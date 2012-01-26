@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<turtle xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://code.google.com/p/apple-tv2-xbmc/turtle/ turtle.xsd"
+	xmlns="https://code.google.com/p/apple-tv2-xbmc/turtle/">
+
+	<service action-id="perform_ping" name="ping" />
+	<service action-id="play_hosted_video" name="playHostedVideo" />
+	<service action-id="play_raw_video" name="playVideo" />
+
+	<action id="perform_ping">
+		<move module="moves.PlayIt_Moves" function="ping" />
+		<next-action name="pong" id="__service_response__"
+			isfolder="false" />
+	</action>
+
+	<action id="play_hosted_video">
+		<move module="moves.PlayIt_Moves" function="playHostedVideo" />
+		<next-action name="respond" id="__service_response__"
+			isfolder="false" />
+		<redirect-action name="play_it" id="snap_and_play_video" />
+	</action>
+
+	<action id="play_raw_video">
+		<move module="moves.PlayIt_Moves" function="playRawVideo" />
+		<next-action name="Play" id="__play__" isfolder="false" />
+	</action>
+
+	<!-- Common Video Link Player Moves -->
+
+	
+	<action id="snap_and_play_video">
+		<move module="moves.PreProcessor" function="prepareVideoItem" />
+		<move module="moves.SnapVideo" function="addPlaylistVideosInfo" />
+		<move module="moves.SnapVideo" function="addVideoInfo" />
+		<next-action name="Play" id="__play__" isfolder="false" />
+	</action>
+
+	<action id="snap_and_directplay_playlist">
+		<move module="moves.PreProcessor" function="preparePlayListItems" />
+		<move module="moves.SnapVideo" function="addPlaylistVideosInfo" />
+		<move module="moves.SnapVideo" function="addVideoInfo" />
+		<next-action name="Play" id="__play__" isfolder="false" />
+	</action>
+
+</turtle>
