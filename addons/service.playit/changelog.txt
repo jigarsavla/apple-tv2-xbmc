@@ -1,0 +1,17 @@
+[B]Version 0.0.6 - 0.0.9[/B]
+- Added new video snappers.
+
+[B]Version 0.0.5[/B]
+- Made TurtleService more generic.
+
+[B]Version 0.0.4[/B]
+- Playlist will only be cleared if at least one video item is found
+
+[B]Version 0.0.3[/B]
+- Added Playlist support and added a check to handle situation when XBMC player is already playing a video
+
+[B]Version 0.0.2[/B]
+- Refined parsing of YouTube HD streaming
+
+[B]Version 0.0.1[/B]
+- beta version
