@@ -282,9 +282,10 @@ def loadVideos(url,name,isRequestForURL,isRequestForPlaylist):
                                 link=response.read()
                                 response.close()
                 map = None
-                match=re.compile('fmt_stream_map=(.+?)&').findall(link)
+                link = link.replace('\\u0026','&')
+                match=re.compile('url_encoded_fmt_stream_map=(.+?)&').findall(link)
                 if len(match) == 0:
-                        map=(re.compile('fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/')
+                        map=(re.compile('url_encoded_fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/').split('url=')
                 else:
                         map=urllib.unquote(match[0]).decode('utf8').split('url=')
                 if re.search('status=fail', link):
@@ -300,7 +301,7 @@ def loadVideos(url,name,isRequestForURL,isRequestForPlaylist):
                         parts = attr.split('&qual')
                         url = urllib.unquote(parts[0]).decode('utf8')
                         print url
-                        qual = re.compile('&itag=(.+?)&').findall(url)[0]
+                        qual = re.compile('&itag=(\d*)').findall(url)[0]
                         print qual
                         if(qual == '13'):
                                 if(not(isRequestForURL)):
@@ -1008,9 +1009,10 @@ def Movie_loadVideos(url,name,isRequestForURL,isRequestForPlaylist):
                                 link=response.read()
                                 response.close()
                 map = None
-                match=re.compile('fmt_stream_map=(.+?)&').findall(link)
+                link = link.replace('\\u0026','&')
+                match=re.compile('url_encoded_fmt_stream_map=(.+?)&').findall(link)
                 if len(match) == 0:
-                        map=(re.compile('fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/')
+                        map=(re.compile('url_encoded_fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/').split('url=')
                 else:
                         map=urllib.unquote(match[0]).decode('utf8').split('url=')
                 if re.search('status=fail', link):
@@ -1026,7 +1028,7 @@ def Movie_loadVideos(url,name,isRequestForURL,isRequestForPlaylist):
                         parts = attr.split('&qual')
                         url = urllib.unquote(parts[0]).decode('utf8')
                         print url
-                        qual = re.compile('&itag=(.+?)&').findall(url)[0]
+                        qual = re.compile('&itag=(\d*)').findall(url)[0]
                         print qual
                         if(qual == '13'):
                                 if(not(isRequestForURL)):
