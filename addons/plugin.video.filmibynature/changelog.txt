@@ -1,3 +1,7 @@
+[B]Version v1.8.8[/B]
+
+YouTube links fixed.
+
 [B]Version v1.8.6[/B]
 
 Videobb links fixed.
