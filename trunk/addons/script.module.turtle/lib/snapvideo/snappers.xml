@@ -40,6 +40,7 @@
 		<video-id regex="youtube.com/v/(.+?)\?" />
 		<video-id regex="youtube.com/v/(.+?)&amp;" />
 		<video-id regex="youtube.com/v/(.+?)&quot;" />
+		<video-id regex="youtube.com/watch\?[a-zA-Z0-9&amp;=]*&amp;v=(.+?)&amp;" />
 	</snapper>
 	<snapper module="snapvideo.ZShare" function="retrieveVideoInfo"
 		enabled="true" desc="www.zshare.net video hosting website">

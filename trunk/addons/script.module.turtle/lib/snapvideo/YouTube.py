@@ -24,9 +24,11 @@ def retrieveVideoInfo(video_id):
         video_info.set_video_image('http://i.ytimg.com/vi/' + video_id + '/default.jpg')
         html = HttpUtils.HttpClient().getHtmlContent(url='http://www.youtube.com/watch?v=' + video_id + '&fmt=18')
         stream_map = None
-        match = re.compile('fmt_stream_map=(.+?)&').findall(html)
+        html = html.replace('\\u0026', '&')
+        match = re.compile('url_encoded_fmt_stream_map=(.+?)&').findall(html)
+        
         if len(match) == 0:
-            stream_map = (re.compile('fmt_stream_map": "(.+?)"').findall(html)[0]).replace('\\/', '/')
+            stream_map = (re.compile('url_encoded_fmt_stream_map": "(.+?)"').findall(html)[0]).replace('\\/', '/').split('url=')
         else:
             stream_map = urllib.unquote(match[0]).decode('utf8').split('url=')
         
@@ -36,13 +38,13 @@ def retrieveVideoInfo(video_id):
         if stream_map == None:
             video_info.set_video_stopped(True)
             return video_info
-        
+            
         for attr in stream_map:
             if attr == '':
                 continue
-            parts = attr.split('&qual')
-            url = urllib.unquote(parts[0]).decode('utf8')
-            qual = re.compile('&itag=(.+?)&').findall(url)[0]
+            parts = urllib.unquote(attr).decode('utf8').split('&qual')
+            url = parts[0]
+            qual = re.compile('&itag=(\d*)').findall(parts[1])[0]
             if(qual == '13'):#176x144
                 video_info.add_video_link(VIDEO_QUAL_LOW, url)
             elif(qual == '17'):#176x144
@@ -75,6 +77,7 @@ def retrieveVideoInfo(video_id):
             video_info.set_video_stopped(False)
     except:
         video_info.set_video_stopped(True)
+        raise
     return video_info
 
 

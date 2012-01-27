@@ -70,9 +70,8 @@ def MYPACKAGES(url, name):
                 link=response.read()
                 response.close()
                 web = ''.join(link.splitlines()).replace('\t','').replace('\'','"')
-                match=re.compile('<table cellspacing=0 cellpadding=0 width="100%"><tr><td><table class="matchListBgClr fontSize80" width=100% cellspacing=1 cellpadding=5><tr><td width="20%">Event</td><td>(.+?)</td></tr><tr class=MainRow><td>Package</td><td>(.+?)</td></tr><tr class=MainRow><td>Purchase Date</td><td class=MainRow>(.+?)</td></tr><tr><td colspan=2><div id=ShowHideMsg(.+?) align=right><a class=TableLink href=(.+?)><strong>Click here</strong></a> to see Matches included in this Package</div><DIV style="display:none" id=MatchList(.+?)></div></td></tr></table></td></tr><tr><td align=right>Click here to <a class=TableLink href="..(.+?)"><strong>WATCH</strong></a> this event.<br><br></td></tr></table>').findall(web)
-                
-                for event,package,purchaseDate,extra1,extra2,extra3,urlParam in match:
+                match=re.compile('<table cellspacing=0 cellpadding=0 width="100%"><tr><td><table class="matchListBgClr fontSize80" width=100% cellspacing=1 cellpadding=5><tr><td (.+?)="20%">Event</td><td>(.+?)</td></tr><tr class=MainRow><td>Package</td><td>(.+?)</td></tr><tr class=MainRow><td>Purchase Date</td><td class=MainRow>(.+?)</td></tr><tr><td colspan=2><div id=ShowHideMsg(.+?) align=right><a class=TableLink href=(.+?)><strong>Click here</strong></a> to see Matches included in this Package</div><DIV style="display:none" id=MatchList(.+?)></div></td></tr></table></td></tr><tr><td align=right>Click here to <a class=TableLink href="..(.+?)"><strong>WATCH</strong></a> this event.<br><br></td></tr></table>').findall(web)
+                for tmp,event,package,purchaseDate,extra1,extra2,extra3,urlParam in match:
                         iconImg = ''
                         fanart = ''
                         if(event=='ICC World Cup 2011'):
@@ -578,12 +577,13 @@ def YouTube_PLAY_LIVE_VIDEO(url, name):
                 response = urllib2.urlopen(req)
                 link=response.read()
                 response.close()
+                link = link.replace('\\u0026','&')
                 #print link
                 if re.search('url_encoded_fmt_stream_map', link):
                         map = None
                         match=re.compile('url_encoded_fmt_stream_map=(.+?)&').findall(link)
                         if len(match) == 0:
-                                map=(re.compile('url_encoded_fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/')
+                                map=(re.compile('url_encoded_fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/').split('url=')
                         else:
                                 map=urllib.unquote(match[0]).decode('utf8').split('url=')
                         videoUrl = resolve_YT_Video(map, name, True, False,'')
@@ -592,7 +592,7 @@ def YouTube_PLAY_LIVE_VIDEO(url, name):
                         map = None
                         match=re.compile('fmt_stream_map=(.+?)&').findall(link)
                         if len(match) == 0:
-                                map=(re.compile('fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/')
+                                map=(re.compile('fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/').split('url=')
                         else:
                                 map=urllib.unquote(match[0]).decode('utf8').split('url=')
                         
@@ -635,33 +635,37 @@ def loginYouTube(url):
                 urllib2.HTTPSHandler(debuglevel=1)
                 response = urllib2.urlopen(req)
                 forms = ParseResponse(response, backwards_compat=False)
+                response.close()
                 form = forms[0]
                 form['Passwd'] = pwd
                 form['Email'] = email
                 req = form.click()
                 response = urllib2.urlopen(req)
-                forms = ParseResponse(response, backwards_compat=False)
-                form = forms[0]
-                
-                keyb = xbmc.Keyboard()
-                keyb.setHeading('Please provide 2-step verification PIN:')
-                keyb.doModal()
-                code = None
-                if (keyb.isConfirmed()):
-                        code = keyb.getText()
-                if code is None:
-                        d = xbmcgui.Dialog()
-                        d.ok('YouTube login failed', 'Cannot proceed without verification code.','Process has been cancelled by user.')
-                        return None
-                form["smsUserPin"] = code
-                req = form.click()
-                response = urllib2.urlopen(req)
-                forms = ParseResponse(response, backwards_compat=False)
-                form = forms[0]
-                req = form.click()
-                response = urllib2.urlopen(req)
                 web = response.read()
-                
+                if re.search('Enter the verification code',web,re.I):
+                    response = urllib2.urlopen(req)
+                    forms = ParseResponse(response, backwards_compat=False)
+                    response.close()
+                    form = forms[0]
+                    keyb = xbmc.Keyboard()
+                    keyb.setHeading('Please provide 2-step verification PIN:')
+                    keyb.doModal()
+                    code = None
+                    if (keyb.isConfirmed()):
+                            code = keyb.getText()
+                    if code is None:
+                            d = xbmcgui.Dialog()
+                            d.ok('YouTube login failed', 'Cannot proceed without verification code.','Process has been cancelled by user.')
+                            return None
+                    form["smsUserPin"] = code
+                    req = form.click()
+                    response = urllib2.urlopen(req)
+                    forms = ParseResponse(response, backwards_compat=False)
+                    response.close()
+                    form = forms[0]
+                    req = form.click()
+                    response = urllib2.urlopen(req)
+                    web = response.read()
                 while re.search('<title>Redirecting</title>', web):
                 
                         redirect_re = re.compile('<meta http-equiv="refresh" content="0; url=\&\#39;(.+?)\&\#39;"')
@@ -669,7 +673,6 @@ def loginYouTube(url):
                         match = redirect_re.search(web)
                         if match:
                                 url = redirect_re.findall(web)[0].replace('&amp;','&')
-                                print url
                         else:
                                 url = None
                                 break
@@ -681,6 +684,7 @@ def loginYouTube(url):
                 
                 return cookiejar
         except:
+                raise
                 d = xbmcgui.Dialog()
                 d.ok('YouTube login failed', 'Please opt for 2-step authentication method of google','You should check if you have provided correct username and password')
                 return None
@@ -707,9 +711,9 @@ def load_YT_Video(code,name,isRequestForURL,isRequestForPlaylist):
                                 link=response.read()
                                 response.close()
                 map = None
-                match=re.compile('fmt_stream_map=(.+?)&').findall(link)
+                match=re.compile('url_encoded_fmt_stream_map=(.+?)&').findall(link)
                 if len(match) == 0:
-                        map=(re.compile('fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/')
+                        map=(re.compile('url_encoded_fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/').split('url=')
                 else:
                         map=urllib.unquote(match[0]).decode('utf8').split('url=')
                 if re.search('status=fail', link):
@@ -734,7 +738,7 @@ def resolve_YT_Video(map, name,isRequestForURL,isRequestForPlaylist,linkImage):
                         parts = attr.split('&qual')
                         url = urllib.unquote(parts[0]).decode('utf8')
                         print url
-                        qual = re.compile('&itag=(.+?)&').findall(url)[0]
+                        qual = re.compile('&itag=(\d*)').findall(url)[0]
                         print qual
                         
                                 

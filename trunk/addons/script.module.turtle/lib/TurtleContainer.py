@@ -6,7 +6,7 @@ Created on Oct 17, 2011
 from common import DataObjects, XBMCInterfaceUtils, AddonUtils
 from common.Singleton import SingletonClass
 from common.XBMCInterfaceUtils import ProgressDisplayer
-from config.Turtle import Action, Move, Service
+from definition.Turtle import Action, Move, Service
 import sys
 import xbmcaddon #@UnresolvedImport
 
@@ -25,7 +25,13 @@ class AddonContext(SingletonClass):
         self.addonPath = self.addon.getAddonInfo('path')
         self.addonProfile = self.addon.getAddonInfo('profile')
         
+        self.turtle_addon = xbmcaddon.Addon(id='script.module.turtle')
+        self.turtle_addonPath = self.turtle_addon.getAddonInfo('path')
+        self.turtle_addonProfile = self.turtle_addon.getAddonInfo('profile')
+        
         turtle_filepath = AddonUtils.getCompleteFilePath(self.addonPath, 'config', 'turtle.xml')
+        if not AddonUtils.doesFileExist(turtle_filepath):
+            turtle_filepath = AddonUtils.getCompleteFilePath(self.turtle_addonPath, 'lib/config', 'turtle.xml')
         self.turtle_map = AddonUtils.getBeautifulSoupObj(turtle_filepath)
         
     

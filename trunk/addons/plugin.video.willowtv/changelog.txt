@@ -91,3 +91,7 @@
 [B]Version v1.3.9[/B]
 
 -Added UPCOMING event links.
+
+[B]Version v1.4.1[/B]
+
+-Added normal or 2-step authentication for YouTube.

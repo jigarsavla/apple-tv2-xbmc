@@ -62,6 +62,9 @@ snappers = None
 
 def __initializeSnappers():
     snapper_filepath = AddonUtils.getCompleteFilePath(AddonContext().addonPath, 'snapvideo', 'snappers.xml')
+    if not AddonUtils.doesFileExist(snapper_filepath):
+        snapper_filepath = AddonUtils.getCompleteFilePath(AddonContext().turtle_addonPath, 'lib/snapvideo', 'snappers.xml')
+        print 'Loading snappers.xml from turtle library... ' + snapper_filepath
     snappers_xml = AddonUtils.getBeautifulSoupObj(snapper_filepath)
     global snappers
     if snappers is not None:
