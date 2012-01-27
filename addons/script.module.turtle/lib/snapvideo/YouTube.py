@@ -77,7 +77,6 @@ def retrieveVideoInfo(video_id):
             video_info.set_video_stopped(False)
     except:
         video_info.set_video_stopped(True)
-        raise
     return video_info
 
 
