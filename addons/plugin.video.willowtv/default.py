@@ -711,6 +711,7 @@ def load_YT_Video(code,name,isRequestForURL,isRequestForPlaylist):
                                 link=response.read()
                                 response.close()
                 map = None
+                link = link.replace('\\u0026','&')
                 match=re.compile('url_encoded_fmt_stream_map=(.+?)&').findall(link)
                 if len(match) == 0:
                         map=(re.compile('url_encoded_fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/').split('url=')
