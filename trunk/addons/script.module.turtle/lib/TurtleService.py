@@ -58,6 +58,8 @@ def start(addon_id, service_name, context_root, default_port, allowed_port_range
         iconimage = AddonUtils.getCompleteFilePath(baseDirPath=containerObj.getAddonContext().addonPath, filename='icon.png')
         serviceport = int(containerObj.getAddonContext().addon.getSetting('serviceport'))
         
+        XBMCInterfaceUtils.setSuppressDialogMsg(True)
+        
         if serviceport < __port_range__[0] or serviceport > __port_range__[1] :
             containerObj.getAddonContext().addon.setSetting('serviceport', str(__port__))
             serviceport = __port__
