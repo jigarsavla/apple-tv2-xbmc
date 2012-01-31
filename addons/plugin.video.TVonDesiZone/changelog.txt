@@ -85,3 +85,7 @@ New Turtle version
 [B]Version v1.2.5 - v1.2.6[/B]
 
 - MoviesNTV and DesiTVStreams channel name will have FLASH HQ in label
+
+[B]Version v1.2.9[/B]
+
+- Fixed DR links

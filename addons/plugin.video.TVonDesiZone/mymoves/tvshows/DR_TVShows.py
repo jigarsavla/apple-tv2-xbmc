@@ -367,17 +367,20 @@ def retrieveVideoLinks(request_obj, response_obj):
     soup = HttpClient().getBeautifulSoup(url=request_obj.get_data()['episodeUrl'], parseOnlyThese=content)
     if soup.has_key('div'):
         soup = soup.findChild('div', recursive=False)
+    prevChild = ''
     for child in soup.findChildren():
-
-        if child.name == 'img' or child.name == 'b' or child.name == 'font':
-            if len(video_playlist_items) > 0:
-                response_obj.addListItem(__preparePlayListItem__(video_source_id, video_source_img, video_playlist_items))
-            if video_source_img is not None:
-                video_source_id = video_source_id + 1
-                video_source_img = None
-                video_part_index = 0
-                video_playlist_items = []
-            ignoreAllLinks = False
+        if child.name == 'img' or child.name == 'font'or child.name == 'b' :
+            if child.name == 'b' and prevChild == 'a':
+                continue
+            else:
+                if len(video_playlist_items) > 0:
+                    response_obj.addListItem(__preparePlayListItem__(video_source_id, video_source_img, video_playlist_items))
+                if video_source_img is not None:
+                    video_source_id = video_source_id + 1
+                    video_source_img = None
+                    video_part_index = 0
+                    video_playlist_items = []
+                ignoreAllLinks = False
         elif not ignoreAllLinks and child.name == 'a' and not re.search('multi', str(child['href']), re.IGNORECASE):
             video_part_index = video_part_index + 1
             video_link = {}
@@ -402,7 +405,7 @@ def retrieveVideoLinks(request_obj, response_obj):
                 video_part_index = 0
                 video_playlist_items = []
                 ignoreAllLinks = True
-            
+        prevChild = child.name
     if len(video_playlist_items) > 0:
         response_obj.addListItem(__preparePlayListItem__(video_source_id, video_source_img, video_playlist_items))
 
@@ -420,11 +423,11 @@ def __prepareVideoLink__(video_link):
     video_url = video_link['videoLink']
     new_video_url = None
     video_id = re.compile('(id|url)=(.+?)/').findall(video_url + '/')[0][1]
-    if re.search('dm.php', video_url, flags=re.I):
+    if re.search('dm(\d*).php', video_url, flags=re.I):
         new_video_url = 'http://www.dailymotion.com/video/' + video_id + '_'
     elif re.search('flash.php', video_url, flags=re.I):
         new_video_url = 'http://www.zshare.net/video/' + video_id + '&'
-    elif re.search('(youtube|u).php', video_url, flags=re.I):
+    elif re.search('(youtube|u)(\d*).php', video_url, flags=re.I):
         new_video_url = 'http://www.youtube.com/watch?v=' + video_id + '&'
     elif re.search('megavideo', video_url, flags=re.I):
         new_video_url = 'http://www.megavideo.com/v/' + video_id + '&'
