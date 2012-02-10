@@ -95,3 +95,7 @@
 [B]Version v1.4.1[/B]
 
 -Added normal or 2-step authentication for YouTube.
+
+[B]Version v1.4.3[/B]
+
+-Enabled LIVE video quality selection option.

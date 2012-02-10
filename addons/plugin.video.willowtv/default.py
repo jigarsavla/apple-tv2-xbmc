@@ -586,7 +586,7 @@ def YouTube_PLAY_LIVE_VIDEO(url, name):
                                 map=(re.compile('url_encoded_fmt_stream_map": "(.+?)"').findall(link)[0]).replace('\\/', '/').split('url=')
                         else:
                                 map=urllib.unquote(match[0]).decode('utf8').split('url=')
-                        videoUrl = resolve_YT_Video(map, name, True, False,'')
+                        videoUrl = resolve_YT_Video(map, name, True, False,'',True)
                         
                 else:
                         map = None
@@ -596,7 +596,7 @@ def YouTube_PLAY_LIVE_VIDEO(url, name):
                         else:
                                 map=urllib.unquote(match[0]).decode('utf8').split('url=')
                         
-                        videoUrl = resolve_YT_Video(map, name, True, False,'')
+                        videoUrl = resolve_YT_Video(map, name, True, False,'',True)
                 
                 #print videoUrl
                 
@@ -727,104 +727,163 @@ def load_YT_Video(code,name,isRequestForURL,isRequestForPlaylist):
         except: pass
         
 
-def resolve_YT_Video(map, name,isRequestForURL,isRequestForPlaylist,linkImage):
+def resolve_YT_Video(map, name,isRequestForURL,isRequestForPlaylist,linkImage,selectVideoQual=False):
         try:
                 
                 highResoVid = ''
                 youtubeVideoQual = wtv.getSetting('videoQual')
-                print map
+                #print map
+                videoQuals = []
+                videoLinks = []
                 for attr in map:
                         if attr == '':
                                 continue
                         parts = attr.split('&qual')
                         url = urllib.unquote(parts[0]).decode('utf8')
-                        print url
                         qual = re.compile('&itag=(\d*)').findall(url)[0]
                         print qual
                         
                                 
                         if(qual == '13'):
-                                if(not(isRequestForURL)):
+                                if(selectVideoQual):
+                                        videoQuals.append('LOW 3GP')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY 3GP Low Quality - 176x144',url,linkImage)
                                 elif(highResoVid == ''):
                                         highResoVid = url
-                        if(qual == '17'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '17'):
+                                if(selectVideoQual):
+                                        videoQuals.append('SD 3GP')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY 3GP Medium Quality - 176x144',url,linkImage)
                                 elif(highResoVid == ''):
                                         highResoVid = url
-                        if(qual == '36'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '36'):
+                                if(selectVideoQual):
+                                        videoQuals.append('HD 3GP')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY 3GP High Quality - 320x240',url,linkImage)
                                 elif(highResoVid == ''):
                                         highResoVid = url
-                        if(qual == '5'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '5'):
+                                if(selectVideoQual):
+                                        videoQuals.append('LOW FLV')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY FLV Low Quality - 400\\327226',url,linkImage)
                                 elif(highResoVid == ''):
                                         highResoVid = url
-                        if(qual == '34'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '34'):
+                                if(selectVideoQual):
+                                        videoQuals.append('SD FLV')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY FLV Medium Quality - 480x360',url,linkImage)
                                 elif(highResoVid == ''):
                                         highResoVid = url
-                        if(qual == '6'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '6'):
+                                if(selectVideoQual):
+                                        videoQuals.append('SD FLV')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY FLV Medium Quality - 640\\327360',url,linkImage)
                                 elif(highResoVid == ''):
                                         highResoVid = url
-                        if(qual == '35'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '35'):
+                                if(selectVideoQual):
+                                        videoQuals.append('HD 720p FLV')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY FLV High Quality - 854\\327480',url,linkImage)
                                 else:
                                         highResoVid = url
-                        if(qual == '18'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '18'):
+                                if(selectVideoQual):
+                                        videoQuals.append('SD 480p MP4')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY MP4 High Quality - 480x360',url,linkImage)
                                 else:
                                         highResoVid = url
                                         
-                        if(qual == '22'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '22'):
+                                if(selectVideoQual):
+                                        videoQuals.append('HD 720p MP4')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY MP4 High Quality - 1280x720',url,linkImage)
                                 else:
                                         highResoVid = url
                                         if youtubeVideoQual == '1' or youtubeVideoQual == '2':
                                                 break
-                        if(qual == '37'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '37'):
+                                if(selectVideoQual):
+                                        videoQuals.append('HD 1080p MP4')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY MP4 High-2 Quality - 1920x1080',url,linkImage)
                                 else:
                                         highResoVid = url
                                         if youtubeVideoQual == '2':
                                                 break
-                        if(qual == '38'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '38'):
+                                if(selectVideoQual):
+                                        videoQuals.append('HD 4096p WEBM')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY MP4 Epic Quality - 4096\\3272304',url,linkImage)
                                 else:
                                         highResoVid = url
                                         if youtubeVideoQual == '2':
                                                 break
-                        if(qual == '43'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '43'):
+                                if(selectVideoQual):
+                                        videoQuals.append('HD 4096p WEBM')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY WEBM Medium Quality - 4096\\3272304',url,linkImage)
                                 else:
                                         highResoVid = url
-                        if(qual == '44'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '44'):
+                                if(selectVideoQual):
+                                        videoQuals.append('HD 4096p WEBM')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY WEBM High Quality - 4096\\3272304',url,linkImage)
                                 else:
                                         highResoVid = url
                                         if youtubeVideoQual == '1' or youtubeVideoQual == '2':
                                                 break
-                        if(qual == '45'):
-                                if(not(isRequestForURL)):
+                        elif(qual == '45'):
+                                if(selectVideoQual):
+                                        videoQuals.append('HD 4096p WEBM')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
                                         addLink ('PLAY WEBM High-2 Quality - 4096\\3272304',url,linkImage)
                                 else:
                                         highResoVid = url
                                         if youtubeVideoQual == '2':
                                                 break
-                print highResoVid
+                        elif(qual == '120'):
+                                if(selectVideoQual):
+                                        videoQuals.append('HD 720p')
+                                        videoLinks.append(url)
+                                elif(not(isRequestForURL)):
+                                        addLink ('PLAY HD Video Quality',url,linkImage)
+                                else:
+                                        highResoVid = url
+                                        if youtubeVideoQual == '1' or youtubeVideoQual == '2':
+                                                break
+                
+                if(selectVideoQual):
+                        d = xbmcgui.Dialog()
+                        index = d.select('Select video quality:', videoQuals)
+                        if index == -1:
+                                return None
+                        highResoVid = videoLinks[index]
                 if(isRequestForURL):
                         if(isRequestForPlaylist):
                                 liz = xbmcgui.ListItem('VIDEO PART', thumbnailImage=linkImage)
