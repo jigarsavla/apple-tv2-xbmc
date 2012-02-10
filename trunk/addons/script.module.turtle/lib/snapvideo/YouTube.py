@@ -73,6 +73,10 @@ def retrieveVideoInfo(video_id):
                 video_info.add_video_link(VIDEO_QUAL_HD_720, url)
             elif(qual == '45' and video_info.get_video_link(VIDEO_QUAL_HD_1080) is None):#4096\\3272304 WEBM
                 video_info.add_video_link(VIDEO_QUAL_HD_1080, url)
+            elif(qual == '120' and video_info.get_video_link(VIDEO_QUAL_HD_720) is None):#New video qual
+                video_info.add_video_link(VIDEO_QUAL_HD_720, url)
+            else:#unknown quality
+                video_info.add_video_link(VIDEO_QUAL_SD, url)
 
             video_info.set_video_stopped(False)
     except:
