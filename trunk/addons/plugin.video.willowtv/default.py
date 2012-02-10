@@ -778,7 +778,7 @@ def resolve_YT_Video(map, name,isRequestForURL,isRequestForPlaylist,linkImage,se
                                         highResoVid = url
                         elif(qual == '34'):
                                 if(selectVideoQual):
-                                        videoQuals.append('SD FLV')
+                                        videoQuals.append('SD 480p FLV')
                                         videoLinks.append(url)
                                 elif(not(isRequestForURL)):
                                         addLink ('PLAY FLV Medium Quality - 480x360',url,linkImage)
@@ -786,7 +786,7 @@ def resolve_YT_Video(map, name,isRequestForURL,isRequestForPlaylist,linkImage,se
                                         highResoVid = url
                         elif(qual == '6'):
                                 if(selectVideoQual):
-                                        videoQuals.append('SD FLV')
+                                        videoQuals.append('SD 640p FLV')
                                         videoLinks.append(url)
                                 elif(not(isRequestForURL)):
                                         addLink ('PLAY FLV Medium Quality - 640\\327360',url,linkImage)
@@ -794,7 +794,7 @@ def resolve_YT_Video(map, name,isRequestForURL,isRequestForPlaylist,linkImage,se
                                         highResoVid = url
                         elif(qual == '35'):
                                 if(selectVideoQual):
-                                        videoQuals.append('HD 720p FLV')
+                                        videoQuals.append('SD FLV')
                                         videoLinks.append(url)
                                 elif(not(isRequestForURL)):
                                         addLink ('PLAY FLV High Quality - 854\\327480',url,linkImage)
@@ -869,7 +869,7 @@ def resolve_YT_Video(map, name,isRequestForURL,isRequestForPlaylist,linkImage,se
                                                 break
                         elif(qual == '120'):
                                 if(selectVideoQual):
-                                        videoQuals.append('HD 720p')
+                                        videoQuals.append('HD 720p Fast')
                                         videoLinks.append(url)
                                 elif(not(isRequestForURL)):
                                         addLink ('PLAY HD Video Quality',url,linkImage)
