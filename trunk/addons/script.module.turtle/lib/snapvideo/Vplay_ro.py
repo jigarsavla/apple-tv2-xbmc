@@ -21,9 +21,10 @@ def retrieveVideoInfo(video_id):
         html = HttpUtils.HttpClient().getHtmlContent(url='http://www.vplay.ro/watch/' + str(video_id))
         html = HttpUtils.HttpClient().getHtmlContent(url='http://www.vplay.ro/play/dinosaur.do', params={'key':str(video_id)})
         params = HttpUtils.getUrlParams(html)
+        video_link = HttpUtils.getRedirectedUrl(url=params['nqURL'])
         HttpUtils.HttpClient().disableCookies()
         video_info.set_video_stopped(False)
-        video_info.add_video_link(VIDEO_QUAL_SD, params['nqURL'])
+        video_info.add_video_link(VIDEO_QUAL_SD, video_link)
         video_info.set_video_image(params['th'])
     except:
         video_info.set_video_stopped(True)
