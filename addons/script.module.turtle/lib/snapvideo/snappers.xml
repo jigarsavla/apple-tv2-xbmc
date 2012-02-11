@@ -180,4 +180,10 @@
 		<video-id regex="veevr.com/videos/(.+?)&amp;" />
 		<video-id regex="veevr.com/embed/(.+?)&amp;" />
 	</snapper>
+	
+	<snapper module="snapvideo.Vplay_ro" function="retrieveVideoInfo"
+		enabled="true" desc="www.vplay.ro video hosting website">
+		<video-id regex="vplay.ro/watch/(.+?)/" />
+		<video-id regex="vplay.ro/watch/(.+?)&amp;" />
+	</snapper>
 </snappers>
