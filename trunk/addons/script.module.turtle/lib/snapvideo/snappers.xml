@@ -13,6 +13,10 @@
 	<snapper module="snapvideo.YouTube" function="retrievePlaylistVideoItems"
 		playlist="true" enabled="true" desc="www.youtube.com video playlist snapper">
 		<video-id regex="youtube.com/playlist\?list=PL(.+?)&amp;" />
+		<video-id regex="youtube.com/playlist\?list=(.+?)&amp;" />
+		<video-id regex="youtube.com/p/(.+?)/" />
+		<video-id regex="youtube.com/p/(.+?)\?" />
+		<video-id regex="youtube.com/p/(.+?)&amp;" />
 		<video-id regex="youtube.com/feeds/api/playlists/(.+?)&amp;" />
 	</snapper>
 
@@ -184,6 +188,7 @@
 	<snapper module="snapvideo.Vplay_ro" function="retrieveVideoInfo"
 		enabled="true" desc="www.vplay.ro video hosting website">
 		<video-id regex="vplay.ro/watch/(.+?)/" />
+		<video-id regex="vplay.ro/watch/(.+?)\?" />
 		<video-id regex="vplay.ro/watch/(.+?)&amp;" />
 	</snapper>
 </snappers>
