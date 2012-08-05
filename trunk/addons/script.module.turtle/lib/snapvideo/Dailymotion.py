@@ -8,6 +8,10 @@ from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_SD, \
 from common import HttpUtils
 import re
 import urllib
+#try:
+#    import json
+#except ImportError:
+#    import simplejson as json
 
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
@@ -22,8 +26,10 @@ def retrieveVideoInfo(video_id):
     try:
         video_link = 'http://www.dailymotion.com/video/' + str(video_id)
         html = HttpUtils.HttpClient().getHtmlContent(url=video_link)
-        sequence = re.compile('"sequence",  "(.+?)"').findall(html)
+        sequence = re.compile('"sequence":"(.+?)"').findall(html)
         newseqeunce = urllib.unquote(sequence[0]).decode('utf8').replace('\\/', '/')
+        #        jsonObj = json.loads(newseqeunce, encoding='utf-8')
+        #        print jsonObj
         imgSrc = re.compile('og:image" content="(.+?)"').findall(html)
         if(len(imgSrc) == 0):
             imgSrc = re.compile('/jpeg" href="(.+?)"').findall(html)
