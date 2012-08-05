@@ -56,8 +56,16 @@ def __retrieveTVShows__(tvShowsUrl):
     
     
 def __retrieveChannelTVShows__(tvChannelObj):
-    running_tvshows = __retrieveTVShows__(tvChannelObj["running_tvshows_url"])
-    finished_tvshows = __retrieveTVShows__(tvChannelObj["finished_tvshows_url"])
+    running_tvshows = []
+    finished_tvshows = []
+    try:
+        running_tvshows = __retrieveTVShows__(tvChannelObj["running_tvshows_url"])
+    except:
+        print 'Failed to load a channel... Continue retrieval of next tv show'
+    try:
+        finished_tvshows = __retrieveTVShows__(tvChannelObj["finished_tvshows_url"])
+    except:
+        print 'Failed to load a channel... Continue retrieval of next tv show'
     tvChannelObj["running_tvshows"] = running_tvshows
     tvChannelObj["finished_tvshows"] = finished_tvshows
         
@@ -230,7 +238,7 @@ def retrieveTVShowsAndSave(request_obj, response_obj):
                    "finished_tvshows_url": "/mahuaa-tv-past-shows/"}
                 }
     
-    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__retrieveChannelTVShows__'), tvChannels.values(), 'Retrieving channel TV Shows', 'Failed to retrieve video information, please try again later', line1='Takes about 5 minutes first time', line3='Refreshes data every month or requested force refresh or on new add-on version')
+    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__retrieveChannelTVShows__'), tvChannels.values(), 'Retrieving channel TV Shows', 'Failed to retrieve video information, please try again later', line1='Takes about 5 minutes first time', line3='Refreshes data every month or on force refresh or on new add-on version')
     #save tvChannels in moving data
     request_obj.get_data()['tvChannels'] = tvChannels
     status = AddonUtils.saveObjToJsonFile(filepath, tvChannels)
