@@ -39,37 +39,40 @@ def __retrieveChannels__(tvChannels, dtUrl, channelType):
     contentDiv = BeautifulSoup.SoupStrainer('div', {'class':'copy fix'})
     soup = HttpClient().getBeautifulSoup(url=dtUrl, parseOnlyThese=contentDiv)
     for tvChannelTag in soup.findAll('tbody'):
-        tvChannel = {}
-        running_tvshows = []
-        finished_tvshows = []
-        tmp_tvshows_list = None
-        firstRow = False
-        for trTag in tvChannelTag.findAll('tr', recursive=False):
-            if not firstRow:
-                channelImg = str(trTag.find('img')['src'])
-                channelName = re.compile(BASE_WSITE_URL + '/category/(tv-serials|pakistan-tvs)/(.+?)/').findall(str(trTag.find('a')['href']))[0][1]
-                channelName = string.upper(channelName.replace('-', ' '))
-                tvChannels[channelName] = tvChannel
-                tvChannel['iconimage'] = channelImg
-                tvChannel['channelType'] = channelType
-                firstRow = True
-            else:
-                divTag = trTag.find('div')
-                if divTag != None:
-                    txt = divTag.getText()
-                    if re.search('running', txt, flags=re.IGNORECASE):
-                        tmp_tvshows_list = running_tvshows
-                        tvChannel['running_tvshows'] = running_tvshows
-                    elif re.search('finished', txt, flags=re.IGNORECASE):
-                        tmp_tvshows_list = finished_tvshows
-                        tvChannel['finished_tvshows'] = finished_tvshows
-                    else:
-                        print 'UNKNOWN TV SHOW CATEGORY'
+        try:
+            tvChannel = {}
+            running_tvshows = []
+            finished_tvshows = []
+            tmp_tvshows_list = None
+            firstRow = False
+            for trTag in tvChannelTag.findAll('tr', recursive=False):
+                if not firstRow:
+                    channelImg = str(trTag.find('img')['src'])
+                    channelName = re.compile(BASE_WSITE_URL + '/category/(tv-serials|pakistan-tvs)/(.+?)/').findall(str(trTag.find('a')['href']))[0][1]
+                    channelName = string.upper(channelName.replace('-', ' '))
+                    tvChannels[channelName] = tvChannel
+                    tvChannel['iconimage'] = channelImg
+                    tvChannel['channelType'] = channelType
+                    firstRow = True
                 else:
-                    for aTag in trTag.findAll('a'):
-                        tvshowUrl = str(aTag['href'])
-                        tvshowName = aTag.getText()
-                        tmp_tvshows_list.append({'name':HttpUtils.unescape(tvshowName), 'url':tvshowUrl})
+                    divTag = trTag.find('div')
+                    if divTag != None:
+                        txt = divTag.getText()
+                        if re.search('running', txt, flags=re.IGNORECASE):
+                            tmp_tvshows_list = running_tvshows
+                            tvChannel['running_tvshows'] = running_tvshows
+                        elif re.search('finished', txt, flags=re.IGNORECASE):
+                            tmp_tvshows_list = finished_tvshows
+                            tvChannel['finished_tvshows'] = finished_tvshows
+                        else:
+                            print 'UNKNOWN TV SHOW CATEGORY'
+                    else:
+                        for aTag in trTag.findAll('a'):
+                            tvshowUrl = str(aTag['href'])
+                            tvshowName = aTag.getText()
+                            tmp_tvshows_list.append({'name':HttpUtils.unescape(tvshowName), 'url':tvshowUrl})
+        except:
+            print 'Failed to load a tv channel links.'
 
 def retrieveTVShowsAndSave(request_obj, response_obj):
     oldfilepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=OLD_CHANNELS_JSON_FILE, makeDirs=True)
@@ -165,38 +168,43 @@ def retrieveTVShowEpisodes(request_obj, response_obj):
     soup = HttpClient().getBeautifulSoup(url=url, parseOnlyThese=contentDiv)
     for aTag in soup.findAll('a', {'rel':'bookmark'}):
         episodeName = aTag.getText()
-        if re.search('Written Episode', episodeName):
-            pass
-        else:
-            item = ListItem()
-            item.add_request_data('episodeName', episodeName)
-            item.add_request_data('episodeUrl', str(aTag['href']))
-            item.set_next_action_name(channelType + '_Episode_VLinks')
-            xbmcListItem = xbmcgui.ListItem(label=episodeName)
-            item.set_xbmc_list_item_obj(xbmcListItem)
-            response_obj.addListItem(item)
+        try:
+            time.strptime(episodeName, '%B %d, %Y')
+            continue
+        except:
+            if re.search('Written Episode', episodeName):
+                pass
+            else:
+                item = ListItem()
+                item.add_request_data('episodeName', episodeName)
+                item.add_request_data('episodeUrl', str(aTag['href']))
+                item.set_next_action_name(channelType + '_Episode_VLinks')
+                xbmcListItem = xbmcgui.ListItem(label=episodeName)
+                item.set_xbmc_list_item_obj(xbmcListItem)
+                response_obj.addListItem(item)
             
     pagesDiv = soup.find('div', {'class':'wp-pagenavi'})
     if pagesDiv is not None:
         pagesInfoTag = pagesDiv.find('span', {'class':'pages'}, recursive=False)
         if pagesInfoTag is not None:
             pageInfo = re.compile('Page (.+?) of (.+?) ').findall(pagesInfoTag.getText() + ' ')
-            currentPage = int(pageInfo[0][0])
-            totalPages = int(pageInfo[0][1])
+            currentPage = int(pageInfo[0][0].replace(',',''))
+            totalPages = int(pageInfo[0][1].replace(',',''))
             for page in range(1, totalPages + 1):
-                if page != currentPage:
-                    item = ListItem()
-                    item.add_request_data('channelType', channelType)
-                    item.add_request_data('tvShowName', request_obj.get_data()['tvShowName'])
-                    item.add_request_data('tvShowUrl', request_obj.get_data()['tvShowUrl'])
-                    if page != 1:
-                        item.add_request_data('page', str(page))
-                    pageName = AddonUtils.getBoldString('              ->              Page #' + str(page))
-                        
-                    item.set_next_action_name('Show_Episodes_Next_Page')
-                    xbmcListItem = xbmcgui.ListItem(label=pageName)
-                    item.set_xbmc_list_item_obj(xbmcListItem)
-                    response_obj.addListItem(item)
+                if page == 1 or page == totalPages or page == currentPage - 1 or page == currentPage + 1:
+                    if page != currentPage:
+                        item = ListItem()
+                        item.add_request_data('channelType', channelType)
+                        item.add_request_data('tvShowName', request_obj.get_data()['tvShowName'])
+                        item.add_request_data('tvShowUrl', request_obj.get_data()['tvShowUrl'])
+                        if page != 1:
+                            item.add_request_data('page', str(page))
+                        pageName = AddonUtils.getBoldString('              ->              Page #' + str(page))
+                            
+                        item.set_next_action_name('Show_Episodes_Next_Page')
+                        xbmcListItem = xbmcgui.ListItem(label=pageName)
+                        item.set_xbmc_list_item_obj(xbmcListItem)
+                        response_obj.addListItem(item)
             
                 
 def retrievePakVideoLinks(request_obj, response_obj):

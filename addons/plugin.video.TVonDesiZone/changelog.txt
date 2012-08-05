@@ -89,3 +89,7 @@ New Turtle version
 [B]Version v1.2.9[/B]
 
 - Fixed DR links
+
+[B]Version v1.3.0[/B]
+
+- Fixed both DR and DT links as request by my Friend on FriendShip day
