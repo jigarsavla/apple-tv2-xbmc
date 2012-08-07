@@ -1,3 +1,7 @@
+[B]Version v1.9.0[/B]
+
+Dailymotion links fixed.
+
 [B]Version v1.8.9[/B]
 
 Disabled bharatmovies movie links.
