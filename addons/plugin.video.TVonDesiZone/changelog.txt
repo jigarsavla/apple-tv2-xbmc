@@ -93,3 +93,7 @@ New Turtle version
 [B]Version v1.3.0[/B]
 
 - Fixed both DR and DT links as request by my Friend on FriendShip day
+
+[B]Version v1.3.1[/B]
+
+- Added new video sources
