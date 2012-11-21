@@ -179,17 +179,30 @@
 		enabled="true" desc="www.stagevu.com video hosting website">
 		<video-id regex="stagevu.com/video/(.+?)&amp;" />
 	</snapper>
-	
+
 	<snapper module="snapvideo.Veevr" function="retrieveVideoInfo"
 		enabled="true" desc="www.veevr.com video hosting website">
 		<video-id regex="veevr.com/videos/(.+?)&amp;" />
 		<video-id regex="veevr.com/embed/(.+?)&amp;" />
 	</snapper>
-	
+
 	<snapper module="snapvideo.Vplay_ro" function="retrieveVideoInfo"
 		enabled="true" desc="www.vplay.ro video hosting website">
 		<video-id regex="vplay.ro/watch/(.+?)/" />
 		<video-id regex="vplay.ro/watch/(.+?)\?" />
 		<video-id regex="vplay.ro/watch/(.+?)&amp;" />
 	</snapper>
+
+	<snapper module="snapvideo.Playwire" function="retrieveVideoInfo"
+		enabled="true" desc="www.playwire.com video hosting website">
+		<video-id regex="playwire.com/(.+?)\.xml" />
+	</snapper>
+
+	<!-- The following snapper should be at the end of all srcappers -->
+	<snapper module="snapvideo.UrlResolverDelegator" function="retrieveVideoInfo"
+		enabled="true"
+		desc="A delegator to retireve streamUrl using t0mm0 urlresolver module">
+		<video-id regex="(.*)" />
+	</snapper>
+
 </snappers>

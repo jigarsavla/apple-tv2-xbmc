@@ -434,11 +434,19 @@ def __prepareVideoLink__(video_link):
     if re.search('dm(\d*).php', video_url, flags=re.I):
         new_video_url = 'http://www.dailymotion.com/video/' + video_id + '_'
     elif re.search('flash.php', video_url, flags=re.I):
-        new_video_url = 'http://www.zshare.net/video/' + video_id + '&'
+        new_video_url = 'http://cdn.playwire.com/12376/embed/' + video_id + '.xml'
     elif re.search('(youtube|u)(\d*).php', video_url, flags=re.I):
         new_video_url = 'http://www.youtube.com/watch?v=' + video_id + '&'
     elif re.search('megavideo', video_url, flags=re.I):
         new_video_url = 'http://www.megavideo.com/v/' + video_id + '&'
+    elif re.search('put.php', video_url, flags=re.I):
+        new_video_url = 'http://www.putlocker.com/file/' + video_id
+    elif re.search('weed.php', video_url, flags=re.I):
+        new_video_url = 'http://www.videoweed.es/file/' + video_id
+    elif re.search('now.php', video_url, flags=re.I):
+        new_video_url = 'http://www.nowvideo.eu/video/' + video_id
+    elif re.search('http://www.sockshare.com/file', video_url, flags=re.I):
+        new_video_url = video_url
         
     video_hosting_info = SnapVideo.findVideoHostingInfo(new_video_url)
     video_link['videoLink'] = new_video_url

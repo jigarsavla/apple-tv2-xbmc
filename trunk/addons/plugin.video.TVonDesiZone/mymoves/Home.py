@@ -5,7 +5,7 @@ Created on Dec 5, 2011
 '''
 from TurtleContainer import AddonContext
 from common.DataObjects import ListItem
-import xbmcgui #@UnresolvedImport
+import xbmcgui  #@UnresolvedImport
 from common import AddonUtils
 
 
@@ -36,28 +36,33 @@ def findTVShowsSource(request_obj, response_obj):
         
         
 def displayLiveTvSources(request_obj, response_obj):
+    username = AddonContext().addon.getSetting('dts_username')
+    if(username != None or username != ''):
+        dts_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='DTS.png')
+        item = ListItem()
+        item.set_next_action_name('Desi_TV_Streams')
+        xbmcListItem = xbmcgui.ListItem(label='[B]DESI TV[/B] STREAMS', iconImage=dts_icon_filepath, thumbnailImage=dts_icon_filepath)
+        item.set_xbmc_list_item_obj(xbmcListItem)
+        response_obj.addListItem(item)
     
-    dts_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='DTS.png')
-    item = ListItem()
-    item.set_next_action_name('Desi_TV_Streams')
-    xbmcListItem = xbmcgui.ListItem(label='[B]DESI TV[/B] STREAMS', iconImage=dts_icon_filepath, thumbnailImage=dts_icon_filepath)
-    item.set_xbmc_list_item_obj(xbmcListItem)
-    response_obj.addListItem(item)
+    username = AddonContext().addon.getSetting('mnt_username')
+    if(username != None or username != ''):
+        mnt_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='MNT.png')
+        item = ListItem()
+        item.set_next_action_name('Movies_n_TV')
+        xbmcListItem = xbmcgui.ListItem(label='MOVIESnTV', iconImage=mnt_icon_filepath, thumbnailImage=mnt_icon_filepath)
+        item.set_xbmc_list_item_obj(xbmcListItem)
+        response_obj.addListItem(item)
     
-    mnt_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='MNT.png')
-    item = ListItem()
-    item.set_next_action_name('Movies_n_TV')
-    xbmcListItem = xbmcgui.ListItem(label='MOVIESnTV', iconImage=mnt_icon_filepath, thumbnailImage=mnt_icon_filepath)
-    item.set_xbmc_list_item_obj(xbmcListItem)
-    response_obj.addListItem(item)
-    
-    wst_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='WST.png')
-    item = ListItem()
-    item.set_next_action_name('Watch_Sun_TV')
-    xbmcListItem = xbmcgui.ListItem(label='WATCH SUN TV', iconImage=wst_icon_filepath, thumbnailImage=wst_icon_filepath)
-    item.set_xbmc_list_item_obj(xbmcListItem)
-    #Hide WatchSunTV.com until it is not working.
-    #response_obj.addListItem(item)
+#     Hide WatchSunTV.com until it is not working.
+#    username = AddonContext().addon.getSetting('wst_username')
+#    if(username != None or username != ''):
+#        wst_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='WST.png')
+#        item = ListItem()
+#        item.set_next_action_name('Watch_Sun_TV')
+#        xbmcListItem = xbmcgui.ListItem(label='WATCH SUN TV', iconImage=wst_icon_filepath, thumbnailImage=wst_icon_filepath)
+#        item.set_xbmc_list_item_obj(xbmcListItem)
+#        response_obj.addListItem(item)
 
     free_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='FREE.png')
     item = ListItem()
