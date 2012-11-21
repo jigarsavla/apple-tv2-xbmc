@@ -6,6 +6,7 @@ Created on Nov 21, 2012
 from BeautifulSoup import BeautifulStoneSoup
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_HD_720
 from common import HttpUtils
+import re
 
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
@@ -27,7 +28,10 @@ def retrieveVideoInfo(video_id):
         video_info.set_video_stopped(False)
         video_info.set_video_image(img_link)
         video_info.set_video_name("PLAYWIRE Video")
-        video_info.add_video_link(VIDEO_QUAL_HD_720, video_link)
+        if re.search(r'\Artmp',video_link):
+            video_info.add_video_link(VIDEO_QUAL_HD_720, video_link, addUserAgent=False)
+        else:
+            video_info.add_video_link(VIDEO_QUAL_HD_720, video_link, addUserAgent=True)
     except:
         video_info.set_video_stopped(True)
     return video_info

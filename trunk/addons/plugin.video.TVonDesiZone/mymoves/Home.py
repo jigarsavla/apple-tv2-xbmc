@@ -37,7 +37,7 @@ def findTVShowsSource(request_obj, response_obj):
         
 def displayLiveTvSources(request_obj, response_obj):
     username = AddonContext().addon.getSetting('dts_username')
-    if(username != None or username != ''):
+    if(username != None and username != ''):
         dts_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='DTS.png')
         item = ListItem()
         item.set_next_action_name('Desi_TV_Streams')
@@ -46,7 +46,7 @@ def displayLiveTvSources(request_obj, response_obj):
         response_obj.addListItem(item)
     
     username = AddonContext().addon.getSetting('mnt_username')
-    if(username != None or username != ''):
+    if(username != None and username != ''):
         mnt_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='MNT.png')
         item = ListItem()
         item.set_next_action_name('Movies_n_TV')
@@ -56,7 +56,7 @@ def displayLiveTvSources(request_obj, response_obj):
     
 #     Hide WatchSunTV.com until it is not working.
 #    username = AddonContext().addon.getSetting('wst_username')
-#    if(username != None or username != ''):
+#    if(username != None and username != ''):
 #        wst_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='WST.png')
 #        item = ListItem()
 #        item.set_next_action_name('Watch_Sun_TV')

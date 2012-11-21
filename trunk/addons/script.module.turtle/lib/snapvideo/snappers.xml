@@ -37,7 +37,6 @@
 	</snapper>
 	<snapper module="snapvideo.YouTube" function="retrieveVideoInfo"
 		enabled="true" desc="www.youtube.com video hosting website">
-		<video-id regex="youtube.com/watch\?feature\=player_embedded&amp;v=(.+?)&amp;" />
 		<video-id regex="youtube.com/watch\?v=(.+?)&amp;" />
 		<video-id regex="youtube.com/embed/(.+?)&amp;" />
 		<video-id regex="href=&quot;http://youtu.be/(.+?)&quot;" />
@@ -196,6 +195,16 @@
 	<snapper module="snapvideo.Playwire" function="retrieveVideoInfo"
 		enabled="true" desc="www.playwire.com video hosting website">
 		<video-id regex="playwire.com/(.+?)\.xml" />
+	</snapper>
+	
+	<snapper module="snapvideo.Putlocker" function="retrieveVideoInfo"
+		enabled="true" desc="www.putlocker.com video hosting website">
+		<video-id regex="putlocker.com/file/(.+?)&amp;" />
+	</snapper>
+	
+	<snapper module="snapvideo.Shockshare" function="retrieveVideoInfo"
+		enabled="true" desc="www.sockshare.com video hosting website">
+		<video-id regex="sockshare.com/file/(.+?)&amp;" />
 	</snapper>
 
 	<!-- The following snapper should be at the end of all srcappers -->
