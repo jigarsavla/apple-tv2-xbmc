@@ -97,3 +97,7 @@ New Turtle version
 [B]Version v1.3.1[/B]
 
 - Added new video sources
+
+[B]Version v1.3.4[/B]
+
+- Fixed DT source

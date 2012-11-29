@@ -9,11 +9,12 @@ import re
 import string
 from TurtleContainer import AddonContext
 from common import AddonUtils, HttpUtils, XBMCInterfaceUtils, ExceptionHandler
-import xbmcgui, xbmcplugin #@UnresolvedImport
+import xbmcgui, xbmcplugin  # @UnresolvedImport
 import time
 from common.DataObjects import ListItem
 import sys
 import base64
+import urllib
 
 
 '''
@@ -29,35 +30,38 @@ Creating a JSON object in following format:
 }
 '''
 
-OLD_CHANNELS_JSON_FILE = 'DT_Channels.json'
-CHANNELS_JSON_FILE = 'DT_Channels_v1.json'
+OLD_CHANNELS_JSON_FILE = 'DT_Channels_v1.json'
+CHANNELS_JSON_FILE = 'DT_Channels_v2.json'
 CHANNEL_TYPE_IND = 'IND'
 CHANNEL_TYPE_PAK = 'PAK'
 BASE_WSITE_URL = base64.b64decode('aHR0cDovL3d3dy5kZXNpLXRhc2hhbi5jb20=')
 
 def __retrieveChannels__(tvChannels, dtUrl, channelType):
-    contentDiv = BeautifulSoup.SoupStrainer('div', {'class':'copy fix'})
+    contentDiv = BeautifulSoup.SoupStrainer('div', {'id':'content'})
     soup = HttpClient().getBeautifulSoup(url=dtUrl, parseOnlyThese=contentDiv)
-    for tvChannelTag in soup.findAll('tbody'):
+    for tvChannelTag in soup.div.div.div.findAll('div', recursive=False):
         try:
             tvChannel = {}
             running_tvshows = []
             finished_tvshows = []
             tmp_tvshows_list = None
             firstRow = False
-            for trTag in tvChannelTag.findAll('tr', recursive=False):
+            for tag in tvChannelTag.findAll(re.compile('div|a'), recursive=False):
+                if tag.name == 'div' and tag.get('class') == 'nav_up':
+                    continue
                 if not firstRow:
-                    channelImg = str(trTag.find('img')['src'])
-                    channelName = re.compile(BASE_WSITE_URL + '/category/(tv-serials|pakistan-tvs)/(.+?)/').findall(str(trTag.find('a')['href']))[0][1]
+                    channelImg = str(tag.find('img')['file'])
+                    channelName = re.compile(BASE_WSITE_URL + '/category/(tv-serials|pakistan-tvs)/(.+?)/').findall(str(tag.find('a')['href']))[0][1]
                     channelName = string.upper(channelName.replace('-', ' '))
+                    print channelName
                     tvChannels[channelName] = tvChannel
                     tvChannel['iconimage'] = channelImg
                     tvChannel['channelType'] = channelType
                     firstRow = True
                 else:
-                    divTag = trTag.find('div')
-                    if divTag != None:
-                        txt = divTag.getText()
+                    if tag.name == 'div' and tag.get('class') == 'dtLink':
+                        txt = tag.getText()
+                        print '       ' + txt
                         if re.search('running', txt, flags=re.IGNORECASE):
                             tmp_tvshows_list = running_tvshows
                             tvChannel['running_tvshows'] = running_tvshows
@@ -66,13 +70,14 @@ def __retrieveChannels__(tvChannels, dtUrl, channelType):
                             tvChannel['finished_tvshows'] = finished_tvshows
                         else:
                             print 'UNKNOWN TV SHOW CATEGORY'
-                    else:
-                        for aTag in trTag.findAll('a'):
-                            tvshowUrl = str(aTag['href'])
-                            tvshowName = aTag.getText()
-                            tmp_tvshows_list.append({'name':HttpUtils.unescape(tvshowName), 'url':tvshowUrl})
+                    elif tag.name == 'a':
+                        tvshowUrl = str(tag['href'])
+                        tvshowName = tag.getText()
+                        print '               ' + tvshowName
+                        tmp_tvshows_list.append({'name':HttpUtils.unescape(tvshowName), 'url':tvshowUrl})
         except:
-            print 'Failed to load a tv channel links.'
+            print '*****Failed to load a tv channel links from following tag:*****'
+            print tvChannelTag
 
 def retrieveTVShowsAndSave(request_obj, response_obj):
     oldfilepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=OLD_CHANNELS_JSON_FILE, makeDirs=True)
@@ -94,7 +99,7 @@ def retrieveTVShowsAndSave(request_obj, response_obj):
     tvChannels = {}
     __retrieveChannels__(tvChannels, BASE_WSITE_URL + '/', CHANNEL_TYPE_IND)
     __retrieveChannels__(tvChannels, BASE_WSITE_URL + '/pakistan-tv/', CHANNEL_TYPE_PAK)
-    #save tvChannels in moving data
+    # save tvChannels in moving data
     request_obj.get_data()['tvChannels'] = tvChannels
     
     status = AddonUtils.saveObjToJsonFile(filepath, tvChannels)
@@ -182,14 +187,29 @@ def retrieveTVShowEpisodes(request_obj, response_obj):
                 xbmcListItem = xbmcgui.ListItem(label=episodeName)
                 item.set_xbmc_list_item_obj(xbmcListItem)
                 response_obj.addListItem(item)
+    
+    for episodeTag in soup.findAll('div', {'class':'episode'}):
+        episodeInfoTag = episodeTag.find('div', {'class':'episodeinfo'})
+        episodeName = episodeInfoTag.a.getText()
+        episodeUrl = str(episodeInfoTag.a['href'])
+        episodeImgTag = episodeTag.find('div', {'class':'episodeimage'})
+        episodeImageUrl = episodeImgTag.img['file']
+        
+        item = ListItem()
+        item.add_request_data('episodeName', episodeName)
+        item.add_request_data('episodeUrl', episodeUrl)
+        item.set_next_action_name(channelType + '_Episode_VLinks')
+        xbmcListItem = xbmcgui.ListItem(label=episodeName , iconImage=episodeImageUrl, thumbnailImage=episodeImageUrl)
+        item.set_xbmc_list_item_obj(xbmcListItem)
+        response_obj.addListItem(item)
             
     pagesDiv = soup.find('div', {'class':'wp-pagenavi'})
     if pagesDiv is not None:
         pagesInfoTag = pagesDiv.find('span', {'class':'pages'}, recursive=False)
         if pagesInfoTag is not None:
             pageInfo = re.compile('Page (.+?) of (.+?) ').findall(pagesInfoTag.getText() + ' ')
-            currentPage = int(pageInfo[0][0].replace(',',''))
-            totalPages = int(pageInfo[0][1].replace(',',''))
+            currentPage = int(pageInfo[0][0].replace(',', ''))
+            totalPages = int(pageInfo[0][1].replace(',', ''))
             for page in range(1, totalPages + 1):
                 if page == 1 or page == totalPages or page == currentPage - 1 or page == currentPage + 1:
                     if page != currentPage:
@@ -313,8 +333,17 @@ def __prepareVideoLink__(item):
         new_video_url = 'http://www.zshare.net/video/' + video_id + '&'
     elif re.search('youtube', video_url, flags=re.I):
         new_video_url = 'http://www.youtube.com/watch?v=' + video_id + '&'
-    elif re.search('megavideo', video_url, flags=re.I):
-        new_video_url = 'http://www.megavideo.com/v/' + video_id + '&'
+    elif re.search('novamov', video_url, flags=re.I):
+        new_video_url = 'http://www.novamov.com/embed.php?v=' + video_id + '&'
+    elif re.search('videoweed', video_url, flags=re.I):
+        new_video_url = 'http://www.videoweed.es/embed.php?v=' + video_id + '&'
+    elif re.search('pw', video_url, flags=re.I):
+        cyhtml = HttpClient().getHtmlContent('http://www.cyberustad.info/pw.php?id=' + video_id)
+        while(re.search('http://www.cyberustad.info/', cyhtml)):
+            cyhtml = HttpClient().getHtmlContent(re.compile('location="(.+?)";').findall(cyhtml)[0])
+        paramSet = re.compile("return p\}\(\'(.+?)\',(\d\d),(\d\d),\'(.+?)\'").findall(cyhtml)
+        video_info_link = AddonUtils.parsePackedValue(paramSet[0][0], int(paramSet[0][1]), int(paramSet[0][2]), paramSet[0][3].split('|')).replace('\\', '').replace('"', '\'')
+        new_video_url = re.compile("src=\'(.+?)\'").findall(urllib.unquote(video_info_link))[0]
         
     if new_video_url is not None:
         item.add_moving_data('videoUrl', new_video_url)
