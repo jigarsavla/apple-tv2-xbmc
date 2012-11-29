@@ -338,12 +338,9 @@ def __prepareVideoLink__(item):
     elif re.search('videoweed', video_url, flags=re.I):
         new_video_url = 'http://www.videoweed.es/embed.php?v=' + video_id + '&'
     elif re.search('pw', video_url, flags=re.I):
-        cyhtml = HttpClient().getHtmlContent('http://www.cyberustad.info/pw.php?id=' + video_id)
-        while(re.search('http://www.cyberustad.info/', cyhtml)):
-            cyhtml = HttpClient().getHtmlContent(re.compile('location="(.+?)";').findall(cyhtml)[0])
-        paramSet = re.compile("return p\}\(\'(.+?)\',(\d\d),(\d\d),\'(.+?)\'").findall(cyhtml)
-        video_info_link = AddonUtils.parsePackedValue(paramSet[0][0], int(paramSet[0][1]), int(paramSet[0][2]), paramSet[0][3].split('|')).replace('\\', '').replace('"', '\'')
-        new_video_url = re.compile("src=\'(.+?)\'").findall(urllib.unquote(video_info_link))[0]
+        new_video_url = 'http://cdn.playwire.com/12272/embed/' + video_id + '.xml'
+        
+    print "NEW VIDEO URL = " + new_video_url
         
     if new_video_url is not None:
         item.add_moving_data('videoUrl', new_video_url)
