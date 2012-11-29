@@ -191,6 +191,8 @@ def retrieveTVShowEpisodes(request_obj, response_obj):
     for episodeTag in soup.findAll('div', {'class':'episode'}):
         episodeInfoTag = episodeTag.find('div', {'class':'episodeinfo'})
         episodeName = episodeInfoTag.a.getText()
+        if re.search("Written Episode", episodeName, re.I):
+            continue
         episodeUrl = str(episodeInfoTag.a['href'])
         episodeImgTag = episodeTag.find('div', {'class':'episodeimage'})
         episodeImageUrl = episodeImgTag.img['file']
