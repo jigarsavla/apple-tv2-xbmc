@@ -202,7 +202,7 @@
 		<video-id regex="putlocker.com/file/(.+?)&amp;" />
 	</snapper>
 	
-	<snapper module="snapvideo.Shockshare" function="retrieveVideoInfo"
+	<snapper module="snapvideo.Sockshare" function="retrieveVideoInfo"
 		enabled="true" desc="www.sockshare.com video hosting website">
 		<video-id regex="sockshare.com/file/(.+?)&amp;" />
 	</snapper>

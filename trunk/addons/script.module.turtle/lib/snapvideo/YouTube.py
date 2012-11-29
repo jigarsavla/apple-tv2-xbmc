@@ -90,11 +90,11 @@ def retrieveVideoInfo(video_id):
                 video_info.add_video_link(VIDEO_QUAL_SD, url)
             elif(qual == '18'):  # 480x360 MP4
                 video_info.add_video_link(VIDEO_QUAL_SD, url)
-            elif(qual == '22' and video_info.get_video_link(VIDEO_QUAL_HD_720) is None):  # 1280x720 MP4
+            elif(qual == '22'):  # 1280x720 MP4
                 video_info.add_video_link(VIDEO_QUAL_HD_720, url)
-            elif(qual == '37' and video_info.get_video_link(VIDEO_QUAL_HD_1080) is None):  # 1920x1080 MP4
+            elif(qual == '37'):  # 1920x1080 MP4
                 video_info.add_video_link(VIDEO_QUAL_HD_1080, url)
-            elif(qual == '38'):  # 4096\\3272304 EPIC MP4
+            elif(qual == '38' and video_info.get_video_link(VIDEO_QUAL_HD_1080) is None):  # 4096\\3272304 EPIC MP4
                 video_info.add_video_link(VIDEO_QUAL_HD_1080, url)
             elif(qual == '43' and video_info.get_video_link(VIDEO_QUAL_SD) is None):  # 360 WEBM
                 video_info.add_video_link(VIDEO_QUAL_SD, url)
