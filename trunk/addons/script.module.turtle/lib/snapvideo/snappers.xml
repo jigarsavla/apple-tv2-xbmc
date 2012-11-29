@@ -195,6 +195,7 @@
 	<snapper module="snapvideo.Playwire" function="retrieveVideoInfo"
 		enabled="true" desc="www.playwire.com video hosting website">
 		<video-id regex="playwire.com/(.+?)\.xml" />
+		<video-id regex="playwire.com/(.+?)\.js" />
 	</snapper>
 	
 	<snapper module="snapvideo.Putlocker" function="retrieveVideoInfo"
