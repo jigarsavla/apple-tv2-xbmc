@@ -443,10 +443,7 @@ def __prepareVideoLink__(video_link):
         new_video_url = 'http://www.putlocker.com/file/' + video_id
     elif re.search('weed.php', video_url, flags=re.I):
         new_video_url = 'http://www.videoweed.es/file/' + video_id
-# Now Video is not yet supported
-#    elif re.search('now.php', video_url, flags=re.I):
-#        new_video_url = 'http://www.nowvideo.eu/video/' + video_id
-    elif re.search('http://www.sockshare.com/file', video_url, flags=re.I):
+    elif re.search('sockshare.com', video_url, flags=re.I):
         new_video_url = video_url
         
     video_hosting_info = SnapVideo.findVideoHostingInfo(new_video_url)
