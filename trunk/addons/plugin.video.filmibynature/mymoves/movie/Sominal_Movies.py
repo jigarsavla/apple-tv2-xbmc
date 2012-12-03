@@ -17,7 +17,7 @@ try:
     import json
 except ImportError:
     import simplejson as json
-from common.HttpUtils import HttpClient
+from common import HttpUtils
 
 BASE_WSITE_URL = base64.b64decode('aHR0cDovL3d3dy5zb21pbmFsdHZmaWxtcy5jb20v')
 
@@ -92,7 +92,7 @@ def displayUC(request_obj, response_obj):
     XBMCInterfaceUtils.displayDialogMessage(heading='UNDER Construction', line1='Please wait for update!!', line2='Enjoy HD movies for the time being.', line3='')
 
 def listHDMovies(request_obj, response_obj):
-    html = HttpClient().getHtmlContent(url=(BASE_WSITE_URL + "feeds/posts/summary/-/BluRay?max-results=10000&alt=json"))
+    html = HttpUtils.HttpClient().getHtmlContent(url=(BASE_WSITE_URL + "feeds/posts/summary/-/BluRay?max-results=10000&alt=json"))
     jObj = json.loads(html)
     print 'RETRIEVED MOVIE OBJECT'
     print len(jObj["feed"]["entry"])
@@ -122,11 +122,11 @@ def listHDMovies(request_obj, response_obj):
         
         
 def retieveMovieStreams(request_obj, response_obj):
-    html = HttpClient().getHtmlContent(url=(request_obj.get_data()['movieInfoUrl'] + '?alt=json'))
+    html = HttpUtils.HttpClient().getHtmlContent(url=(request_obj.get_data()['movieInfoUrl'] + '?alt=json'))
     jObj = json.loads(html)
     html = jObj['entry']['content']['$t']
     soup = BeautifulSoup.BeautifulSoup(html)
-    for aTag in soup.findAll('a', attrs={'href':re.compile('http://www.desionlinetheater.com')}, recursive=True):
+    for aTag in soup.findAll('a', attrs={'href':re.compile('(desionlinetheater.com|wp.me)')}, recursive=True):
         infoLink = str(aTag['href']).replace('http://adf.ly/377117/', '')
         name = aTag.getText()
         
@@ -142,9 +142,11 @@ def retieveMovieStreams(request_obj, response_obj):
     
 def __prepareVideoLink__(item):
     url = item.get_moving_data()['videoInfoLink']
+    if re.search('wp.me',url,re.I):
+        url = HttpUtils.getRedirectedUrl(url)
     video_link = {}
     contentDiv = BeautifulSoup.SoupStrainer('div', {'class':'left'})
-    soup = HttpClient().getBeautifulSoup(url=url, parseOnlyThese=contentDiv)
+    soup = HttpUtils.HttpClient().getBeautifulSoup(url=url, parseOnlyThese=contentDiv)
     child = soup.findChild('embed')
     if child is None:
         child = soup.findChild('iframe')
