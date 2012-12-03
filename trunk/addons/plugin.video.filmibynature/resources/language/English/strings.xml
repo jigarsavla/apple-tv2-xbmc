@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 <!-- Options -->
-	<string id="30030">Download folder:</string>
-	<string id="30031">Delete incomplete download</string>
-	<string id="30032">Ask for filename</string>
-	<string id="30010">Always get movie poster [I]Unckeck to increase speed[/I] </string>
-	<string id="30011">Port number</string>
 	<string id="30000">15</string>
 	<string id="30001">25</string>
 	<string id="30002">50</string>
 	<string id="30003">480</string>
 	<string id="30004">720 HD</string>
 	<string id="30005">1080 HD</string>
-	<string id="30006">Username:</string>
-	<string id="30007">Password:</string>
-	<string id="30020">USA</string>
-	<string id="30021">Europe</string>
-	<string id="30022">Canada</string>
-	<string id="30026">MMS HTTP</string>
-	<string id="30027">MMS RTSP</string>
+	<string id="30021">1080p</string>
+	<string id="30022">720p</string>
+	<string id="30023">Standard</string>
 </strings>

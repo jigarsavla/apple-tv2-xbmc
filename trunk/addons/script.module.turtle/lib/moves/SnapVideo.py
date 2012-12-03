@@ -9,7 +9,7 @@ import sys
 from TurtleContainer import AddonContext
 from common.HttpUtils import HttpClient
 from common.DataObjects import ListItem
-import xbmcgui #@UnresolvedImport
+import xbmcgui  # @UnresolvedImport
 
 class Snapper(object):
     def __init__(self, snapper_Tag):
@@ -28,6 +28,7 @@ class Snapper(object):
                 module = getattr(module, components[index])
         
         self.__snapper_module = module
+        self.__snapper_modulepath = modulePath + ':' + functionName
         self.__getVideoInfo = getattr(module, functionName)
         self.getVideoHostingInfo = getattr(module, 'getVideoHostingInfo')
         print 'Snapper loaded = ' + modulePath
@@ -35,10 +36,14 @@ class Snapper(object):
     def isPlaylistSnapper(self):
         return self.__is_playlist
     
+    def getModuleName(self):
+        return self.__snapper_modulepath
+    
     def isVideoHostedByYou(self, video_url):
         isVideoHoster = False
         videoId = self.getVideoId(video_url)
         if videoId is not None:
+            print 'Snapper selected = ' + self.getModuleName()
             isVideoHoster = True
         return isVideoHoster
     
@@ -46,6 +51,7 @@ class Snapper(object):
         videoInfo = None
         videoId = self.getVideoId(video_url)
         if videoId is not None:
+            print 'Snapper selected = ' + self.getModuleName()
             videoInfo = self.__getVideoInfo(videoId)
         return videoInfo
     

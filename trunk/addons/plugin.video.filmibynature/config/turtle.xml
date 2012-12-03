@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<turtle xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://code.google.com/p/apple-tv2-xbmc/turtle/ turtle.xsd"
+	xmlns="https://code.google.com/p/apple-tv2-xbmc/turtle/">
+
+	<action id="__start__"
+		pmessage="Welcome to Filmi BY NATURE|presented by AJ|based on Turtle">
+		<move module="mymoves.Home" function="displayMenuItems" />
+		<next-action name="Movie" id="display_Movie_Section"
+			isfolder="true" />
+		<next-action name="YouTube" id="display_SOM_Movie_Under_Construction"
+			isfolder="true" />
+	</action>
+
+	<action id="display_Movie_Section"
+		pmessage="SominalTvTheatre|Please go to website and press an Advertisement|Keep it running in your hands">
+		<move module="mymoves.movie.Sominal_Movies" function="displayMainMenu" />
+		<next-action name="Blurays" id="display_SOM_Blurays"
+			isfolder="true" />
+		<next-action name="AZ" id="display_SOM_Movie_Under_Construction" isfolder="true" />
+		<next-action name="Hindi" id="display_SOM_Movie_Under_Construction"
+			isfolder="true" />
+		<next-action name="Telugu" id="display_SOM_Movie_Under_Construction"
+			isfolder="true" />
+		<next-action name="Tamil" id="display_SOM_Movie_Under_Construction" isfolder="true" />
+		<next-action name="Punjabi" id="display_SOM_Movie_Under_Construction"
+			isfolder="true" />
+		<next-action name="Malayalam" id="display_SOM_Movie_Under_Construction"
+			isfolder="true" />
+		<next-action name="Bengali" id="display_SOM_Movie_Under_Construction"
+			isfolder="true" />
+	</action>
+
+	<!-- BluRay actions -->
+	<action id="display_SOM_Blurays">
+		<move module="mymoves.movie.Sominal_Movies" function="listHDMovies"
+			pmessage="Retrieving HD movie collection" />
+		<move module="mymoves.movie.Metadata" function="retieveMovieInfoAndAddItem"
+			pmessage="Reading saved information|Preparing TV Channels to be displayed" />
+		<next-action name="Movie_Streams" id="display_SOM_Movie_Streams"
+			isfolder="true" />
+	</action>
+
+	<action id="display_SOM_Movie_Streams">
+		<move module="mymoves.movie.Sominal_Movies" function="retieveMovieStreams"
+			pmessage="Retrieving movie stream information" />
+		<next-action name="Play_Stream" id="snap_and_play_video"
+			isfolder="false" />
+	</action>
+	
+	<action id="display_SOM_Movie_Under_Construction">
+		<move module="mymoves.movie.Sominal_Movies" function="displayUC"
+			pmessage="" />
+	</action>
+
+
+	<!-- Common Video Link Player Moves -->
+
+
+	<action id="snap_and_play_video">
+		<move module="moves.PreProcessor" function="prepareVideoItem" />
+		<move module="moves.SnapVideo" function="addPlaylistVideosInfo" />
+		<move module="moves.SnapVideo" function="addVideoInfo" />
+		<next-action name="Play" id="__play__" isfolder="false" />
+	</action>
+
+	<action id="snap_and_directplay_playlist">
+		<move module="moves.PreProcessor" function="preparePlayListItems" />
+		<move module="moves.SnapVideo" function="addPlaylistVideosInfo" />
+		<move module="moves.SnapVideo" function="addVideoInfo" />
+		<next-action name="Play" id="__play__" isfolder="false" />
+	</action>
+
+
+</turtle>
