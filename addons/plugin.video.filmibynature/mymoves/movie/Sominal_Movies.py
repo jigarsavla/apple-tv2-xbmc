@@ -100,16 +100,16 @@ def listHDMovies(request_obj, response_obj):
         title = str(entry["title"]["$t"])
         print title
         movieInfo = re.compile("(.+?)\((\d+)\) (.*)").findall(title)
-        title = movieInfo[0][0].rstrip()
-        year = movieInfo[0][1]
-        quality = movieInfo[0][2]
+        title = str(movieInfo[0][0].rstrip())
+        year = str(movieInfo[0][1])
+        quality = str(movieInfo[0][2])
         moviePageUrl = ""
         movieInfoUrl = ""
         for link in entry["link"]:
             if link["rel"] == "self":
-                movieInfoUrl = link["href"]
+                movieInfoUrl = str(link["href"])
             elif link["rel"] == "alternate":
-                moviePageUrl = link["href"]
+                moviePageUrl = str(link["href"])
                 
         item = ListItem()
         item.add_moving_data('movieTitle', title)
@@ -134,29 +134,42 @@ def retieveMovieStreams(request_obj, response_obj):
         item.add_moving_data('videoInfoLink', infoLink)
         item.add_request_data('videoTitle', name)
         item.set_next_action_name('Play_Stream')
-        xbmcListItem = xbmcgui.ListItem(label=name)
-        item.set_xbmc_list_item_obj(xbmcListItem)
         response_obj.addListItem(item)
     items = response_obj.get_item_list()
-    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__prepareVideoLink__'), items, 'Retrieving Streaming links', 'Failed to retrieve stream information, please try again later')
+    new_items = XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__prepareVideoLink__'), items, 'Retrieving Streaming links', 'Failed to retrieve stream information, please try again later')
+    response_obj.set_item_list(new_items)
     
 def __prepareVideoLink__(item):
+    new_items = []
     url = item.get_moving_data()['videoInfoLink']
-    if re.search('wp.me',url,re.I):
+    if re.search('wp.me', url, re.I):
         url = HttpUtils.getRedirectedUrl(url)
     video_link = {}
     contentDiv = BeautifulSoup.SoupStrainer('div', {'class':'left'})
     soup = HttpUtils.HttpClient().getBeautifulSoup(url=url, parseOnlyThese=contentDiv)
-    child = soup.findChild('embed')
-    if child is None:
-        child = soup.findChild('iframe')
-    video_url = child['src']
-    video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
-    video_source_img = video_hosting_info.get_video_hosting_image()
-    
-    item.add_request_data('videoLink', video_url)
-    xbmc_item = item.get_xbmc_list_item_obj()
-    xbmc_item.setIconImage(video_source_img)
-    xbmc_item.setThumbnailImage(video_source_img)
+    children = soup.findChildren('embed')
+    if children is None or len(children) == 0:
+        children = soup.findChildren('iframe', attrs={'class':'iframe-class'})
+    name = item.get_request_data()['videoTitle']
+    count = 0
+    for child in children:
+        count = count + 1
+        new_name = name
+        if(len(children) > 1):
+            new_name = name + ' - Part #' + str(count)
+        video_url = child['src']
+        if(re.search('http://ads', video_url, re.I)):
+            return
+        video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
+        video_source_img = video_hosting_info.get_video_hosting_image()
+        new_item = ListItem()
+        new_item.add_request_data('videoTitle', new_name)
+        new_item.add_request_data('videoLink', video_url)
+        new_item.set_next_action_name('Play_Stream')
+        xbmcListItem = xbmcgui.ListItem(label=new_name, iconImage=video_source_img, thumbnailImage=video_source_img)
+        new_item.set_xbmc_list_item_obj(xbmcListItem)
+        new_items.append(new_item)
+        
+    return new_items
     
     
