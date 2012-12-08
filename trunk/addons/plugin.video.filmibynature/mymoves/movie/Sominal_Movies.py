@@ -100,9 +100,9 @@ def listHDMovies(request_obj, response_obj):
         title = str(entry["title"]["$t"])
         print title
         movieInfo = re.compile("(.+?)\((\d+)\) (.*)").findall(title)
-        title = str(movieInfo[0][0].rstrip())
-        year = str(movieInfo[0][1])
-        quality = str(movieInfo[0][2])
+        title = unicode(movieInfo[0][0].rstrip()).encode('utf-8')
+        year = unicode(movieInfo[0][1]).encode('utf-8')
+        quality = unicode(movieInfo[0][2]).encode('utf-8')
         moviePageUrl = ""
         movieInfoUrl = ""
         for link in entry["link"]:
