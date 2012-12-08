@@ -14,8 +14,8 @@ global metaget
 metaget = metahandlers.MetaData()
 
 def __addMovieInfo_in_item(item):
-    title = str(item.get_moving_data()['movieTitle'])
-    year = str(item.get_moving_data()['movieYear'])
+    title = unicode(item.get_moving_data()['movieTitle']).encode('utf-8')
+    year = unicode(item.get_moving_data()['movieYear']).encode('utf-8')
     meta = metaget.get_meta('movie', title, year=year)
     xbmc_item = item.get_xbmc_list_item_obj()
     
