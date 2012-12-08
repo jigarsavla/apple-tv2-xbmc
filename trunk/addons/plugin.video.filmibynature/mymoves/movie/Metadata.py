@@ -22,7 +22,13 @@ def __addMovieInfo_in_item(item):
     if(meta is not None):
         xbmc_item.setIconImage(meta['thumb_url'])
         xbmc_item.setThumbnailImage(meta['cover_url'])
-        xbmc_item.setInfo('video', {'genre':meta['genre'], 'title':meta['title'], 'year':meta['year'], 'rating':meta['rating'], 'tagline':meta['tagline'], 'writer':meta['writer'] , 'director':meta['director'], 'cast':meta['cast'], 'raiting':meta['rating'], 'votes':meta['votes'], 'plot':meta['plot'], 'duration':meta['duration'], 'mpaa':meta['mpaa'], 'studio':meta['studio'] , 'premiered':meta['premiered'], 'trailer_url':meta['trailer_url']})
+        videoInfo = {'trailer_url':meta['trailer_url']}
+        for key, value in meta.items():
+            if key in ['genre', 'title', 'year', 'rating', 'tagline', 'writer', 'director', 'rating', 'votes', 'plot', 'duration', 'cast', 'mpaa', 'studio', 'premiered']:
+                if type(value) is str:
+                    value = unicode(value).encode('utf-8')
+                videoInfo['key'] = value
+        xbmc_item.setInfo('video', videoInfo)
         xbmc_item.setProperty('fanart_image', meta['backdrop_url'])
     else:
         xbmc_item.setInfo('video', {'title':title, 'year':year})

@@ -7,6 +7,7 @@ from TurtleContainer import Container
 import xbmcplugin #@UnresolvedImport
 import sys
 from common import ExceptionHandler
+import logging
 
 __addon_id__ = None
 
@@ -19,6 +20,7 @@ def start(addon_id):
         action_id = containerObj.getTurtleRequest().get_action_id()
         containerObj.performAction(action_id)
     except Exception, e:
+        logging.exception(e)
         ExceptionHandler.handle(e)
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

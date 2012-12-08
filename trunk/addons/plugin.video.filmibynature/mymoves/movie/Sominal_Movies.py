@@ -97,9 +97,9 @@ def listHDMovies(request_obj, response_obj):
     print 'RETRIEVED MOVIE OBJECT'
     print len(jObj["feed"]["entry"])
     for entry in jObj["feed"]["entry"]:
-        title = str(entry["title"]["$t"])
-        print title
-        movieInfo = re.compile("(.+?)\((\d+)\) (.*)").findall(title)
+        titleInfo = str(entry["title"]["$t"])
+        print titleInfo
+        movieInfo = re.compile("(.+?)\((\d+)\) (.*)").findall(titleInfo)
         title = unicode(movieInfo[0][0].rstrip()).encode('utf-8')
         year = unicode(movieInfo[0][1]).encode('utf-8')
         quality = unicode(movieInfo[0][2]).encode('utf-8')
@@ -119,6 +119,7 @@ def listHDMovies(request_obj, response_obj):
         xbmcListItem = xbmcgui.ListItem(label=title, label2='(' + year + ') - ' + quality)
         item.set_xbmc_list_item_obj(xbmcListItem)
         response_obj.addListItem(item)
+    response_obj.set_xbmc_content_type('movies')
         
         
 def retieveMovieStreams(request_obj, response_obj):
