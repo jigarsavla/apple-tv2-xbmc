@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.TVonDesiZone" name="TV on DESI ZONE"
-	version="1.3.6" provider-name="AJ">
+	version="1.3.7" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtle" version="1.1.3" />
+		<import addon="script.module.turtle" version="1.1.6" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
 		<provides>video</provides>

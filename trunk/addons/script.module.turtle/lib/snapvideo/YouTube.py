@@ -8,6 +8,7 @@ from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_LOW, \
 from common import HttpUtils
 import re
 import urllib
+import logging
 
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
@@ -27,6 +28,7 @@ def retrieveVideoInfo(video_id):
         html = html.decode('utf8')
         html = html.replace('\n', '')
         html = html.replace('\r', '')
+        html = html + '&'
         title = urllib.unquote_plus(re.compile('&title=(.+?)&').findall(html)[0]).replace('/\+/g', ' ')
         print title
         if re.search('status=fail', html):
@@ -119,7 +121,8 @@ def retrieveVideoInfo(video_id):
                 video_info.add_video_link(VIDEO_QUAL_SD, url)
 
             video_info.set_video_stopped(False)
-    except:
+    except Exception, e:
+        logging.exception(e)
         video_info.set_video_stopped(True)
     return video_info
 

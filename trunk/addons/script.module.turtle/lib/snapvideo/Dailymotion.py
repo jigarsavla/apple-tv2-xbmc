@@ -12,6 +12,7 @@ try:
     import json
 except ImportError:
     import simplejson as json
+import logging
 
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
@@ -55,15 +56,18 @@ def retrieveVideoInfo(video_id):
                     for layerItem in sequenceItem['layerList']:
                         if layerItem['name'] == 'video' and layerItem['type'] == 'VideoFrame':
                             params = layerItem['param']
-                            dm_low = params['sdURL']
-                            dm_high = params['hqURL']
-                            video_info.add_video_link(VIDEO_QUAL_SD, dm_low)
-                            video_info.add_video_link(VIDEO_QUAL_HD_720, dm_high)
+                            if params.has_key('sdURL'):
+                                dm_low = params['sdURL']
+                                video_info.add_video_link(VIDEO_QUAL_SD, dm_low)
+                            if params.has_key('hqURL'):
+                                dm_high = params['hqURL']
+                                video_info.add_video_link(VIDEO_QUAL_HD_720, dm_high)
                             video_info.set_video_stopped(False)
                         elif layerItem['name'] == 'relatedBackground' and layerItem['type'] == 'Background':
                             params = layerItem['param']
                             video_info.set_video_image(params['imageURL'])
-    except: 
+    except Exception, e:
+        logging.exception(e)
         video_info.set_video_stopped(True)
     return video_info
 
