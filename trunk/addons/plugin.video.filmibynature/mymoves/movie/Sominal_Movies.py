@@ -190,7 +190,7 @@ def __prepareVideoLink__(item):
     soup = HttpUtils.HttpClient().getBeautifulSoup(url=url, parseOnlyThese=contentDiv)
     children = soup.findChildren('embed')
     if children is None or len(children) == 0:
-        children = soup.findChildren('iframe', attrs={'class':'iframe-class'})
+        children = soup.findChildren('iframe')
     name = item.get_request_data()['videoTitle']
     count = 0
     for child in children:
@@ -200,7 +200,7 @@ def __prepareVideoLink__(item):
             new_name = name + ' - Part #' + str(count)
         video_url = child['src']
         if(re.search('http://ads', video_url, re.I)):
-            return
+            continue
         video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
         video_source_img = video_hosting_info.get_video_hosting_image()
         new_item = ListItem()
@@ -210,7 +210,4 @@ def __prepareVideoLink__(item):
         xbmcListItem = xbmcgui.ListItem(label=new_name, iconImage=video_source_img, thumbnailImage=video_source_img)
         new_item.set_xbmc_list_item_obj(xbmcListItem)
         new_items.append(new_item)
-        
     return new_items
-    
-    
