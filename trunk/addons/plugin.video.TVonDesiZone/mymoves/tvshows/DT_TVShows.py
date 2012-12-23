@@ -195,7 +195,7 @@ def retrieveTVShowEpisodes(request_obj, response_obj):
             continue
         episodeUrl = str(episodeInfoTag.a['href'])
         episodeImgTag = episodeTag.find('div', {'class':'episodeimage'})
-        episodeImageUrl = episodeImgTag.img['file']
+        episodeImageUrl = episodeImgTag.img['src']
         
         item = ListItem()
         item.add_request_data('episodeName', episodeName)

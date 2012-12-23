@@ -8,16 +8,9 @@ import urllib
 from common.Singleton import SingletonClass
 from common import AddonUtils, ExceptionHandler
 import sys
+import logging
 
-SUPPRESS_DIALOG_MSG = False
-
-def setSuppressDialogMsg(suppressMsg=False):
-    global SUPPRESS_DIALOG_MSG
-    if suppressMsg:
-        SUPPRESS_DIALOG_MSG = True
-    else:
-        SUPPRESS_DIALOG_MSG = False
-
+SUPPRESS_DIALOG_MSG = True
 
 def updateListItem_With_VideoHostingInfo(video_hosting_info, xbmc_list_item):
     new_label = video_hosting_info.get_video_hosting_name()
@@ -67,6 +60,7 @@ def callBackDialogProgressBar(function_obj, function_args, heading, failure_mess
                 dialog = xbmcgui.Dialog()
                 dialog.ok('Process Failed', failure_message, 'You may like to try again later or use other source if available')
             print 'ERROR OCCURRED :: ' + str(e)
+            logging.exception(e)
             raise Exception(ExceptionHandler.DONOT_DISPLAY_ERROR, '')
         if isCanceled:
             raise Exception(ExceptionHandler.PROCESS_STOPPED, 'It looks like you don\'t want wait more|Process was stopped in between')
