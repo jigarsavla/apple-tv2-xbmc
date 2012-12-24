@@ -10,4 +10,8 @@
 	<string id="30021">1080p</string>
 	<string id="30022">720p</string>
 	<string id="30023">Standard</string>
+	
+	<string id="30051">25</string>
+	<string id="30052">50</string>
+	<string id="30053">100</string>
 </strings>
