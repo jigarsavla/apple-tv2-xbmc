@@ -19,17 +19,7 @@
 			isfolder="true" />
 		<next-action name="AZ" id="display_SOM_Movie_Under_Construction"
 			isfolder="true" />
-		<next-action name="Hindi" id="display_SOM_Category_Movie_List"
-			isfolder="true" />
-		<next-action name="Telugu" id="display_SOM_Category_Movie_List"
-			isfolder="true" />
-		<next-action name="Tamil" id="display_SOM_Category_Movie_List"
-			isfolder="true" />
-		<next-action name="Punjabi" id="display_SOM_Category_Movie_List"
-			isfolder="true" />
-		<next-action name="Malayalam" id="display_SOM_Movie_Under_Construction"
-			isfolder="true" />
-		<next-action name="Bengali" id="display_SOM_Movie_Under_Construction"
+		<next-action name="CategoryMovies" id="display_SOM_Category_Movie_List"
 			isfolder="true" />
 	</action>
 
@@ -41,6 +31,8 @@
 			pmessage="Reading saved information|Preparing TV Channels to be displayed" />
 		<next-action name="Movie_Streams" id="display_SOM_Movie_Streams"
 			isfolder="true" />
+		<next-action name="Next_Page" id="display_SOM_Blurays"
+			isfolder="true" />
 	</action>
 
 
@@ -50,6 +42,8 @@
 		<move module="mymoves.movie.Metadata" function="retieveMovieInfoAndAddItem"
 			pmessage="Reading saved information|Preparing TV Channels to be displayed" />
 		<next-action name="Movie_Streams" id="display_SOM_Movie_Streams"
+			isfolder="true" />
+		<next-action name="Next_Page" id="display_SOM_Category_Movie_List"
 			isfolder="true" />
 	</action>
 

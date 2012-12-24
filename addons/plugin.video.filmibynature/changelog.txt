@@ -1,3 +1,7 @@
 [B]Version v1.9.1[/B]
 
-New way to watch DESI MOVIES comming up!
+New way to watch DESI MOVIES coming up!
+
+[B]Version v1.9.7[/B]
+
+Enabled HD Movies and other categories. Caching and pagination added.
