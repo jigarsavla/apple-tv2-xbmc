@@ -284,6 +284,27 @@ def retieveMovieStreams(request_obj, response_obj):
     new_items = XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__prepareVideoLink__'), items, 'Retrieving Streaming links', 'Failed to retrieve stream information, please try again later')
     response_obj.set_item_list(new_items)
     
+    if len(new_items) > 1:
+        response_obj.addListItem(__preparePlayListItem__(new_items))
+
+
+def __preparePlayListItem__(video_items):
+    video_playlist_items = []
+    video_source_img = None
+    for item in video_items:
+        video_item = {}
+        video_item['videoLink'] = item.get_request_data()['videoLink']
+        video_item['videoTitle'] = item.get_request_data()['videoTitle']
+        video_playlist_items.append(video_item)
+        video_source_img = item.get_moving_data()['videoSourceImg']
+    
+    item = ListItem()
+    item.add_request_data('videoPlayListItems', video_playlist_items)
+    item.set_next_action_name('Play_AllStreams')
+    xbmcListItem = xbmcgui.ListItem(label=AddonUtils.getBoldString('DirectPlay') + ' | ' + 'Parts = ' + str(len(video_playlist_items)) , iconImage=video_source_img, thumbnailImage=video_source_img)
+    item.set_xbmc_list_item_obj(xbmcListItem)
+    return item
+    
 def __prepareVideoLink__(item):
     new_items = []
     url = item.get_moving_data()['videoInfoLink']
@@ -303,16 +324,20 @@ def __prepareVideoLink__(item):
         new_name = name
         if(len(children) > 1):
             new_name = name + ' - Part #' + str(count)
+        new_name = 'Video Part #' + str(count)
         video_url = child['src']
         if(re.search('http://ads', video_url, re.I)):
             continue
         video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
         video_source_img = video_hosting_info.get_video_hosting_image()
+        
         new_item = ListItem()
         new_item.add_request_data('videoTitle', new_name)
         new_item.add_request_data('videoLink', video_url)
+        new_item.add_moving_data('videoSourceImg', video_source_img)
         new_item.set_next_action_name('Play_Stream')
         xbmcListItem = xbmcgui.ListItem(label=new_name, iconImage=video_source_img, thumbnailImage=video_source_img)
         new_item.set_xbmc_list_item_obj(xbmcListItem)
         new_items.append(new_item)
+    
     return new_items

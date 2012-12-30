@@ -52,6 +52,8 @@
 			pmessage="Retrieving movie stream information" />
 		<next-action name="Play_Stream" id="snap_and_play_video"
 			isfolder="false" />
+		<next-action name="Play_AllStreams" id="snap_and_directplay_playlist"
+			isfolder="false" />
 	</action>
 
 	<action id="display_SOM_Movie_Under_Construction">
