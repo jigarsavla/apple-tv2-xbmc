@@ -27,7 +27,7 @@ def retrieveVideoInfo(video_id):
     try:
         video_link = 'http://www.dailymotion.com/video/' + str(video_id)
         html = HttpUtils.HttpClient().getHtmlContent(url=video_link)
-        
+        HttpUtils.HttpClient().disableCookies()
         sequence = re.compile('"sequence":"(.+?)"').findall(html)
         if(len(sequence) == 0):
             sequence = re.compile('"sequence",  "(.+?)"').findall(html)
