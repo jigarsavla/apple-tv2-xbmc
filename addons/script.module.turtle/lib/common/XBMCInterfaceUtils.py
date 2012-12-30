@@ -10,7 +10,15 @@ from common import AddonUtils, ExceptionHandler
 import sys
 import logging
 
-SUPPRESS_DIALOG_MSG = True
+SUPPRESS_DIALOG_MSG = False
+
+def setSuppressDialogMsg(suppressMsg=False):
+    global SUPPRESS_DIALOG_MSG
+    if suppressMsg:
+        SUPPRESS_DIALOG_MSG = True
+    else:
+        SUPPRESS_DIALOG_MSG = False
+
 
 def updateListItem_With_VideoHostingInfo(video_hosting_info, xbmc_list_item):
     new_label = video_hosting_info.get_video_hosting_name()
