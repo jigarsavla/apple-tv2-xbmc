@@ -15,7 +15,7 @@
 	<action id="display_Movie_Section"
 		pmessage="SominalTvTheatre|Please go to website and press an Advertisement|Keep it running in your hands">
 		<move module="mymoves.movie.Sominal_Movies" function="displayMainMenu" />
-		<next-action name="Blurays" id="display_SOM_Blurays"
+		<next-action name="listMovies" id="display_SOM_Movies"
 			isfolder="true" />
 		<next-action name="AZ" id="display_SOM_Movie_Under_Construction"
 			isfolder="true" />
@@ -23,15 +23,15 @@
 			isfolder="true" />
 	</action>
 
-	<!-- BluRay actions -->
-	<action id="display_SOM_Blurays">
-		<move module="mymoves.movie.Sominal_Movies" function="listHDMovies"
+	<!-- all movie listing common actions -->
+	<action id="display_SOM_Movies">
+		<move module="mymoves.movie.Sominal_Movies" function="listMovies"
 			pmessage="Retrieving HD movie collection" />
 		<move module="mymoves.movie.Metadata" function="retieveMovieInfoAndAddItem"
 			pmessage="Reading saved information|Preparing TV Channels to be displayed" />
 		<next-action name="Movie_Streams" id="display_SOM_Movie_Streams"
 			isfolder="true" />
-		<next-action name="Next_Page" id="display_SOM_Blurays"
+		<next-action name="Next_Page" id="display_SOM_Movies"
 			isfolder="true" />
 	</action>
 
