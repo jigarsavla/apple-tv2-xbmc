@@ -32,7 +32,8 @@ def displayMainMenu(request_obj, response_obj):
     # HD Movies
     hd_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='HD_Movies_V1.png')
     item = ListItem()
-    item.set_next_action_name('Blurays')
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'BluRay')
     xbmcListItem = xbmcgui.ListItem(label='HD MOVIES', iconImage=hd_movie_icon_filepath, thumbnailImage=hd_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
@@ -48,8 +49,9 @@ def displayMainMenu(request_obj, response_obj):
     # Hindi Movies
     hindi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Hindi_Movies_V1.png')
     item = ListItem()
-    item.set_next_action_name('CategoryMovies')
-    item.add_request_data('infoUrl', BASE_WSITE_URL + '2010/11/hindi-movies.html')
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'Hindi%20Movies')
+#    item.add_request_data('infoUrl', BASE_WSITE_URL + '2010/11/hindi-movies.html')
     xbmcListItem = xbmcgui.ListItem(label='HINDI', iconImage=hindi_movie_icon_filepath, thumbnailImage=hindi_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
@@ -57,8 +59,9 @@ def displayMainMenu(request_obj, response_obj):
     # Telugu Movies
     telugu_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Telugu_Movies_V1.png')
     item = ListItem()
-    item.set_next_action_name('CategoryMovies')
-    item.add_request_data('infoUrl', BASE_WSITE_URL + '2010/11/telugu-movies.html')
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'Telugu')
+#    item.add_request_data('infoUrl', BASE_WSITE_URL + '2010/11/telugu-movies.html')
     xbmcListItem = xbmcgui.ListItem(label='TELUGU', iconImage=telugu_movie_icon_filepath, thumbnailImage=telugu_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
@@ -66,8 +69,9 @@ def displayMainMenu(request_obj, response_obj):
     # Tamil Movies
     tamil_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Tamil_Movies_V1.png')
     item = ListItem()
-    item.set_next_action_name('CategoryMovies')
-    item.add_request_data('infoUrl', BASE_WSITE_URL + '2010/11/tamil-movies.html')
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'Tamil')
+#    item.add_request_data('infoUrl', BASE_WSITE_URL + '2010/11/tamil-movies.html')
     xbmcListItem = xbmcgui.ListItem(label='TAMIL', iconImage=tamil_movie_icon_filepath, thumbnailImage=tamil_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
@@ -75,8 +79,9 @@ def displayMainMenu(request_obj, response_obj):
     # Punjabi Movies
     punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
     item = ListItem()
-    item.set_next_action_name('CategoryMovies')
-    item.add_request_data('infoUrl', BASE_WSITE_URL + '2011/08/punjabi-movies.html')
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'Punjabi')
+#    item.add_request_data('infoUrl', BASE_WSITE_URL + '2011/08/punjabi-movies.html')
     xbmcListItem = xbmcgui.ListItem(label='PUNJABI', iconImage=punjabi_movie_icon_filepath, thumbnailImage=punjabi_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
@@ -84,29 +89,31 @@ def displayMainMenu(request_obj, response_obj):
     # Malayalam Movies
     malayalam_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Malayalam_Movies_V1.png')
     item = ListItem()
-    item.set_next_action_name('CategoryMovies')
-    item.add_request_data('infoUrl', BASE_WSITE_URL + '2010/11/hindi-movies.html')
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'Malayalam')
+#    item.add_request_data('infoUrl', BASE_WSITE_URL + '2010/11/hindi-movies.html')
     xbmcListItem = xbmcgui.ListItem(label='MALAYALAM', iconImage=malayalam_movie_icon_filepath, thumbnailImage=malayalam_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
-#    response_obj.addListItem(item)
+    response_obj.addListItem(item)
     
     # Bengali Movies
     bengali_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Bengali_Movies_V1.png')
     item = ListItem()
-    item.set_next_action_name('CategoryMovies')
-    item.add_request_data('infoUrl', BASE_WSITE_URL + '2010/11/hindi-movies.html')
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'Bengali')
+#    item.add_request_data('infoUrl', BASE_WSITE_URL + '2010/11/hindi-movies.html')
     xbmcListItem = xbmcgui.ListItem(label='BENGALI', iconImage=bengali_movie_icon_filepath, thumbnailImage=bengali_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
-#    response_obj.addListItem(item)
+    response_obj.addListItem(item)
 
 
 def displayUC(request_obj, response_obj):
     print 'UNDER CONSTRUCTION'
     XBMCInterfaceUtils.displayDialogMessage(heading='UNDER Construction', line1='Please wait for update!!', line2='Enjoy HD movies for the time being.', line3='')
 
-def listHDMovies(request_obj, response_obj):
+def listMovies(request_obj, response_obj):
     cache = StorageServer.StorageServer(TurtlePlugin.__addon_id__, 12)
-    titles = cache.cacheFunction(retrieveHDMovies)
+    titles = cache.cacheFunction(retrieveMovies, request_obj.get_data()['categoryUrlSuffix'])
     
     count = -1
     start = 0
@@ -134,17 +141,25 @@ def listHDMovies(request_obj, response_obj):
         titleInfo = entry['info']
         print titleInfo
         movieInfo = re.compile("(.+?)\((\d+)\) (.*)").findall(titleInfo)
+        if(len(movieInfo) == 0):
+            movieInfo = re.compile("(.+?)\((\d+)\)").findall(titleInfo)
+        if(len(movieInfo) == 0):
+            movieInfo = [[titleInfo]]
         title = unicode(movieInfo[0][0].rstrip()).encode('utf-8')
-        year = unicode(movieInfo[0][1]).encode('utf-8')
-        quality = unicode(movieInfo[0][2]).encode('utf-8')
-        movieInfoUrl = entry["link"]
-        
+        year = ''
+        if(len(movieInfo[0]) >= 2):
+            year = unicode(movieInfo[0][1]).encode('utf-8')
+        quality = ''
+        if(len(movieInfo[0]) >= 3):
+            quality = unicode(movieInfo[0][2]).encode('utf-8')
+        movieInfoUrl = entry['link']
+        movieLabel = '[B]' + title + '[/B]' + ( '(' + year + ') :: ' + quality if (year != '') else '')
         item = ListItem()
         item.add_moving_data('movieTitle', title)
         item.add_moving_data('movieYear', year)
         item.add_request_data('movieInfoUrl', movieInfoUrl)
         item.set_next_action_name('Movie_Streams')
-        xbmcListItem = xbmcgui.ListItem(label=title, label2='(' + year + ') - ' + quality)
+        xbmcListItem = xbmcgui.ListItem(label=movieLabel, label2='(' + year + ') :: ' + quality)
         item.set_xbmc_list_item_obj(xbmcListItem)
         response_obj.addListItem(item)
     
@@ -152,6 +167,7 @@ def listHDMovies(request_obj, response_obj):
         next_page = current_page + 1
         item = ListItem()
         item.add_request_data('page', next_page)
+        item.add_request_data('categoryUrlSuffix', request_obj.get_data()['categoryUrlSuffix'])
         item.set_next_action_name('Next_Page')
         xbmcListItem = xbmcgui.ListItem(label='  ---- next page ----  #' + str(next_page) + ' ->')
         item.set_xbmc_list_item_obj(xbmcListItem)
@@ -162,8 +178,8 @@ def listHDMovies(request_obj, response_obj):
 '''
 Cached function to retrieve HD movies
 '''
-def retrieveHDMovies():
-    html = HttpUtils.HttpClient().getHtmlContent(url=(BASE_WSITE_URL + "feeds/posts/summary/-/BluRay?max-results=10000&alt=json"))
+def retrieveMovies(categoryUrlSuffix):
+    html = HttpUtils.HttpClient().getHtmlContent(url=(BASE_WSITE_URL + "feeds/posts/summary/-/" + categoryUrlSuffix + "?max-results=99999&alt=json"))
     jObj = json.loads(html)
     titles = []
     print 'RETRIEVED MOVIE OBJECT'
@@ -184,6 +200,10 @@ def retrieveHDMovies():
     return titles
 
 
+'''
+
+@deprecated: Using the method listMovies
+'''
 def listCategoryMovies(request_obj, response_obj):
     cache = StorageServer.StorageServer(TurtlePlugin.__addon_id__, 12)
     titles = cache.cacheFunction(retrieveCategoryMovies, request_obj.get_data()['infoUrl'])
@@ -240,6 +260,8 @@ def listCategoryMovies(request_obj, response_obj):
 
 '''
 Cached function to retrieve category specific movies
+
+@deprecated: Using the method retrieveMovies
 '''
 def retrieveCategoryMovies(infoUrl):
     titles = []
@@ -258,6 +280,7 @@ def retrieveCategoryMovies(infoUrl):
         title['link'] = moviePageUrl
         titles.append(title)
     return titles
+
 
 def retieveMovieStreams(request_obj, response_obj):
     soup = None
