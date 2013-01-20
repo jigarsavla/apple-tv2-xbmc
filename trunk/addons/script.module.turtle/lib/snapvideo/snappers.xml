@@ -12,7 +12,7 @@
 
 	<snapper module="snapvideo.YouTube" function="retrievePlaylistVideoItems"
 		playlist="true" enabled="true" desc="www.youtube.com video playlist snapper">
-		<video-id regex="youtube.com/embed/videoseries\?list=PL(.+?)&amp;"/>
+		<video-id regex="youtube.com/embed/videoseries\?list=PL(.+?)&amp;" />
 		<video-id regex="youtube.com/playlist\?list=PL(.+?)&amp;" />
 		<video-id regex="youtube.com/playlist\?list=(.+?)&amp;" />
 		<video-id regex="youtube.com/p/(.+?)/" />
@@ -200,15 +200,20 @@
 		<video-id regex="playwire.com/(.+?)\.xml" />
 		<video-id regex="playwire.com/(.+?)\.js" />
 	</snapper>
-	
+
 	<snapper module="snapvideo.Putlocker" function="retrieveVideoInfo"
 		enabled="true" desc="www.putlocker.com video hosting website">
 		<video-id regex="putlocker.com/file/(.+?)&amp;" />
 	</snapper>
-	
+
 	<snapper module="snapvideo.Sockshare" function="retrieveVideoInfo"
 		enabled="true" desc="www.sockshare.com video hosting website">
 		<video-id regex="sockshare.com/file/(.+?)&amp;" />
+	</snapper>
+
+	<snapper function="retrieveVideoInfo" enabled="true"
+		module="snapvideo.GoogleDocs" desc="video url that is downloaded from google docs server">
+		<video-id regex="docs.google.com/file/(.+?)&amp;" />
 	</snapper>
 
 	<!-- The following snapper should be at the end of all srcappers -->
