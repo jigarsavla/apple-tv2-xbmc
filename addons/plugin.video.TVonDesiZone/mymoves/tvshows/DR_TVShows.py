@@ -66,6 +66,7 @@ def __retrieveChannelTVShows__(tvChannelObj):
         finished_tvshows = __retrieveTVShows__(tvChannelObj["finished_tvshows_url"])
     except:
         print 'Failed to load a channel... Continue retrieval of next tv show'
+        raise
     tvChannelObj["running_tvshows"] = running_tvshows
     tvChannelObj["finished_tvshows"] = finished_tvshows
         
@@ -235,7 +236,12 @@ def retrieveTVShowsAndSave(request_obj, response_obj):
                   {"iconimage":"http://www.lyngsat-logo.com/logo/tv/mm/mahuaa_bangla.jpg",
                    "channelType": "IND",
                    "running_tvshows_url": "/mahuaa-tv/",
-                   "finished_tvshows_url": "/mahuaa-tv-past-shows/"}
+                   "finished_tvshows_url": "/mahuaa-tv-past-shows/"},
+                  "Movies":
+                  {"iconimage":"http://2.bp.blogspot.com/-8IURT2pXsb4/T5BqxR2OhfI/AAAAAAAACd0/cc5fwuEQIx8/s1600/the_movies.jpg",
+                   "channelType": "IND",
+                   "running_tvshows_url": "/bollywood-movies/",
+                   "finished_tvshows_url": None}
                 }
     
     XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__retrieveChannelTVShows__'), tvChannels.values(), 'Retrieving channel TV Shows', 'Failed to retrieve video information, please try again later', line1='Takes about 5 minutes first time', line3='Refreshes data every month or on force refresh or on new add-on version')

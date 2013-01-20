@@ -349,7 +349,7 @@ def __prepareVideoLink__(item):
             new_name = name + ' - Part #' + str(count)
         new_name = 'Video Part #' + str(count)
         video_url = child['src']
-        if(re.search('http://ads', video_url, re.I)):
+        if(re.search('http://ads', video_url, re.I) or re.search('http://ax-d', video_url, re.I)):
             continue
         video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
         video_source_img = video_hosting_info.get_video_hosting_image()

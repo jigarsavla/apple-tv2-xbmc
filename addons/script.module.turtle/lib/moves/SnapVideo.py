@@ -43,7 +43,7 @@ class Snapper(object):
         isVideoHoster = False
         videoId = self.getVideoId(video_url)
         if videoId is not None:
-            print 'Snapper selected = ' + self.getModuleName()
+            print 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url
             isVideoHoster = True
         return isVideoHoster
     
@@ -51,7 +51,7 @@ class Snapper(object):
         videoInfo = None
         videoId = self.getVideoId(video_url)
         if videoId is not None:
-            print 'Snapper selected = ' + self.getModuleName()
+            print 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url
             videoInfo = self.__getVideoInfo(videoId)
         return videoInfo
     
