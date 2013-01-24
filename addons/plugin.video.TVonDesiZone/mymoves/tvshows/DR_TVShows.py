@@ -342,7 +342,7 @@ def __retrieveTVShowEpisodes__(threads, response_obj):
 def retrieveTVShowEpisodes(request_obj, response_obj):
     url = request_obj.get_data()['tvShowUrl']
     if request_obj.get_data().has_key('page'):
-        url = url[0:len(url) - 1] + '-' + request_obj.get_data()['page'] + '.html'
+        url = url[0:len(url) - 1] + '/index' + request_obj.get_data()['page'] + '.html'
     contentDiv = BeautifulSoup.SoupStrainer('div', {'id':'contentBody'})
     soup = HttpClient().getBeautifulSoup(url=url, parseOnlyThese=contentDiv)
     
