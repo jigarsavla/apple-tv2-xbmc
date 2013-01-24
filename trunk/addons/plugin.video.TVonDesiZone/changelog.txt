@@ -106,7 +106,7 @@ New Turtle version
 
 - Fixed DT source again
 
-[B]Version v1.3.8.4[/B]
+[B]Version v1.3.8.5[/B]
 
 - Fixed DR source video links
 
