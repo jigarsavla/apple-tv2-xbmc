@@ -15,7 +15,7 @@ from common.DataObjects import ListItem
 import sys
 import base64
 import urllib
-
+import logging
 
 '''
 Creating a JSON object in following format:
@@ -37,9 +37,9 @@ CHANNEL_TYPE_PAK = 'PAK'
 BASE_WSITE_URL = base64.b64decode('aHR0cDovL3d3dy5kZXNpLXRhc2hhbi5jb20=')
 
 def __retrieveChannels__(tvChannels, dtUrl, channelType):
-    contentDiv = BeautifulSoup.SoupStrainer('div', {'id':'content'})
+    contentDiv = BeautifulSoup.SoupStrainer('div', {'class':re.compile(r'\bhentry\b')})
     soup = HttpClient().getBeautifulSoup(url=dtUrl, parseOnlyThese=contentDiv)
-    for tvChannelTag in soup.div.div.div.findAll('div', recursive=False):
+    for tvChannelTag in soup.div.findAll('div', recursive=False):
         try:
             tvChannel = {}
             running_tvshows = []
@@ -50,7 +50,11 @@ def __retrieveChannels__(tvChannels, dtUrl, channelType):
                 if tag.name == 'div' and tag.get('class') == 'nav_up':
                     continue
                 if not firstRow:
-                    channelImg = str(tag.find('img')['file'])
+                    channelImg = ''
+                    if(tag.find('img').has_key('src')):
+                        channelImg = str(tag.find('img')['src'])
+                    else:
+                        channelImg = str(tag.find('img')['file'])
                     channelName = re.compile(BASE_WSITE_URL + '/category/(tv-serials|pakistan-tvs)/(.+?)/').findall(str(tag.find('a')['href']))[0][1]
                     channelName = string.upper(channelName.replace('-', ' '))
                     print channelName
@@ -72,10 +76,11 @@ def __retrieveChannels__(tvChannels, dtUrl, channelType):
                             print 'UNKNOWN TV SHOW CATEGORY'
                     elif tag.name == 'a':
                         tvshowUrl = str(tag['href'])
-                        tvshowName = tag.getText()
+                        tvshowName = tag.getText().encode('utf-8')
                         print '               ' + tvshowName
                         tmp_tvshows_list.append({'name':HttpUtils.unescape(tvshowName), 'url':tvshowUrl})
-        except:
+        except Exception, e:
+            logging.exception(e)
             print '*****Failed to load a tv channel links from following tag:*****'
             print tvChannelTag
 
