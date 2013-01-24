@@ -11,7 +11,7 @@ import BeautifulSoup
 import re
 import sys
 import time
-import xbmcgui, xbmcplugin #@UnresolvedImport
+import xbmcgui, xbmcplugin  # @UnresolvedImport
 from moves import SnapVideo
 import base64
 
@@ -245,7 +245,7 @@ def retrieveTVShowsAndSave(request_obj, response_obj):
                 }
     
     XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__retrieveChannelTVShows__'), tvChannels.values(), 'Retrieving channel TV Shows', 'Failed to retrieve video information, please try again later', line1='Takes about 5 minutes first time', line3='Refreshes data every month or on force refresh or on new add-on version')
-    #save tvChannels in moving data
+    # save tvChannels in moving data
     request_obj.get_data()['tvChannels'] = tvChannels
     status = AddonUtils.saveObjToJsonFile(filepath, tvChannels)
     if status is not None:
@@ -312,23 +312,32 @@ def __displayTVShows__(tvShowsList, channelType, finished=False):
 def __retrieveTVShowEpisodes__(threads, response_obj):
     if threads is None:
         return
-    for aTag in threads.findAll('a', {'class':re.compile(r'\btitle\b')}):
+    aTags = threads.findAll('a', {'class':re.compile(r'\btitle\b')})
+    videoEpisodes = []
+    for aTag in aTags:
         episodeName = aTag.getText()
         if not re.search(r'\b(Watch|Episode|Video|Promo)\b', episodeName, re.IGNORECASE):
             pass
         else:
-            item = ListItem()
-            item.add_request_data('episodeName', HttpUtils.unescape(episodeName))
-            episodeUrl = str(aTag['href'])
-            if not episodeUrl.lower().startswith(BASE_WSITE_URL):
-                if episodeUrl[0] != '/':
-                    episodeUrl = '/' + episodeUrl
-                episodeUrl = BASE_WSITE_URL + episodeUrl
-            item.add_request_data('episodeUrl', episodeUrl)
-            item.set_next_action_name('Episode_VLinks')
-            xbmcListItem = xbmcgui.ListItem(label=episodeName)
-            item.set_xbmc_list_item_obj(xbmcListItem)
-            response_obj.addListItem(item)
+            videoEpisodes.append(aTag)
+            
+    if len(videoEpisodes) == 0:
+        videoEpisodes = aTags
+        
+    for aTag in videoEpisodes:
+        episodeName = aTag.getText()
+        item = ListItem()
+        item.add_request_data('episodeName', HttpUtils.unescape(episodeName))
+        episodeUrl = str(aTag['href'])
+        if not episodeUrl.lower().startswith(BASE_WSITE_URL):
+            if episodeUrl[0] != '/':
+                episodeUrl = '/' + episodeUrl
+            episodeUrl = BASE_WSITE_URL + episodeUrl
+        item.add_request_data('episodeUrl', episodeUrl)
+        item.set_next_action_name('Episode_VLinks')
+        xbmcListItem = xbmcgui.ListItem(label=episodeName)
+        item.set_xbmc_list_item_obj(xbmcListItem)
+        response_obj.addListItem(item)
 
 def retrieveTVShowEpisodes(request_obj, response_obj):
     url = request_obj.get_data()['tvShowUrl']
@@ -383,7 +392,7 @@ def retrieveVideoLinks(request_obj, response_obj):
         soup = soup.findChild('div', recursive=False)
     prevChild = ''
     for child in soup.findChildren():
-        if child.name == 'img' or child.name == 'font'or child.name == 'b' :
+        if child.name == 'img' or child.name == 'b' :
             if child.name == 'b' and prevChild == 'a':
                 continue
             else:
@@ -436,7 +445,7 @@ def __preparePlayListItem__(video_source_id, video_source_img, video_playlist_it
 def __prepareVideoLink__(video_link):
     video_url = video_link['videoLink']
     new_video_url = None
-    video_id = re.compile('(id|url)=(.+?)/').findall(video_url + '/')[0][1]
+    video_id = re.compile('(id|url|v)=(.+?)/').findall(video_url + '/')[0][1]
     if re.search('dm(\d*).php', video_url, flags=re.I):
         new_video_url = 'http://www.dailymotion.com/video/' + video_id + '_'
     elif re.search('flash.php', video_url, flags=re.I):
