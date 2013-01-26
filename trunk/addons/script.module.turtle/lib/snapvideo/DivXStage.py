@@ -6,6 +6,7 @@ Created on Dec 23, 2011
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_SD
 from common import HttpUtils
 import re
+import logging
 
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
@@ -26,10 +27,13 @@ def retrieveVideoInfo(video_id):
             html = HttpUtils.HttpClient().getHtmlContent(url=video_info_link)
         
         HttpUtils.HttpClient().disableCookies()
-        
-        video_link = re.compile('<param name="src" value="(.+?)"').findall(html)[0]
+        fileKey = re.compile('flashvars.filekey="(.+?)";').findall(html)[0]
+        video_info_link = 'http://www.divxstage.eu/api/player.api.php?file=' + video_id + '&key=' + fileKey
+        html = HttpUtils.HttpClient().getHtmlContent(url=video_info_link)
+        video_link = re.compile('url=(.+?)&').findall(html)[0]
         video_info.set_video_stopped(False)
         video_info.add_video_link(VIDEO_QUAL_SD, video_link)
-    except: 
+    except Exception, e:
+        logging.exception(e)
         video_info.set_video_stopped(True)
     return video_info

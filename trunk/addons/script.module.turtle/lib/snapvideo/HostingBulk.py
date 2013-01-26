@@ -23,13 +23,15 @@ def retrieveVideoInfo(video_id):
         html = HttpUtils.HttpClient().getHtmlContent(url=video_info_link)
         
         paramSet = re.compile("return p\}\(\'(.+?)\',(\d\d),(\d\d),\'(.+?)\'").findall(html)
-        video_info_link = AddonUtils.parsePackedValue(paramSet[0][0], int(paramSet[0][1]), int(paramSet[0][2]), paramSet[0][3].split('|')).replace('\\', '').replace('"', '\'')
-        
-        img_data = re.compile(r"addVariable\(\'image\',\'(.+?)\'\);").findall(video_info_link)
-        if len(img_data) == 1:
-            video_info.set_video_image(img_data[0])
-        video_link = re.compile("addVariable\(\'file\',\'(.+?)\'\);").findall(video_info_link)[0]
-        
+        if len(paramSet) > 0:
+            video_info_link = AddonUtils.parsePackedValue(paramSet[0][0], int(paramSet[0][1]), int(paramSet[0][2]), paramSet[0][3].split('|')).replace('\\', '').replace('"', '\'')
+            
+            img_data = re.compile(r"addVariable\(\'image\',\'(.+?)\'\);").findall(video_info_link)
+            if len(img_data) == 1:
+                video_info.set_video_image(img_data[0])
+            video_link = re.compile("addVariable\(\'file\',\'(.+?)\'\);").findall(video_info_link)[0]
+        else:
+            video_link = re.compile("'file': '(.+?)'").findall(html)[0]
         video_info.set_video_stopped(False)
         video_info.add_video_link(VIDEO_QUAL_SD, video_link)
         
