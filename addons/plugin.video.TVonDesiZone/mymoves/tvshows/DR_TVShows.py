@@ -14,6 +14,7 @@ import time
 import xbmcgui, xbmcplugin  # @UnresolvedImport
 from moves import SnapVideo
 import base64
+import logging
 
 
 '''
@@ -60,13 +61,14 @@ def __retrieveChannelTVShows__(tvChannelObj):
     finished_tvshows = []
     try:
         running_tvshows = __retrieveTVShows__(tvChannelObj["running_tvshows_url"])
-    except:
+    except Exception, e:
+        logging.exception(e)
         print 'Failed to load a channel... Continue retrieval of next tv show'
     try:
         finished_tvshows = __retrieveTVShows__(tvChannelObj["finished_tvshows_url"])
-    except:
+    except Exception, e:
+        logging.exception(e)
         print 'Failed to load a channel... Continue retrieval of next tv show'
-        raise
     tvChannelObj["running_tvshows"] = running_tvshows
     tvChannelObj["finished_tvshows"] = finished_tvshows
         
@@ -392,7 +394,7 @@ def retrieveVideoLinks(request_obj, response_obj):
         soup = soup.findChild('div', recursive=False)
     prevChild = ''
     for child in soup.findChildren():
-        if child.name == 'img' or child.name == 'b' :
+        if (child.name == 'img' or child.name == 'b' or (prevChild != 'a' and child.name == 'font' and not child.findChild('a'))):
             if child.name == 'b' and prevChild == 'a':
                 continue
             else:
@@ -456,10 +458,18 @@ def __prepareVideoLink__(video_link):
         new_video_url = 'http://www.megavideo.com/v/' + video_id + '&'
     elif re.search('put.php', video_url, flags=re.I):
         new_video_url = 'http://www.putlocker.com/file/' + video_id
-    elif re.search('weed.php', video_url, flags=re.I):
+    elif re.search('(weed.php|vw.php)', video_url, flags=re.I):
         new_video_url = 'http://www.videoweed.es/file/' + video_id
-    elif re.search('sockshare.com', video_url, flags=re.I):
+    elif re.search('(sockshare.com|sock.com)', video_url, flags=re.I):
         new_video_url = video_url
+    elif re.search('divxstage.php', video_url, flags=re.I):
+        new_video_url = 'divxstage.eu/video/' + video_id + '&'
+    elif re.search('hostingbulk.php', video_url, flags=re.I):
+        new_video_url = 'hostingbulk.com/' + video_id + '&'
+    elif re.search('movshare.php', video_url, flags=re.I):
+        new_video_url = 'movshare.net/video/' + video_id + '&'
+    elif re.search('nm.php', video_url, flags=re.I):
+        new_video_url = 'novamov.com/video/' + video_id + '&'
         
     video_hosting_info = SnapVideo.findVideoHostingInfo(new_video_url)
     video_link['videoLink'] = new_video_url
