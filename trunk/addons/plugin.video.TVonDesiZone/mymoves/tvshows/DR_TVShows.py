@@ -32,8 +32,8 @@ Creating a JSON object in following format:
 }
 '''
 
-CHANNELS_JSON_FILE = 'DR_Channels_v2.json'
-OLD_CHANNELS_JSON_FILE = 'DR_Channels_v1.json'
+CHANNELS_JSON_FILE = 'DR_Channels_v3.json'
+OLD_CHANNELS_JSON_FILE = 'DR_Channels_v2.json'
 CHANNEL_TYPE_IND = 'IND'
 CHANNEL_TYPE_PAK = 'PAK'
 BASE_WSITE_URL = base64.b64decode('aHR0cDovL3d3dy5kZXNpcnVsZXoubmV0')
@@ -243,7 +243,17 @@ def retrieveTVShowsAndSave(request_obj, response_obj):
                   {"iconimage":"http://2.bp.blogspot.com/-8IURT2pXsb4/T5BqxR2OhfI/AAAAAAAACd0/cc5fwuEQIx8/s1600/the_movies.jpg",
                    "channelType": "IND",
                    "running_tvshows_url": "/bollywood-movies/",
-                   "finished_tvshows_url": None}
+                   "finished_tvshows_url": None},
+                  "Latest & HQ Movies":
+                  {"iconimage":"http://2.bp.blogspot.com/-8IURT2pXsb4/T5BqxR2OhfI/AAAAAAAACd0/cc5fwuEQIx8/s1600/the_movies.jpg",
+                   "channelType": "IND",
+                   "running_tvshows_url": "/latest-exclusive-movie-hq/",
+                   "finished_tvshows_url": None},
+                  "Awards & Concerts":
+                  {"iconimage":"https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQGOu4sxdHNUQC8BUic5rcuMB3VbHf864dKIF7g65aNc2ozDxQQ",
+                   "channelType": "IND",
+                   "running_tvshows_url": "/awards-performances-concerts/",
+                   "finished_tvshows_url": None},
                 }
     
     XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__retrieveChannelTVShows__'), tvChannels.values(), 'Retrieving channel TV Shows', 'Failed to retrieve video information, please try again later', line1='Takes about 5 minutes first time', line3='Refreshes data every month or on force refresh or on new add-on version')
