@@ -32,8 +32,8 @@ Creating a JSON object in following format:
 }
 '''
 
-CHANNELS_JSON_FILE = 'DR_Channels_v3.json'
-OLD_CHANNELS_JSON_FILE = 'DR_Channels_v2.json'
+CHANNELS_JSON_FILE = 'DR_Channels_v4.json'
+OLD_CHANNELS_JSON_FILE = 'DR_Channels_v3.json'
 CHANNEL_TYPE_IND = 'IND'
 CHANNEL_TYPE_PAK = 'PAK'
 BASE_WSITE_URL = base64.b64decode('aHR0cDovL3d3dy5kZXNpcnVsZXoubmV0')
@@ -61,6 +61,8 @@ def __retrieveChannelTVShows__(tvChannelObj):
     finished_tvshows = []
     try:
         running_tvshows = __retrieveTVShows__(tvChannelObj["running_tvshows_url"])
+        if(len(running_tvshows) == 0):
+            running_tvshows.append({"name":"ENTER TO VIEW :: This is the only easy way to view!", "url":BASE_WSITE_URL + tvChannelObj["running_tvshows_url"]})
     except Exception, e:
         logging.exception(e)
         print 'Failed to load a channel... Continue retrieval of next tv show'
@@ -422,8 +424,13 @@ def retrieveVideoLinks(request_obj, response_obj):
             video_link['videoTitle'] = 'Source #' + str(video_source_id) + ' | ' + 'Part #' + str(video_part_index) + ' | ' + child.getText()
             video_link['videoLink'] = str(child['href'])
             try:
-                __prepareVideoLink__(video_link)
-                
+                try:
+                    __prepareVideoLink__(video_link)
+                except:
+                    video_hosting_info = SnapVideo.findVideoHostingInfo(video_link['videoLink'])
+                    if video_hosting_info is None or video_hosting_info.get_video_hosting_name() == 'UrlResolver by t0mm0':
+                        raise
+                    video_link['videoSourceImg'] = video_hosting_info.get_video_hosting_image()
                 video_playlist_items.append(video_link)
                 video_source_img = video_link['videoSourceImg']
                 
