@@ -467,7 +467,7 @@ def __prepareVideoLink__(video_link):
     video_id = re.compile('(id|url|v)=(.+?)/').findall(video_url + '/')[0][1]
     if re.search('dm(\d*).php', video_url, flags=re.I):
         new_video_url = 'http://www.dailymotion.com/video/' + video_id + '_'
-    elif re.search('flash.php', video_url, flags=re.I):
+    elif re.search('(flash.php|wire.php)', video_url, flags=re.I):
         new_video_url = 'http://cdn.playwire.com/12376/embed/' + video_id + '.xml'
     elif re.search('(youtube|u)(\d*).php', video_url, flags=re.I):
         new_video_url = 'http://www.youtube.com/watch?v=' + video_id + '&'
