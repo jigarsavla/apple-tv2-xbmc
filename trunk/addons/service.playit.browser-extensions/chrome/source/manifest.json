@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "PlayIt",
+  "version": "0.3",
+  "background": { "page": "background.html" },
+  "options_page": "options.html",
+  "description": "PlayIt extension will send play video request to XBMC running on remote/local machine.",
+  "browser_action": {
+    "default_icon": "small-icon.png",
+    "default_title": "Play video on XBMC",
+    "update_url": "http://code.google.com/p/apple-tv2-xbmc/source/browse/trunk/addons/service.playit.browser-extensions/chrome/auto-update.xml"
+  },
+  "permissions": [
+    "http://*/*",
+    "notifications",
+    "tabs"
+  ],
+  "icons": {
+    "16": "small-icon.png",
+    "32": "Icon-32.png",
+    "48": "Icon-48.png",
+    "64": "Icon-64.png",
+    "96": "Icon-96.png",
+    "128": "Icon-128.png",
+    "256": "Icon-256.png"
+  }
+}
