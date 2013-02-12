@@ -4,7 +4,7 @@ Created on Oct 29, 2011
 @author: ajju
 '''
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_SD, \
-    VIDEO_QUAL_HD_720
+    VIDEO_QUAL_HD_720, VIDEO_QUAL_HD_1080
 from common import HttpUtils
 import re
 import urllib
@@ -49,6 +49,7 @@ def retrieveVideoInfo(video_id):
                 video_info.add_video_link(VIDEO_QUAL_SD, dm_low[0])
                 video_info.add_video_link(VIDEO_QUAL_HD_720, dm_high[0])
         else:
+            
             newseqeunce = urllib.unquote(sequence[0]).decode('utf8').replace('\\/', '/')
             jObj = json.loads(newseqeunce)
             for sequenceItem in jObj['sequence'][0]['layerList'][0]['sequenceList']:
@@ -56,13 +57,38 @@ def retrieveVideoInfo(video_id):
                     for layerItem in sequenceItem['layerList']:
                         if layerItem['name'] == 'video' and layerItem['type'] == 'VideoFrame':
                             params = layerItem['param']
-                            if params.has_key('sdURL'):
-                                dm_low = params['sdURL']
-                                video_info.add_video_link(VIDEO_QUAL_SD, dm_low)
-                            if params.has_key('hqURL'):
-                                dm_high = params['hqURL']
-                                video_info.add_video_link(VIDEO_QUAL_HD_720, dm_high)
-                            video_info.set_video_stopped(False)
+                            if not params.has_key('sdURL') and not params.has_key('hqURL'):
+                                autoURL = params['autoURL']
+                                videoData = HttpUtils.HttpClient().getHtmlContent(url=autoURL)
+                                jVideoData = json.loads(videoData)
+                                dm_SD = None
+                                dm_720 = None
+                                dm_1080 = None
+                                for alternate in jVideoData['alternates']:
+                                    if alternate['name'] == '380' and dm_SD == None:
+                                        dm_SD = alternate['template'].replace('mnft','mp4')
+                                    elif alternate['name'] == '480':
+                                        dm_SD = alternate['template'].replace('mnft','mp4')
+                                    elif alternate['name'] == '720':
+                                        dm_720 = alternate['template'].replace('mnft','mp4')
+                                    elif alternate['name'] == '1080':
+                                        dm_1080 = alternate['template'].replace('mnft','mp4')
+                                
+                                if dm_SD is not None:
+                                    video_info.add_video_link(VIDEO_QUAL_SD, dm_SD, addReferer=True, refererUrl=video_link)
+                                if dm_720 is not None:
+                                    video_info.add_video_link(VIDEO_QUAL_HD_720, dm_720, addReferer=True, refererUrl=video_link)
+                                if dm_1080 is not None:
+                                    video_info.add_video_link(VIDEO_QUAL_HD_1080, dm_1080, addReferer=True, refererUrl=video_link)
+                                video_info.set_video_stopped(False)
+                            else:
+                                if params.has_key('sdURL'):
+                                    dm_low = params['sdURL']
+                                    video_info.add_video_link(VIDEO_QUAL_SD, dm_low)
+                                if params.has_key('hqURL'):
+                                    dm_high = params['hqURL']
+                                    video_info.add_video_link(VIDEO_QUAL_HD_720, dm_high)
+                                video_info.set_video_stopped(False)
                         elif layerItem['name'] == 'relatedBackground' and layerItem['type'] == 'Background':
                             params = layerItem['param']
                             video_info.set_video_image(params['imageURL'])
@@ -70,6 +96,7 @@ def retrieveVideoInfo(video_id):
         logging.exception(e)
         video_info.set_video_stopped(True)
     return video_info
+
 
 def retrievePlaylistVideoItems(playlistId):
     html = HttpUtils.HttpClient().getHtmlContent(url='http://www.dailymotion.com/playlist/' + playlistId)

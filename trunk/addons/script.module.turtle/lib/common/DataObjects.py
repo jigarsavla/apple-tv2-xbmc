@@ -326,9 +326,11 @@ class VideoInfo(object):
         else:
             return None
 
-    def add_video_link(self, video_qual, video_link, addUserAgent=True):
+    def add_video_link(self, video_qual, video_link, addUserAgent=True, addReferer=False, refererUrl=None):
         if addUserAgent:
             video_link = video_link.replace(' ', '%20') + '|' + HttpUtils.getUserAgentForXBMCPlay()
+            if addReferer and refererUrl is not None:
+                video_link = video_link + '&Referer=' + refererUrl
         self.__video_links[video_qual] = video_link
     
     video_image = property(get_video_image, set_video_image, del_video_image, "video_image's docstring")
