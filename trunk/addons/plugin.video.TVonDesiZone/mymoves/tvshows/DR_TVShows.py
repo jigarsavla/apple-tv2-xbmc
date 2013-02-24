@@ -341,7 +341,15 @@ def __retrieveTVShowEpisodes__(threads, response_obj):
     for aTag in videoEpisodes:
         episodeName = aTag.getText()
         item = ListItem()
-        item.add_request_data('episodeName', HttpUtils.unescape(episodeName))
+        titleInfo = HttpUtils.unescape(episodeName)
+        movieInfo = re.compile("(.+?)\((\d+)\)").findall(titleInfo)
+        if(len(movieInfo) >= 1 and len(movieInfo[0]) >= 2):
+            title = unicode(movieInfo[0][0].rstrip()).encode('utf-8')
+            year = unicode(movieInfo[0][1]).encode('utf-8')
+            item.add_moving_data('movieTitle', title)
+            item.add_moving_data('movieYear', year)
+        
+        item.add_request_data('episodeName', titleInfo)
         episodeUrl = str(aTag['href'])
         if not episodeUrl.lower().startswith(BASE_WSITE_URL):
             if episodeUrl[0] != '/':

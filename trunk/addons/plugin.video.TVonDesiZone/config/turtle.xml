@@ -38,6 +38,8 @@
 	<action id="display_DR_TVShowEpisodes">
 		<move module="mymoves.tvshows.DR_TVShows" function="retrieveTVShowEpisodes"
 			pmessage="Retrieving TV Show Episodes from source|Please wait..." />
+		<move module="mymoves.movie.Metadata" function="retieveMovieInfoAndAddItem"
+			pmessage="Reading saved information|Preparing TV Channels to be displayed" />
 		<next-action name="Episode_VLinks" id="display_DR_EpisodesVLinks"
 			isfolder="true" />
 		<next-action name="Show_Episodes_Next_Page" id="display_DR_TVShowEpisodes"
