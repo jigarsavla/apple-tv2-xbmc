@@ -351,9 +351,9 @@ rpc.ServiceProxy.prototype.__callMethod = function(methodName, params, successHa
 							//JSON-RPC
 							else {
 								if(xhr.status == '200' && xhr.responseText != ''){
-									if(xhrTimeout != undefined){
-										clearTimeout(xhrTimeout); 
-									}
+//									if(xhrTimeout != undefined){
+//										clearTimeout(xhrTimeout); 
+//									}
 									var response = instance.__evalJSON(xhr.responseText, instance.__isResponseSanitized);
 									if(!response.id)
 										response.id = requestInfo.id;
@@ -380,10 +380,10 @@ rpc.ServiceProxy.prototype.__callMethod = function(methodName, params, successHa
 				//Send the request
 				xhr.send(postData);
 				// Timeout to abort in 10 seconds
-				var xhrTimeout = setTimeout(
-						function(){
-							xhr.abort();
-						},10000);
+//				var xhrTimeout = setTimeout(
+//						function(){
+//							xhr.abort();
+//						},10000);
 				
 				return undefined;
 			}
