@@ -10,9 +10,9 @@
        <key>Developer Identifier</key>
        <string>T7EL4ZDV64</string>
        <key>CFBundleVersion</key>
-       <string>1</string>
+       <string>1.1</string>
        <key>CFBundleShortVersionString</key>
-       <string>1.0</string>
+       <string>1.1</string>
        <key>URL</key>
        <string>http://apple-tv2-xbmc.googlecode.com/svn/trunk/addons/service.playit.browser-extensions/safari/PlayIt.safariextz</string>
      </dict>
