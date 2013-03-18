@@ -10,10 +10,11 @@ import re
 import urllib
 import logging
 
+VIDEO_HOSTING_NAME = 'YouTube'
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
     video_hosting_info.set_video_hosting_image('http://www.automotivefinancingsystems.com/images/icons/socialmedia_youtube_256x256.png')
-    video_hosting_info.set_video_hosting_name('YouTube')
+    video_hosting_info.set_video_hosting_name(VIDEO_HOSTING_NAME)
     return video_hosting_info
 
 def retrieveVideoInfo(video_id):

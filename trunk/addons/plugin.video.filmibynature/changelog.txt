@@ -1,7 +1,13 @@
-[B]Version v1.9.1[/B]
+[B]Version v1.9.9[/B]
 
-New way to watch DESI MOVIES coming up!
+DirectPlay is redefined as PDP (Preferred Direct Play). 
+Continuous Play: a new replacement for DirectPlay existing functionality
 
 [B]Version v1.9.7[/B]
 
 Enabled HD Movies and other categories. Caching and pagination added.
+
+[B]Version v1.9.1[/B]
+
+New way to watch DESI MOVIES coming up!
+

@@ -104,6 +104,15 @@ def addVideoHostingInfo(request_obj, response_obj):
     items = response_obj.get_item_list()
     XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
 
+def addVideoHostingInfoInPlayableItems(request_obj, response_obj):
+    items = response_obj.get_item_list()
+    playable_items = []
+    for item in items:
+        if item.get_next_action_name() == 'Play':
+            playable_items.append(item)
+    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
+
+
 def __addVideoHostingInfo_in_item(item):
     videoHostingInfo = findVideoHostingInfo(item.get_moving_data()['videoUrl'])
     item.set_xbmc_list_item_obj(XBMCInterfaceUtils.updateListItem_With_VideoHostingInfo(videoHostingInfo, item.get_xbmc_list_item_obj()))
@@ -112,6 +121,15 @@ def addVideoInfo(request_obj, response_obj):
     items = response_obj.get_item_list()
     XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
 
+def addVideoInfoInPlayableItems(request_obj, response_obj):
+    items = response_obj.get_item_list()
+    playable_items = []
+    for item in items:
+        if item.get_next_action_name() == 'Play':
+            playable_items.append(item)
+    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
+
+
 def __addVideoInfo_in_item(item):
     __processAndAddVideoInfo__(item, item.get_moving_data()['videoUrl'])
 
@@ -119,6 +137,14 @@ def __addVideoInfo_in_item(item):
 def addEmbeddedVideoInfo(request_obj, response_obj):
     items = response_obj.get_item_list()
     XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addEmbeddedVideoInfo_in_item__'), items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
+
+def addEmbeddedVideoInfoInPlayableItems(request_obj, response_obj):
+    items = response_obj.get_item_list()
+    playable_items = []
+    for item in items:
+        if item.get_next_action_name() == 'Play':
+            playable_items.append(item)
+    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addEmbeddedVideoInfo_in_item__'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
 
 
 def __addEmbeddedVideoInfo_in_item__(item):
@@ -155,6 +181,17 @@ def addPlaylistVideosInfo(request_obj, response_obj):
         if videoItems is not None and len(videoItems) > 0:
             items.remove(item)
             items.extend(videoItems)
+            
+            
+def addPlaylistVideosInfoInPlayableItems(request_obj, response_obj):
+    items = response_obj.get_item_list()
+    for item in items:
+        if item.get_next_action_name() == 'Play':
+            videoItems = __processPlaylistAndAddVideoItem__(item)
+            if videoItems is not None and len(videoItems) > 0:
+                items.remove(item)
+                items.extend(videoItems)
+            
     
 def __processPlaylistAndAddVideoItem__(item):
     playlist = findPlaylistInfo(item.get_moving_data()['videoUrl'])

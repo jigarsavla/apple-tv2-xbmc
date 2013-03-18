@@ -49,6 +49,11 @@
 	<action id="display_DR_EpisodesVLinks">
 		<move module="mymoves.tvshows.DR_TVShows" function="retrieveVideoLinks"
 			pmessage="Retrieving video sources for this episode|Please wait..." />
+			
+		<move module="moves.PreProcessor" function="preparePlayListItems" />
+		<move module="moves.SnapVideo" function="addPlaylistVideosInfoInPlayableItems" />
+		<move module="moves.SnapVideo" function="addVideoInfoInPlayableItems" />
+		<next-action name="Play" id="__play__" isfolder="false" />
 		<next-action name="SnapAndPlayVideo" id="snap_and_play_video"
 			isfolder="false" />
 		<next-action name="SnapAndDirectPlayList" id="snap_and_directplay_playlist"

@@ -13,6 +13,7 @@ import sys
 import time
 import xbmcgui, xbmcplugin  # @UnresolvedImport
 from moves import SnapVideo
+from snapvideo import Dailymotion, YouTube, GoogleDocs, Playwire, Putlocker
 import base64
 import logging
 
@@ -32,6 +33,7 @@ Creating a JSON object in following format:
 }
 '''
 
+PREFERRED_DIRECT_PLAY_ORDER = [GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, Playwire.VIDEO_HOSTING_NAME, Putlocker.VIDEO_HOSTING_NAME]
 CHANNELS_JSON_FILE = 'DR_Channels_v4.json'
 OLD_CHANNELS_JSON_FILE = 'DR_Channels_v3.json'
 CHANNEL_TYPE_IND = 'IND'
@@ -404,6 +406,7 @@ def retrieveTVShowEpisodes(request_obj, response_obj):
 def retrieveVideoLinks(request_obj, response_obj):
     video_source_id = 1
     video_source_img = None
+    video_source_name = None
     video_part_index = 0
     video_playlist_items = []
     ignoreAllLinks = False
@@ -419,10 +422,11 @@ def retrieveVideoLinks(request_obj, response_obj):
                 continue
             else:
                 if len(video_playlist_items) > 0:
-                    response_obj.addListItem(__preparePlayListItem__(video_source_id, video_source_img, video_playlist_items))
+                    response_obj.addListItem(__preparePlayListItem__(video_source_id, video_source_img, video_source_name, video_playlist_items))
                 if video_source_img is not None:
                     video_source_id = video_source_id + 1
                     video_source_img = None
+                    video_source_name = None
                     video_part_index = 0
                     video_playlist_items = []
                 ignoreAllLinks = False
@@ -434,13 +438,16 @@ def retrieveVideoLinks(request_obj, response_obj):
             try:
                 try:
                     __prepareVideoLink__(video_link)
-                except:
+                except Exception, e:
+                    logging.exception(e)
                     video_hosting_info = SnapVideo.findVideoHostingInfo(video_link['videoLink'])
                     if video_hosting_info is None or video_hosting_info.get_video_hosting_name() == 'UrlResolver by t0mm0':
                         raise
                     video_link['videoSourceImg'] = video_hosting_info.get_video_hosting_image()
+                    video_link['videoSourceName'] = video_hosting_info.get_video_hosting_name()
                 video_playlist_items.append(video_link)
                 video_source_img = video_link['videoSourceImg']
+                video_source_name = video_link['videoSourceName']
                 
                 item = ListItem()
                 item.add_request_data('videoLink', video_link['videoLink'])
@@ -452,19 +459,28 @@ def retrieveVideoLinks(request_obj, response_obj):
             except:
                 print 'Unable to recognize a source = ' + video_link['videoLink']
                 video_source_img = None
+                video_source_name = None
                 video_part_index = 0
                 video_playlist_items = []
                 ignoreAllLinks = True
         prevChild = child.name
     if len(video_playlist_items) > 0:
-        response_obj.addListItem(__preparePlayListItem__(video_source_id, video_source_img, video_playlist_items))
+        response_obj.addListItem(__preparePlayListItem__(video_source_id, video_source_img, video_source_name, video_playlist_items))
+        
+    
+    ''' Following new cool stuff is to get Smart Direct Play Feature'''
+    playNowItem = __findPlayNowStream__(response_obj.get_item_list())
+    if playNowItem is not None:
+        request_obj.set_data({'videoPlayListItems': playNowItem.get_request_data()['videoPlayListItems']})
 
 
-def __preparePlayListItem__(video_source_id, video_source_img, video_playlist_items):
+def __preparePlayListItem__(video_source_id, video_source_img, video_source_name, video_playlist_items):
     item = ListItem()
     item.add_request_data('videoPlayListItems', video_playlist_items)
     item.set_next_action_name('SnapAndDirectPlayList')
-    xbmcListItem = xbmcgui.ListItem(label=AddonUtils.getBoldString('DirectPlay') + ' | ' + 'Source #' + str(video_source_id) + ' | ' + 'Parts = ' + str(len(video_playlist_items)) , iconImage=video_source_img, thumbnailImage=video_source_img)
+    item.add_moving_data('isContinuousPlayItem', True)
+    item.add_moving_data('videoSourceName', video_source_name)
+    xbmcListItem = xbmcgui.ListItem(label='[COLOR blue]' + AddonUtils.getBoldString('Continuous Play') + '[/COLOR]' + ' | ' + 'Source #' + str(video_source_id) + ' | ' + 'Parts = ' + str(len(video_playlist_items)) , iconImage=video_source_img, thumbnailImage=video_source_img)
     item.set_xbmc_list_item_obj(xbmcListItem)
     return item
 
@@ -499,3 +515,23 @@ def __prepareVideoLink__(video_link):
     video_hosting_info = SnapVideo.findVideoHostingInfo(new_video_url)
     video_link['videoLink'] = new_video_url
     video_link['videoSourceImg'] = video_hosting_info.get_video_hosting_image()
+    video_link['videoSourceName'] = video_hosting_info.get_video_hosting_name()
+
+def __findPlayNowStream__(new_items):
+    selectedIndex = None
+    selectedSource = None
+    for item in new_items:
+        if item.get_moving_data().has_key('isContinuousPlayItem') and item.get_moving_data()['isContinuousPlayItem']:
+            try:
+                print item.get_moving_data()['videoSourceName']
+                preference = PREFERRED_DIRECT_PLAY_ORDER.index(item.get_moving_data()['videoSourceName'])
+                if preference == 0:
+                    selectedSource = item
+                    selectedIndex = 0
+                    break
+                elif selectedIndex is None or selectedIndex > preference:
+                    selectedSource = item
+                    selectedIndex = preference
+            except ValueError:
+                continue
+    return selectedSource
