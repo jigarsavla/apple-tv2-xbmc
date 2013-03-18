@@ -110,3 +110,8 @@ New Turtle version
 
 - Fixed DR source video links
 
+[B]Version v1.4.1[/B]
+
+DirectPlay is redefined as PDP (Preferred Direct Play). Enabled for DR only.
+Continuous Play: a new replacement for DirectPlay existing functionality
+

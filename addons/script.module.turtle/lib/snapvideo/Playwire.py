@@ -8,10 +8,11 @@ from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_HD_720
 from common import HttpUtils
 import re
 
+VIDEO_HOSTING_NAME = 'PLAYWIRE'
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
     video_hosting_info.set_video_hosting_image('http://www.playwire.com/images/logo.png')
-    video_hosting_info.set_video_hosting_name('PLAYWIRE')
+    video_hosting_info.set_video_hosting_name(VIDEO_HOSTING_NAME)
     return video_hosting_info
 
 def retrieveVideoInfo(video_id):

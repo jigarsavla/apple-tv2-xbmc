@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
 <addon id="plugin.video.filmibynature" name="Filmi BY NATURE"
-	version="1.9.8" provider-name="AJ">
+	version="1.9.9" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtle" version="1.2.0" />
+		<import addon="script.module.turtle" version="1.2.4" />
 		<import addon="script.module.metahandler" version="1.0.1"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 	</requires>
@@ -54,12 +54,12 @@
 </addon>
 
 <addon id="plugin.video.TVonDesiZone" name="TV on DESI ZONE"
-	version="1.4.0.1" provider-name="AJ">
+	version="1.4.1" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtle" version="1.2.3" />
+		<import addon="script.module.turtle" version="1.2.4" />
 		<import addon="script.module.metahandler" version="1.0.1"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
@@ -85,10 +85,13 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.willowtv" name="Willow TV" version="1.4.4"
+<addon id="plugin.video.willowtv" name="Willow TV" version="2.0.0"
 	provider-name="AJ">
 	<requires>
-		<import addon="xbmc.python" version="1.0" />
+		<import addon="xbmc.python" version="2.0" />
+		<import addon="script.module.simplejson" version="2.0.10" />
+		<import addon="script.module.beautifulsoup" version="3.2.0" />
+		<import addon="script.module.turtle" version="1.2.3" />
 		<import addon="script.module.mechanize" version="0.2.5" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
@@ -131,7 +134,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtle" name="Turtle" version="1.2.3"
+<addon id="script.module.turtle" name="Turtle" version="1.2.4"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
@@ -142,7 +145,7 @@
 	<extension point="xbmc.python.module" library="lib" />
 	<extension point="xbmc.addon.metadata">
 		<summary>XBMC add-on framework</summary>
-		<description>XBMC add-on provides a simplest way to configure action
+		<description>XBMC add-on provides a simplest way to configure actions
 			to be performed for each add-on request using XML.</description>
 		<disclaimer>This addon makes no warranties, expressed or implied, and
 			hereby disclaims and negates all other warranties, including without

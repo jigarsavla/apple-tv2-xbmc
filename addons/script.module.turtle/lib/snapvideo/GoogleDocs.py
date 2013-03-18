@@ -8,10 +8,11 @@ import re
 import urllib
 import logging
 
+VIDEO_HOSTING_NAME = 'Google Docs'
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
-    video_hosting_info.set_video_hosting_image('')
-    video_hosting_info.set_video_hosting_name('G Docs')
+    video_hosting_info.set_video_hosting_image('http://oakhill.newton.k12.ma.us/sites/oakhill.newton.k12.ma.us/files/users/3/google_docs_image.png')
+    video_hosting_info.set_video_hosting_name(VIDEO_HOSTING_NAME)
     return video_hosting_info
     
 def retrieveVideoInfo(video_id):
