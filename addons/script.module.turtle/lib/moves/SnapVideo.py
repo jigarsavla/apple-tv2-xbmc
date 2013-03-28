@@ -10,6 +10,7 @@ from TurtleContainer import AddonContext
 from common.HttpUtils import HttpClient
 from common.DataObjects import ListItem
 import xbmcgui  # @UnresolvedImport
+import logging
 
 class Snapper(object):
     def __init__(self, snapper_Tag):
@@ -31,7 +32,7 @@ class Snapper(object):
         self.__snapper_modulepath = modulePath + ':' + functionName
         self.__getVideoInfo = getattr(module, functionName)
         self.getVideoHostingInfo = getattr(module, 'getVideoHostingInfo')
-        print 'Snapper loaded = ' + modulePath
+        logging.log(logging.DEBUG, 'Snapper loaded = ' + modulePath)
 
     def isPlaylistSnapper(self):
         return self.__is_playlist
@@ -43,7 +44,7 @@ class Snapper(object):
         isVideoHoster = False
         videoId = self.getVideoId(video_url)
         if videoId is not None:
-            print 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url
+            logging.log(logging.DEBUG, 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url)
             isVideoHoster = True
         return isVideoHoster
     
@@ -51,7 +52,7 @@ class Snapper(object):
         videoInfo = None
         videoId = self.getVideoId(video_url)
         if videoId is not None:
-            print 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url
+            logging.log(logging.DEBUG, 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url)
             videoInfo = self.__getVideoInfo(videoId)
         return videoInfo
     
@@ -70,7 +71,7 @@ def __initializeSnappers():
     snapper_filepath = AddonUtils.getCompleteFilePath(AddonContext().addonPath, 'snapvideo', 'snappers.xml')
     if not AddonUtils.doesFileExist(snapper_filepath):
         snapper_filepath = AddonUtils.getCompleteFilePath(AddonContext().turtle_addonPath, 'lib/snapvideo', 'snappers.xml')
-        print 'Loading snappers.xml from turtle library... ' + snapper_filepath
+        logging.log(logging.DEBUG, 'Loading snappers.xml from turtle library... ' + snapper_filepath)
     snappers_xml = AddonUtils.getBeautifulSoupObj(snapper_filepath)
     global snappers
     if snappers is not None:
@@ -110,8 +111,10 @@ def addVideoHostingInfoInPlayableItems(request_obj, response_obj):
     for item in items:
         if item.get_next_action_name() == 'Play':
             playable_items.append(item)
-    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
-
+    try:
+        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
+    except Exception,e:
+        logging.exception(e)
 
 def __addVideoHostingInfo_in_item(item):
     videoHostingInfo = findVideoHostingInfo(item.get_moving_data()['videoUrl'])
@@ -127,8 +130,10 @@ def addVideoInfoInPlayableItems(request_obj, response_obj):
     for item in items:
         if item.get_next_action_name() == 'Play':
             playable_items.append(item)
-    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
-
+    try:
+        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
+    except Exception,e:
+        logging.exception(e)
 
 def __addVideoInfo_in_item(item):
     __processAndAddVideoInfo__(item, item.get_moving_data()['videoUrl'])
@@ -144,8 +149,10 @@ def addEmbeddedVideoInfoInPlayableItems(request_obj, response_obj):
     for item in items:
         if item.get_next_action_name() == 'Play':
             playable_items.append(item)
-    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addEmbeddedVideoInfo_in_item__'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
-
+    try:
+        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addEmbeddedVideoInfo_in_item__'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
+    except Exception,e:
+        logging.exception(e)
 
 def __addEmbeddedVideoInfo_in_item__(item):
     video_url = item.get_moving_data()['videoUrl']
@@ -185,12 +192,15 @@ def addPlaylistVideosInfo(request_obj, response_obj):
             
 def addPlaylistVideosInfoInPlayableItems(request_obj, response_obj):
     items = response_obj.get_item_list()
-    for item in items:
-        if item.get_next_action_name() == 'Play':
-            videoItems = __processPlaylistAndAddVideoItem__(item)
-            if videoItems is not None and len(videoItems) > 0:
-                items.remove(item)
-                items.extend(videoItems)
+    try:
+        for item in items:
+            if item.get_next_action_name() == 'Play':
+                videoItems = __processPlaylistAndAddVideoItem__(item)
+                if videoItems is not None and len(videoItems) > 0:
+                    items.remove(item)
+                    items.extend(videoItems)
+    except Exception,e:
+        logging.exception(e)
             
     
 def __processPlaylistAndAddVideoItem__(item):

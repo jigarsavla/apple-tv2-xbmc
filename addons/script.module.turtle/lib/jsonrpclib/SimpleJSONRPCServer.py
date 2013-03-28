@@ -274,9 +274,8 @@ class CGIJSONRPCRequestHandler(SimpleJSONRPCDispatcher):
 
     def handle_jsonrpc(self, request_text):
         response = self._marshaled_dispatch(request_text)
-        print 'Content-Type: application/json-rpc'
-        print 'Content-Length: %d' % len(response)
-        print
+        logging.log(logging.INFO,  'Content-Type: application/json-rpc')
+        logging.log(logging.INFO, 'Content-Length: %d' % len(response))
         sys.stdout.write(response)
 
     handle_xmlrpc = handle_jsonrpc

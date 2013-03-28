@@ -3,7 +3,7 @@ Created on Nov 12, 2011
 
 @author: ajju
 '''
-import xbmcgui, xbmcplugin, xbmc #@UnresolvedImport
+import xbmcgui, xbmcplugin, xbmc  # @UnresolvedImport
 import urllib
 from common.Singleton import SingletonClass
 from common import AddonUtils, ExceptionHandler
@@ -45,7 +45,7 @@ def callBackDialogProgressBar(function_obj, function_args, heading, failure_mess
         pDialog = xbmcgui.DialogProgress()
         pDialog.create(heading, line1, line2.replace('$total_it', str(total_iteration)).replace('$current_index', str(current_index)), line3)
         pDialog.update(1)
-    print 'Total Iterations = ' + str(total_iteration)
+    logging.log(logging.DEBUG, 'Total Iterations = ' + str(total_iteration))
     function_returns = []
     isCanceled = False
     for arg in function_args:
@@ -67,7 +67,6 @@ def callBackDialogProgressBar(function_obj, function_args, heading, failure_mess
                 pDialog.close()
                 dialog = xbmcgui.Dialog()
                 dialog.ok('Process Failed', failure_message, 'You may like to try again later or use other source if available')
-            print 'ERROR OCCURRED :: ' + str(e)
             logging.exception(e)
             raise Exception(ExceptionHandler.DONOT_DISPLAY_ERROR, '')
         if isCanceled:
@@ -85,8 +84,9 @@ def addFolderItem(item, item_next_action_id, is_folder=True):
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=item.get_xbmc_list_item_obj(), isFolder=is_folder)
 
 def addPlayListItem(item):
-    playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-    playlist.add(url=item.get_moving_data()['videoStreamUrl'], listitem=item.get_xbmc_list_item_obj())
+    if item.get_moving_data().has_key('videoStreamUrl'):
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.add(url=item.get_moving_data()['videoStreamUrl'], listitem=item.get_xbmc_list_item_obj())
     
 def clearPlayList():
     playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
@@ -97,7 +97,7 @@ def play(videoSrc=None):
         videoSrc = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
     xbmcPlayer = xbmc.Player()
     xbmcPlayer.play(videoSrc)
-    #if not xbmcPlayer.isPlayingVideo():
+    # if not xbmcPlayer.isPlayingVideo():
     #        d = xbmcgui.Dialog()
     #        d.ok('Playback Failed!', 'XBMC player failed to play the playlist items', 'Please check again later or look for other options')
     
