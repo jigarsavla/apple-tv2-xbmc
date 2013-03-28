@@ -52,6 +52,7 @@ def retrieveVideoInfo(video_id):
         else:
             
             newseqeunce = urllib.unquote(sequence[0]).decode('utf8').replace('\\/', '/')
+            print newseqeunce
             jObj = json.loads(newseqeunce)
             for sequenceItem in jObj['sequence'][0]['layerList'][0]['sequenceList']:
                 if sequenceItem['name'] == 'main':
@@ -88,6 +89,9 @@ def retrieveVideoInfo(video_id):
                                     video_info.add_video_link(VIDEO_QUAL_SD, dm_low)
                                 if params.has_key('hqURL'):
                                     dm_high = params['hqURL']
+                                    video_info.add_video_link(VIDEO_QUAL_SD, dm_high)
+                                if params.has_key('hd720URL'):
+                                    dm_high = params['hd720URL']
                                     video_info.add_video_link(VIDEO_QUAL_HD_720, dm_high)
                                 video_info.set_video_stopped(False)
                         elif layerItem['name'] == 'relatedBackground' and layerItem['type'] == 'Background':
@@ -106,3 +110,4 @@ def retrievePlaylistVideoItems(playlistId):
     for mediaTitle, mediaUrl in mediaLines:  # @UnusedVariable
         videoItemsList.append('http://www.dailymotion.com' + mediaUrl)
     return videoItemsList
+

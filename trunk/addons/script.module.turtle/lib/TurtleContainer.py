@@ -9,6 +9,7 @@ from common.XBMCInterfaceUtils import ProgressDisplayer
 from definition.Turtle import Action, Move, Service
 import sys
 import xbmcaddon #@UnresolvedImport
+import logging
 
 __author__ = "ajju"
 __version__ = "1.0.0"
@@ -137,7 +138,10 @@ class Container(SingletonClass):
                     XBMCInterfaceUtils.addFolderItem(item, nextActionId, is_Folder)
             if isAnyVideoItem == True:
                 ProgressDisplayer().end()
-                XBMCInterfaceUtils.play()
+                try:
+                    XBMCInterfaceUtils.play()
+                except Exception, e:
+                    logging.exception(e)
             else:
                 if self.response_obj.get_xbmc_sort_method() is not None:
                     XBMCInterfaceUtils.sortItems(self.response_obj.get_xbmc_sort_method())
