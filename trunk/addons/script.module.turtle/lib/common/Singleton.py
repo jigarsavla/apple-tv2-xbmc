@@ -3,15 +3,15 @@ Created on Oct 28, 2011
 
 @author: singleton recipe
 '''
-#import thread
+# import thread
 
 class SingletonClass(object):
     '''Implement Pattern: SINGLETON'''
 
-    #Disabled lock mechanism as we don't start multiple threads in this add-on
-    #__lockObj = thread.allocate_lock()  # lock object
+    # Disabled lock mechanism as we don't start multiple threads in this add-on
+    # __lockObj = thread.allocate_lock()  # lock object
     __instance = None  # the unique instance
-    __initialized = False # the initialization status
+    __initialized = False  # the initialization status
     
     def __new__(cls, *args, **kargs):
         return cls.getInstance(cls, *args, **kargs)
@@ -21,13 +21,14 @@ class SingletonClass(object):
         
         if cls.__instance is None:
             
-            #Critical section start
-            #cls.__lockObj.acquire()
+            # Critical section start
+            # cls.__lockObj.acquire()
             try:
                 if cls.__instance is None:
                     cls.__instance = object.__new__(cls)
             except Exception, e:
-                print 'Error occurred while creating singleton obj: ' + str(e)
+                logging.log(logging.CRITICAL, 'Error occurred while creating singleton obj ')
+                logging.exception(e)
                 raise
 #            finally:
 #                #  Exit from critical section whatever happens
@@ -40,7 +41,8 @@ class SingletonClass(object):
                 if cls.__instance is not None:
                     cls.__instance.__initialize__(**kargs)
             except Exception, e:
-                print 'Error occurred while initialization of singleton obj: ' + str(e)
+                logging.log(logging.CRITICAL, 'Error occurred while initialization of singleton obj')
+                logging.exception(e)
                 raise
             cls.__initialized = True
 #        else:

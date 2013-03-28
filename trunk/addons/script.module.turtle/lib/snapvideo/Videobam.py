@@ -15,7 +15,6 @@ def getVideoHostingInfo():
     return video_hosting_info
     
 def retrieveVideoInfo(video_id):
-    print video_id
     video_info = VideoInfo()
     video_info.set_video_hosting_info(getVideoHostingInfo())
     video_info.set_video_id(video_id)

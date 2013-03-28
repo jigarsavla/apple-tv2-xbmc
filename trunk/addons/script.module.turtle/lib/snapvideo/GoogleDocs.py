@@ -23,7 +23,6 @@ def retrieveVideoInfo(video_id):
     try:
         html = HttpUtils.HttpClient().getHtmlContent(url='https://docs.google.com/file/' + str(video_id) + '?pli=1')
         stream_map = re.compile('fmt_stream_map":"(.+?)"').findall(html)[0].replace("\/", "/")
-        print stream_map
         formatArray = stream_map.split(',')
         for formatContent in formatArray:
             formatContentInfo = formatContent.split('|')

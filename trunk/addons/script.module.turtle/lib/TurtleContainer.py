@@ -158,7 +158,7 @@ class Container(SingletonClass):
         ProgressDisplayer().start('Processing request...')
          
         while actionId is not None:
-            print 'Action to be performed ::' + actionId
+            logging.log(logging.INFO, 'Action to be performed ::' + actionId)
             turtle_route = self.getTurtleRoute(actionId)
             for move in turtle_route.moves:
                 self.moveTurtle(move)

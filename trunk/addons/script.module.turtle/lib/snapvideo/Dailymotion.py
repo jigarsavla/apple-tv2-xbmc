@@ -52,7 +52,6 @@ def retrieveVideoInfo(video_id):
         else:
             
             newseqeunce = urllib.unquote(sequence[0]).decode('utf8').replace('\\/', '/')
-            print newseqeunce
             jObj = json.loads(newseqeunce)
             for sequenceItem in jObj['sequence'][0]['layerList'][0]['sequenceList']:
                 if sequenceItem['name'] == 'main':
