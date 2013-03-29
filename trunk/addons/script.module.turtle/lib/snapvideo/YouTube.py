@@ -5,7 +5,7 @@ Created on Oct 29, 2011
 '''
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_LOW, \
     VIDEO_QUAL_SD, VIDEO_QUAL_HD_720, VIDEO_QUAL_HD_1080
-from common import HttpUtils
+from common import HttpUtils, XBMCInterfaceUtils
 import re
 import urllib
 import logging
@@ -23,17 +23,20 @@ def retrieveVideoInfo(video_id):
     video_info.set_video_hosting_info(getVideoHostingInfo())
     video_info.set_video_id(video_id)
     try:
+        
+        HttpUtils.HttpClient().enableCookies()
         video_info.set_video_image('http://i.ytimg.com/vi/' + video_id + '/default.jpg')
         html = HttpUtils.HttpClient().getHtmlContent(url='http://www.youtube.com/get_video_info?video_id=' + video_id + '&asv=3&el=detailpage&hl=en_US')
         stream_map = None
         html = html.decode('utf8')
         html = html.replace('\n', '')
         html = html.replace('\r', '')
-        html = html + '&'
-        title = urllib.unquote_plus(re.compile('&title=(.+?)&').findall(html)[0]).replace('/\+/g', ' ')
+        html = unicode(html + '&').encode('utf-8')
         if re.search('status=fail', html):
+            XBMCInterfaceUtils.displayDialogMessage('Video info retrieval failed', 'Reason: ' + ((re.compile('reason\=(.+?)\.').findall(html))[0]).replace('+', ' ') + '.')
             video_info.set_video_stopped(True)
             return video_info
+        title = urllib.unquote_plus(re.compile('&title=(.+?)&').findall(html)[0]).replace('/\+/g', ' ')
         
         stream_info = re.compile('url_encoded_fmt_stream_map=(.+?)&').findall(html)
         stream_map = ''
@@ -76,6 +79,7 @@ def retrieveVideoInfo(video_id):
         
             qual = formatQual
             url = formatUrl
+            print 'quality ---> '+qual
             if(qual == '13'):  # 176x144
                 video_info.add_video_link(VIDEO_QUAL_LOW, url)
             elif(qual == '17'):  # 176x144
@@ -100,12 +104,12 @@ def retrieveVideoInfo(video_id):
                 video_info.add_video_link(VIDEO_QUAL_HD_1080, url)
             elif(qual == '43' and video_info.get_video_link(VIDEO_QUAL_SD) is None):  # 360 WEBM
                 video_info.add_video_link(VIDEO_QUAL_SD, url)
-            elif(qual == '44'):  # 480 WEBM
+            elif(qual == '44' and video_info.get_video_link(VIDEO_QUAL_SD) is None):  # 480 WEBM
                 video_info.add_video_link(VIDEO_QUAL_SD, url)
             elif(qual == '45' and video_info.get_video_link(VIDEO_QUAL_HD_720) is None):  # 720 WEBM
                 video_info.add_video_link(VIDEO_QUAL_HD_720, url)
             elif(qual == '46' and video_info.get_video_link(VIDEO_QUAL_HD_1080) is None):  # 1080 WEBM
-                video_info.add_video_link(VIDEO_QUAL_HD_1080, url)
+                video_info.add_video_link(VIDEO_QUAL_SD, url)
             elif(qual == '120' and video_info.get_video_link(VIDEO_QUAL_HD_720) is None):  # New video qual
                 video_info.add_video_link(VIDEO_QUAL_HD_720, url)
                 # 3D streams - MP4

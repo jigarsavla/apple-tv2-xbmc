@@ -12,6 +12,7 @@ from common.DataObjects import ListItem
 import xbmcgui  # @UnresolvedImport
 import logging
 
+
 class Snapper(object):
     def __init__(self, snapper_Tag):
         modulePath = snapper_Tag['module']
@@ -32,7 +33,7 @@ class Snapper(object):
         self.__snapper_modulepath = modulePath + ':' + functionName
         self.__getVideoInfo = getattr(module, functionName)
         self.getVideoHostingInfo = getattr(module, 'getVideoHostingInfo')
-        logging.log(logging.DEBUG, 'Snapper loaded = ' + modulePath)
+        print 'Snapper loaded = ' + modulePath
 
     def isPlaylistSnapper(self):
         return self.__is_playlist
@@ -44,7 +45,7 @@ class Snapper(object):
         isVideoHoster = False
         videoId = self.getVideoId(video_url)
         if videoId is not None:
-            logging.log(logging.DEBUG, 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url)
+            print 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url
             isVideoHoster = True
         return isVideoHoster
     
@@ -52,7 +53,7 @@ class Snapper(object):
         videoInfo = None
         videoId = self.getVideoId(video_url)
         if videoId is not None:
-            logging.log(logging.DEBUG, 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url)
+            print 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url
             videoInfo = self.__getVideoInfo(videoId)
         return videoInfo
     
@@ -71,7 +72,7 @@ def __initializeSnappers():
     snapper_filepath = AddonUtils.getCompleteFilePath(AddonContext().addonPath, 'snapvideo', 'snappers.xml')
     if not AddonUtils.doesFileExist(snapper_filepath):
         snapper_filepath = AddonUtils.getCompleteFilePath(AddonContext().turtle_addonPath, 'lib/snapvideo', 'snappers.xml')
-        logging.log(logging.DEBUG, 'Loading snappers.xml from turtle library... ' + snapper_filepath)
+        print 'Loading snappers.xml from turtle library... ' + snapper_filepath
     snappers_xml = AddonUtils.getBeautifulSoupObj(snapper_filepath)
     global snappers
     if snappers is not None:
@@ -113,7 +114,7 @@ def addVideoHostingInfoInPlayableItems(request_obj, response_obj):
             playable_items.append(item)
     try:
         XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
-    except Exception,e:
+    except Exception, e:
         logging.exception(e)
 
 def __addVideoHostingInfo_in_item(item):
@@ -132,7 +133,7 @@ def addVideoInfoInPlayableItems(request_obj, response_obj):
             playable_items.append(item)
     try:
         XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
-    except Exception,e:
+    except Exception, e:
         logging.exception(e)
 
 def __addVideoInfo_in_item(item):
@@ -151,7 +152,7 @@ def addEmbeddedVideoInfoInPlayableItems(request_obj, response_obj):
             playable_items.append(item)
     try:
         XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addEmbeddedVideoInfo_in_item__'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
-    except Exception,e:
+    except Exception, e:
         logging.exception(e)
 
 def __addEmbeddedVideoInfo_in_item__(item):
@@ -199,7 +200,7 @@ def addPlaylistVideosInfoInPlayableItems(request_obj, response_obj):
                 if videoItems is not None and len(videoItems) > 0:
                     items.remove(item)
                     items.extend(videoItems)
-    except Exception,e:
+    except Exception, e:
         logging.exception(e)
             
     
