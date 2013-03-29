@@ -69,25 +69,30 @@ class HttpClient(SingletonClass):
     
     def __initialize__(self):
         self.__cookiejar = cookielib.LWPCookieJar()
+        self.__cookiesEnabled = False
         
     def enableCookies(self, cookieJar=None, cookiesFilePath=None):
         if cookieJar is not None:
             self.__cookiejar = cookieJar
         elif cookiesFilePath is not None:
-            self.loadCookiesToFile(cookiesFilePath)
+            self.loadCookiesFromFile(cookiesFilePath)
         else:
             cookieJar = self.__cookiejar
         http_cookiejar = urllib2.HTTPCookieProcessor(cookieJar)
         opener = urllib2.build_opener(http_cookiejar)
         urllib2.install_opener(opener)
+        urllib2.HTTPSHandler(debuglevel=1)
+        self.__cookiesEnabled = True
+        
         
     def disableCookies(self):
         urllib2.install_opener(None)
+        self.__cookiesEnabled = False
         
     def saveCookiesToFile(self, filepath):
         self.__cookiejar.save(filename=filepath, ignore_discard=True, ignore_expires=True)
         
-    def loadCookiesToFile(self, filepath):
+    def loadCookiesFromFile(self, filepath):
         self.__cookiejar.load(filename=filepath, ignore_discard=True, ignore_expires=True)
     
     def get_cookiejar(self):
@@ -107,11 +112,34 @@ class HttpClient(SingletonClass):
         if params is not None:
             data = urllib.urlencode(params)
         req = urllib2.Request(url, data, headers)
-        
+        if self.__cookiesEnabled and self.__cookiejar is not None:
+            self.__cookiejar.add_cookie_header(req);
         response = urllib2.urlopen(req)
         html = response.read()
         response.close()
         return html
+    
+    def getResponse(self, url, params=None, headers=None):
+        if headers is None:
+            headers = HEADERS
+        data = None
+        if params is not None:
+            data = urllib.urlencode(params)
+        req = urllib2.Request(url, data, headers)
+        if self.__cookiesEnabled and self.__cookiejar is not None:
+            self.__cookiejar.add_cookie_header(req);
+        response = urllib2.urlopen(req)
+        return response
+    
+    def getResponseForRequest(self, req, headers=None):
+        if headers is None:
+            headers = HEADERS
+        for key in headers.keys():
+            req.add_header(key, headers[key])
+        if self.__cookiesEnabled and self.__cookiejar is not None:
+            self.__cookiejar.add_cookie_header(req);
+        response = urllib2.urlopen(req)
+        return response
     
     def getBeautifulSoup(self, url, params=None, headers=None, parseOnlyThese=None):
         return BeautifulSoup(self.getHtmlContent(url, params, headers), parseOnlyThese)
