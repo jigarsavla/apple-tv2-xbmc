@@ -1,5 +1,5 @@
 from TurtleContainer import AddonContext
-from common import AddonUtils, HttpUtils, XBMCInterfaceUtils
+from common import AddonUtils, HttpUtils, XBMCInterfaceUtils, ExceptionHandler
 import time
 import re
 import xbmcgui, xbmc  # @UnresolvedImport
@@ -36,10 +36,9 @@ def __checkAndLoadCookieStore__(cookieStore):
     if AddonUtils.doesFileExist(cookieStore):
         HttpUtils.HttpClient().loadCookiesFromFile(cookieStore)
         HttpUtils.HttpClient().enableCookies()
-        now = time.time()
-        for cookie in HttpUtils.HttpClient().get_cookiejar():
-            if cookie.is_expired(now):
-                relogin = True
+        html = HttpUtils.HttpClient().getHtmlContent("http://www.youtube.com/")
+        if len(re.compile('My channel').findall(html)) == 0:
+            relogin = True
     else:
         relogin = True
     return relogin
@@ -53,7 +52,8 @@ def __loginAndSaveCookieStore__(cookieStore):
         d = xbmcgui.Dialog()
         d.ok('Welcome to Willow TV', 'Watch LIVE CRICKET on your favorite Willow TV.', 'Please provide your login details for YouTube Account.')
         AddonContext().addon.openSettings(sys.argv[ 0 ])
-        return False
+        email = AddonContext().addon.getSetting('yt_email')
+        password = AddonContext().addon.getSetting('yt_password')
     successInd = __loginYouTube__(LOGIN_URL, email, password)
     if successInd:
         HttpUtils.HttpClient().saveCookiesToFile(cookieStore)
@@ -67,8 +67,7 @@ def __loginYouTube__(url, email, pwd):
         if (not email or email == '') or (not pwd or pwd == ''):
             d = xbmcgui.Dialog()
             d.ok('Provide YouTube account details', 'To watch LIVE CRICKET on your favorite Willow TV,', 'please provide your login details for YouTube account linked to Willow TV.')
-            AddonContext().addon.openSettings(sys.argv[ 0 ])
-            return False
+            raise Exception(ExceptionHandler.DONOT_DISPLAY_ERROR);
         
         HttpUtils.HttpClient().enableCookies()
         response = HttpUtils.HttpClient().getResponse(url)
@@ -83,7 +82,10 @@ def __loginYouTube__(url, email, pwd):
         response = HttpUtils.HttpClient().getResponseForRequest(req)
         br = mechanize.Browser(factory=mechanize.RobustFactory())
         br.set_response(response)
-        br.select_form("verifyForm")
+        try:
+            br.select_form("verifyForm")
+        except:
+            return True
         if br.find_control("smsUserPin"):
             forms = list(br.forms())
             form = forms[0]
@@ -95,7 +97,7 @@ def __loginYouTube__(url, email, pwd):
                     code = keyb.getText()
             if code is None:
                     d = xbmcgui.Dialog()
-                    d.ok('YouTube login failed', 'Cannot proceed without verification code.', 'Process has been cancelled by user.')
+                    d.ok('YouTube login failed', 'We cannot proceed without verification code.', 'The login process has been cancelled by user.')
                     return None
             form["smsUserPin"] = code
             req = form.click()
@@ -106,7 +108,7 @@ def __loginYouTube__(url, email, pwd):
             req = form.click()
             response = HttpUtils.HttpClient().getResponseForRequest(req)
             web = response.read()
-            print web
+            response.close()
         while re.search('<title>Redirecting</title>', web):
             
             redirect_re = re.compile('<meta http-equiv="refresh" content="0; url=\&\#39;(.+?)\&\#39;"')
@@ -119,11 +121,9 @@ def __loginYouTube__(url, email, pwd):
                     break
             response = HttpUtils.HttpClient().getResponse(url)
             web = response.read()
-            print web
             response.close()
         return True
     except Exception,e:
-        raise
         print e
         d = xbmcgui.Dialog()
         d.ok('YouTube login failed', 'Please opt for 2-step authentication method of google', 'You should check if you have provided correct username and password')
