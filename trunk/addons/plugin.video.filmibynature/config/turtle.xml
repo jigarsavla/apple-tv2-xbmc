@@ -12,14 +12,33 @@
 			isfolder="true" />
 		<next-action name="YouTube" id="display_SOM_Movie_Under_Construction"
 			isfolder="true" />
+		<next-action name="AZ" id="display_AZ_Menu_Section"
+			isfolder="true" />
+	</action>
+	
+	<action id="display_AZ_Menu_Section">
+		<move module="mymoves.movie.Menu" function="displayAtoZMenu" />
+		<next-action name="ChooseChar" id="display_AZ_List"
+			isfolder="true" />
+	</action>
+	
+	<action id="display_AZ_List">
+		<move module="mymoves.movie.Menu" function="displayAtoZList"
+			pmessage="Retrieving HD movie collection" />
+		<move module="mymoves.sominaltv.Sominal" function="listMovies"
+			pmessage="Retrieving HD movie collection" />
+		<move module="mymoves.movie.Metadata" function="retieveMovieInfoAndAddItem"
+			pmessage="Reading saved information|Preparing TV Channels to be displayed" />
+		<next-action name="Movie_Streams" id="display_SOM_Movie_Streams"
+			isfolder="true" />
+		<next-action name="Next_Page" id="display_SOM_Movies"
+			isfolder="true" />
 	</action>
 
 	<action id="display_Movie_Section"
 		pmessage="SominalTvTheatre|Please go to website and press an Advertisement|Keep it running in your hands">
 		<move module="mymoves.movie.Menu" function="displayMainMenu" />
 		<next-action name="listMovies" id="display_SOM_Movies"
-			isfolder="true" />
-		<next-action name="AZ" id="display_SOM_Movie_Under_Construction"
 			isfolder="true" />
 	</action>
 
