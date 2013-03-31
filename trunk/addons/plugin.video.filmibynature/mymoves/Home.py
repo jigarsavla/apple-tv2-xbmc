@@ -18,12 +18,22 @@ def displayMenuItems(request_obj, response_obj):
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
     
+    # HD Movies
+    hd_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Trailers.png')
+    item = ListItem()
+    item.set_next_action_name('Trailer')
+    item.add_request_data('categoryUrlSuffix', 'Trailers')
+    xbmcListItem = xbmcgui.ListItem(label='TRAILERS', iconImage=hd_movie_icon_filepath, thumbnailImage=hd_movie_icon_filepath)
+    item.set_xbmc_list_item_obj(xbmcListItem)
+    response_obj.addListItem(item)
+
+    
     # LIVE TV item
     youtube_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='YouTube_V1.png')
     item = ListItem()
     item.set_next_action_name('YouTube')
     xbmcListItem = xbmcgui.ListItem(label='YouTube', iconImage=youtube_icon_filepath, thumbnailImage=youtube_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
-    response_obj.addListItem(item)
+#     response_obj.addListItem(item)
 
 

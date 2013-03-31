@@ -110,7 +110,7 @@ def retrieveVideoInfo(video_id):
                 video_info.add_video_link(VIDEO_QUAL_HD_720, url)
             elif(qual == '46' and video_info.get_video_link(VIDEO_QUAL_HD_1080) is None):  # 1080 WEBM
                 video_info.add_video_link(VIDEO_QUAL_SD, url)
-            elif(qual == '120' and video_info.get_video_link(VIDEO_QUAL_HD_720) is None):  # New video qual
+            elif(qual == '120'):  # New video qual
                 video_info.add_video_link(VIDEO_QUAL_HD_720, url)
                 # 3D streams - MP4
                 # 240p -> 83
