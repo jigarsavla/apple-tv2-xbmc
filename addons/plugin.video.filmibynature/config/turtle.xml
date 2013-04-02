@@ -10,18 +10,18 @@
 			isfolder="true" />
 		<next-action name="Trailer" id="display_SOM_Trailers"
 			isfolder="true" />
-		<next-action name="YouTube" id="display_SOM_Movie_Under_Construction"
+		<next-action name="YouTube" id="display_YouTube_Channels"
 			isfolder="true" />
 		<next-action name="AZ" id="display_AZ_Menu_Section"
 			isfolder="true" />
 	</action>
-	
+
 	<action id="display_AZ_Menu_Section">
 		<move module="mymoves.movie.Menu" function="displayAtoZMenu" />
 		<next-action name="ChooseChar" id="display_AZ_List"
 			isfolder="true" />
 	</action>
-	
+
 	<action id="display_AZ_List">
 		<move module="mymoves.movie.Menu" function="displayAtoZList"
 			pmessage="Retrieving HD movie collection" />
@@ -53,7 +53,7 @@
 		<next-action name="Next_Page" id="display_SOM_Movies"
 			isfolder="true" />
 	</action>
-	
+
 	<action id="display_SOM_Movies">
 		<move module="mymoves.sominaltv.Sominal" function="listMovies"
 			pmessage="Retrieving HD movie collection" />
@@ -91,10 +91,64 @@
 	</action>
 
 	<action id="display_SOM_Movie_Under_Construction">
-		<move module="mymoves.movie.Menu" function="displayUC"
+		<move module="mymoves.movie.Menu" function="displayUC" pmessage="" />
+	</action>
+
+
+	<!-- YouTube Channels -->
+	<action id="display_YouTube_Channels">
+		<move module="mymoves.youtube.YouTubeChannelContainer" function="displayChannels"
+			pmessage="" />
+		<next-action name="add_Channel" isfolder="false"
+			id="add_YouTube_Channel" />
+		<next-action name="show_Channel" isfolder="true"
+			id="display_YouTube_Channel" />
+	</action>
+
+	<action id="add_YouTube_Channel">
+		<move module="mymoves.youtube.YouTubeChannelContainer" function="addNewChannel"
+			pmessage="" />
+	</action>
+	
+	<action id="remove_YouTube_Channel">
+		<move module="mymoves.youtube.YouTubeChannelContainer" function="removeChannel"
 			pmessage="" />
 	</action>
 
+	<action id="display_YouTube_Channel">
+		<move module="mymoves.youtube.YouTubeBrowser" function="selectContentType"
+			pmessage="" />
+		<redirect-action name="show_Videos" id="display_YouTube_Channel_Videos" />
+		<redirect-action name="show_Playlists"
+			id="display_YouTube_Channel_Playlists" />
+	</action>
+
+	<action id="display_YouTube_Channel_Videos">
+		<move module="mymoves.youtube.YouTubeBrowser" function="showUserUploads"
+			pmessage="" />
+		<next-action name="show_Videos" isfolder="true"
+			id="display_YouTube_Channel_Videos" />
+		<next-action name="play_Video" isfolder="false"
+			id="snap_and_play_video" />
+	</action>
+
+	<action id="display_YouTube_Channel_Playlists">
+		<move module="mymoves.youtube.YouTubeBrowser" function="showUserPlaylists"
+			pmessage="" />
+		<next-action name="show_Playlist_Videos" isfolder="true"
+			id="display_YouTube_Channel_Playlist_Videos" />
+		<next-action name="show_Playlists" isfolder="true"
+			id="display_YouTube_Channel_Playlists" />
+	</action>
+
+	<action id="display_YouTube_Channel_Playlist_Videos">
+		<move module="mymoves.youtube.YouTubeBrowser" function="showUserPlaylistVideos"
+			pmessage="" />
+		<next-action name="show_Playlist_Videos" isfolder="true"
+			id="display_YouTube_Channel_Playlist_Videos" />
+		<next-action name="play_Video" isfolder="false"
+			id="snap_and_play_video" />
+	</action>
 
 	<!-- Common Video Link Player Moves -->
 

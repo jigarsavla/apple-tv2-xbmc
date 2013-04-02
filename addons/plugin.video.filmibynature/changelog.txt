@@ -1,3 +1,6 @@
+[B]Version v2.0.3[/B]
+Added YouTube Channel
+
 [B]Version v1.9.9[/B]
 
 DirectPlay is redefined as PDP (Preferred Direct Play). 
