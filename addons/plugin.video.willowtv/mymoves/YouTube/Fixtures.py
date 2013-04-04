@@ -36,17 +36,19 @@ def displaySeries(request_obj, response_obj):
             tabType = 'UPCOMING'
             item = ListItem()
             item.set_next_action_name('Nothing')
-            xbmcListItem = xbmcgui.ListItem(label='[B][COLOR blue]Upcoming/Ongoing Series[/COLOR][/B]', iconImage='', thumbnailImage='')
+            xbmcListItem = xbmcgui.ListItem(label='[B][COLOR blue]Upcoming Series[/COLOR][/B]', iconImage='', thumbnailImage='')
             item.set_xbmc_list_item_obj(xbmcListItem)
             items.append(item)
         elif tabType != 'ARCHIVE' and series['SeriesShouldRenderInArchiveTab'] == "1":
             tabType = 'ARCHIVE'
             item = ListItem()
             item.set_next_action_name('Nothing')
-            xbmcListItem = xbmcgui.ListItem(label='[B][COLOR orange]Archive Series[/COLOR][/B]', iconImage='', thumbnailImage='')
+            xbmcListItem = xbmcgui.ListItem(label='[B][COLOR orange]Ongoing/Archive Series[/COLOR][/B]', iconImage='', thumbnailImage='')
             item.set_xbmc_list_item_obj(xbmcListItem)
             items.append(item)
             
+        if series.has_key('MatchDetails'):
+            del series['MatchDetails'] #Always retrieve match details
         item = ListItem()
         item.add_request_data('series', series)
         item.set_next_action_name('Matches')

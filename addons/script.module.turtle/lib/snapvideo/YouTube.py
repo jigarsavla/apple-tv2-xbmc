@@ -3,12 +3,12 @@ Created on Oct 29, 2011
 
 @author: ajju
 '''
+from common import HttpUtils, XBMCInterfaceUtils
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_LOW, \
     VIDEO_QUAL_SD, VIDEO_QUAL_HD_720, VIDEO_QUAL_HD_1080
-from common import HttpUtils, XBMCInterfaceUtils
+import logging
 import re
 import urllib
-import logging
 
 VIDEO_HOSTING_NAME = 'YouTube'
 def getVideoHostingInfo():
@@ -28,6 +28,7 @@ def retrieveVideoInfo(video_id):
         video_info.set_video_image('http://i.ytimg.com/vi/' + video_id + '/default.jpg')
         html = HttpUtils.HttpClient().getHtmlContent(url='http://www.youtube.com/get_video_info?video_id=' + video_id + '&asv=3&el=detailpage&hl=en_US')
         stream_map = None
+        
         html = html.decode('utf8')
         html = html.replace('\n', '')
         html = html.replace('\r', '')
@@ -36,17 +37,27 @@ def retrieveVideoInfo(video_id):
             XBMCInterfaceUtils.displayDialogMessage('Video info retrieval failed', 'Reason: ' + ((re.compile('reason\=(.+?)\.').findall(html))[0]).replace('+', ' ') + '.')
             video_info.set_video_stopped(True)
             return video_info
-        title = urllib.unquote_plus(re.compile('&title=(.+?)&').findall(html)[0]).replace('/\+/g', ' ')
         
-        stream_info = re.compile('url_encoded_fmt_stream_map=(.+?)&').findall(html)
-        stream_map = ''
-        if(len(stream_info) == 0):
+        title = urllib.unquote_plus(re.compile('&title=(.+?)&').findall(html)[0]).replace('/\+/g', ' ')
+        stream_info = None
+        if not re.search('url_encoded_fmt_stream_map=&', html):
+            stream_info = re.compile('url_encoded_fmt_stream_map=(.+?)&').findall(html)
+        stream_map = None
+        if (stream_info is None or len(stream_info) == 0) and re.search('fmt_stream_map": "', html):
             stream_map = re.compile('fmt_stream_map": "(.+?)"').findall(html)[0].replace("\\/", "/")
-        else:
+        elif stream_info is not None:
             stream_map = stream_info[0]
             
-        if stream_map == None:
-            video_info.set_video_stopped(True)
+        if stream_map is None:
+            params = HttpUtils.getUrlParams(html)
+            print 'ENTERING live video scenario...'
+            for key in params:
+                print key + " : " + urllib.unquote_plus(params[key])
+            hlsvp = urllib.unquote_plus(params['hlsvp'])
+            print HttpUtils.HttpClient().getHtmlContent(url=hlsvp)
+            videoUrl = HttpUtils.HttpClient().addHttpCookiesToUrl(hlsvp, extraExtraHeaders={'Referer':'https://www.youtube.com/watch?v=' + video_id})
+            video_info.add_video_link(VIDEO_QUAL_SD, videoUrl)
+            video_info.set_video_stopped(False)
             return video_info
         
         stream_map = urllib.unquote_plus(stream_map)
@@ -56,7 +67,9 @@ def retrieveVideoInfo(video_id):
         for formatContent in formatArray:
             if formatContent == '':
                 continue
-            formatUrl = ""
+            print formatContent
+            print title
+            formatUrl = ''
             try:
                 formatUrl = urllib.unquote(re.compile("url=([^&]+)").findall(formatContent)[0]) + "&title=" + urllib.quote_plus(title)   
             except Exception, e:
@@ -71,7 +84,8 @@ def retrieveVideoInfo(video_id):
                     formatUrl = "-r %22rtmpe:\/\/" + host + "\/" + path + "%22 -V -a %22" + path + "%22 -f %22WIN 11,3,300,268%22 -W %22http:\/\/s.ytimg.com\/yt\/swfbin\/watch_as3-vfl7aCF1A.swf%22 -p %22http:\/\/www.youtube.com\/watch?v=" + video_id + "%22 -y %22" + urllib.unquote(stream) + "%22"
                 except Exception, e:
                     logging.exception(e)
-                
+            if formatUrl == '':
+                continue
             if(formatUrl[0: 4] == "http" or formatUrl[0: 2] == "-r"):
                 formatQual = re.compile("itag=([^&]+)").findall(formatContent)[0]
                 if not re.search("signature=", formatUrl):
@@ -79,7 +93,7 @@ def retrieveVideoInfo(video_id):
         
             qual = formatQual
             url = formatUrl
-            print 'quality ---> '+qual
+            print 'quality ---> ' + qual
             if(qual == '13'):  # 176x144
                 video_info.add_video_link(VIDEO_QUAL_LOW, url)
             elif(qual == '17'):  # 176x144
@@ -129,6 +143,7 @@ def retrieveVideoInfo(video_id):
         logging.exception(e)
         video_info.set_video_stopped(True)
     return video_info
+
 
 def retrievePlaylistVideoItems(playlistId):
     soupXml = HttpUtils.HttpClient().getBeautifulSoup('http://gdata.youtube.com/feeds/api/playlists/' + playlistId)
