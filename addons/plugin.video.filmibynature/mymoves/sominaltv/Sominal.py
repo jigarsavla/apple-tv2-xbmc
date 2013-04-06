@@ -146,7 +146,12 @@ def retieveTrailerStream(request_obj, response_obj):
         soup = HttpUtils.HttpClient().getBeautifulSoup(url=request_obj.get_data()['moviePageUrl'], parseOnlyThese=contentDiv)
     if soup == None:
         return
-    videoLink = soup.findChild('param', attrs={'name':'movie'}, recursive=True)['value']
+    paramTag = soup.findChild('param', attrs={'name':'movie'}, recursive=True)
+    videoLink = None
+    if paramTag is not None:
+        videoLink = paramTag['value']
+    else:
+        videoLink = soup.findChild('embed', recursive=True)['src']
     request_obj.set_data({'videoLink': videoLink, 'videoTitle':title})
 
 
