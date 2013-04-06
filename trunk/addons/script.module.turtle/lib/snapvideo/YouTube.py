@@ -54,9 +54,23 @@ def retrieveVideoInfo(video_id):
             for key in params:
                 print key + " : " + urllib.unquote_plus(params[key])
             hlsvp = urllib.unquote_plus(params['hlsvp'])
-            print HttpUtils.HttpClient().getHtmlContent(url=hlsvp)
-            videoUrl = HttpUtils.HttpClient().addHttpCookiesToUrl(hlsvp, extraExtraHeaders={'Referer':'https://www.youtube.com/watch?v=' + video_id})
-            video_info.add_video_link(VIDEO_QUAL_SD, videoUrl)
+            playlistItems = HttpUtils.HttpClient().getHtmlContent(url=hlsvp).splitlines()
+            qualityIdentified = None
+            for item in playlistItems:
+                print item
+                if item.startswith('#EXT-X-STREAM-INF'):
+                    if item.endswith('1280x720'):
+                        qualityIdentified = VIDEO_QUAL_HD_720
+                    elif item.endswith('1080'):
+                        qualityIdentified = VIDEO_QUAL_HD_1080
+                    elif item.endswith('854x480'):
+                        qualityIdentified = VIDEO_QUAL_SD
+                    elif item.endswith('640x360'):
+                        qualityIdentified = VIDEO_QUAL_LOW
+                elif item.startswith('http') and qualityIdentified is not None:
+                    videoUrl = HttpUtils.HttpClient().addHttpCookiesToUrl(item, extraExtraHeaders={'Referer':'https://www.youtube.com/watch?v=' + video_id})
+                    video_info.add_video_link(qualityIdentified, videoUrl)
+                    qualityIdentified = None
             video_info.set_video_stopped(False)
             return video_info
         
@@ -92,8 +106,11 @@ def retrieveVideoInfo(video_id):
                     formatUrl += "&signature=" + re.compile("sig=([^&]+)").findall(formatContent)[0]
         
             qual = formatQual
-            url = formatUrl
+            url = HttpUtils.HttpClient().addHttpCookiesToUrl(formatUrl, extraExtraHeaders={'Referer':'https://www.youtube.com/watch?v=' + video_id})
             print 'quality ---> ' + qual
+            if(qual == '52' or qual == '60'):  # Incorrect stream should be skipped. Causes Svere Crash
+                XBMCInterfaceUtils.displayDialogMessage('XBMC Unsupported codec skipped', 'YouTube has started new stream is currently cannot be decoded by XBMC player, causes crash.', 'Skipped this video quality.')
+                continue
             if(qual == '13'):  # 176x144
                 video_info.add_video_link(VIDEO_QUAL_LOW, url)
             elif(qual == '17'):  # 176x144

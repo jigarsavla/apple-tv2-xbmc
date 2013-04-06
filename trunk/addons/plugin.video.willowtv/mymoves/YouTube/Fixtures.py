@@ -83,7 +83,7 @@ def displayMatches(request_obj, response_obj):
         startDate = time.strftime('%a, %d %b %Y %I:%M %p', time.localtime(calendar.timegm(time_obj)))
         name = ''
         if match['IsMatchLive'] == '1':
-            name = '[B][COLOR red]LIVE[/COLOR][/B] '
+            name = '[COLOR red]LIVE[/COLOR] '
         name = name + match['Name']
         
         item = ListItem()
