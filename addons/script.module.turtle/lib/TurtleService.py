@@ -6,12 +6,11 @@ Created on Dec 27, 2011
 from TurtleContainer import Container
 import xbmc  # @UnresolvedImport
 import time
-from common import ExceptionHandler, AddonUtils, XBMCInterfaceUtils
+from common import ExceptionHandler, AddonUtils, XBMCInterfaceUtils, Logger
 from common.Singleton import SingletonClass
 from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCRequestHandler
 from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCServer
 from threading import Thread
-import logging
 
 __registered_services__ = {}
 __context_root__ = ''
@@ -34,7 +33,7 @@ def serviceMethod(name, **params):
         containerObj.performAction(actionId)
         service_response_obj = containerObj.getTurtleResponse().get_service_response_obj()
     except Exception, e:
-        logging.exception(__service_name__ + ' Service :: ERROR OCCURRED: ' + str(e))
+        Logger.logFatal(__service_name__ + ' Service :: ERROR OCCURRED: ' + str(e))
         ExceptionHandler.handle(e)
         service_response_obj = {"status":"exception", "message":"an unexpected error occurred, please check your input"}
         XBMCInterfaceUtils.displayNotification(__service_name__ + ' Service', 'Error while processing your request', time='5000')
@@ -69,20 +68,20 @@ def start(addon_id, service_name, context_root, default_port, allowed_port_range
         server.registerService('serviceName', serviceMethod)
         defined_services = containerObj.getAddonContext().getTurtleServices()
         if len(defined_services) == 0:
-            logging.error(__service_name__ + ' Service :: There are no services defined for registration, end this service program now.')
+            Logger.logError(__service_name__ + ' Service :: There are no services defined for registration, end this service program now.')
             return
         for service in defined_services:
             server.registerService(service.get_service_name(), serviceMethod)
             __registered_services__[service.get_service_name()] = service.get_action_id()
-            logging.info(__service_name__ + ' Service :: service registered = %s @ %s' % (service.get_service_name(), __context_root__))
+            Logger.logInfo(__service_name__ + ' Service :: service registered = %s @ %s' % (service.get_service_name(), __context_root__))
         server.start()
         XBMCInterfaceUtils.displayNotification(__service_name__ + ' Service has started', 'Use safari extension to play video remotely', iconimage=iconimage)
         
         while not xbmc.abortRequested:
             time.sleep(5)
-        logging.info(__service_name__ + ' Service :: ABORT request received from XBMC. PlayIt service will stop now.')
+        Logger.logInfo(__service_name__ + ' Service :: ABORT request received from XBMC. PlayIt service will stop now.')
     except Exception, e:
-        logging.error(__service_name__ + ' Service :: ERROR OCCURRED: ' + str(e))
+        Logger.logFatal(__service_name__ + ' Service :: ERROR OCCURRED: ' + str(e))
         ExceptionHandler.handle(e)
     
     

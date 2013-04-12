@@ -115,3 +115,7 @@ New Turtle version
 DirectPlay is redefined as PDP (Preferred Direct Play). Enabled for DR only.
 Continuous Play: a new replacement for DirectPlay existing functionality
 
+[B]Version v1.4.2 - v1.4.4[B]
+
+- Fixed some issues related to resolving streaming links
+- Enabled caching of channels JSON file.

@@ -1,5 +1,8 @@
-[B]Version v2.0.3[/B]
-Added YouTube Channel
+[B]Version v2.0.6[/B]
+Added caching of menu section to make things work faster.
+
+[B]Version v2.0.3 - v2.0.5[/B]
+Enabled YouTube Menu link with pre-loaded list of Indian Entertainment channels
 
 [B]Version v1.9.9[/B]
 

@@ -1,18 +1,23 @@
 '''
 Created on Oct 17, 2011
-
+Modified on Apr 11, 2013 :: Added cache support
 '''
 
-from common import DataObjects, XBMCInterfaceUtils, AddonUtils
+from common import DataObjects, XBMCInterfaceUtils, AddonUtils, Logger
 from common.Singleton import SingletonClass
 from common.XBMCInterfaceUtils import ProgressDisplayer
 from definition.Turtle import Action, Move, Service
 import sys
 import xbmcaddon #@UnresolvedImport
-import logging
 
+try:
+    import StorageServer #@UnresolvedImport
+except:
+    import common.storageserverdummy as StorageServer
+    
 __author__ = "ajju"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
+
 
 
 class AddonContext(SingletonClass):
@@ -30,11 +35,16 @@ class AddonContext(SingletonClass):
         self.turtle_addonPath = self.turtle_addon.getAddonInfo('path')
         self.turtle_addonProfile = self.turtle_addon.getAddonInfo('profile')
         
+        cache = StorageServer.StorageServer(addon_id, 12)
+        self.turtle_map = cache.cacheFunction(self.loadTurtleMap)
+        
+    
+    def loadTurtleMap(self):
         turtle_filepath = AddonUtils.getCompleteFilePath(self.addonPath, 'config', 'turtle.xml')
         if not AddonUtils.doesFileExist(turtle_filepath):
             turtle_filepath = AddonUtils.getCompleteFilePath(self.turtle_addonPath, 'lib/config', 'turtle.xml')
-        self.turtle_map = AddonUtils.getBeautifulSoupObj(turtle_filepath)
-        
+        return AddonUtils.getBeautifulSoupObj(turtle_filepath)
+    
     
     def getTurtleRoute(self, actionId):
         actionTag = self.turtle_map.find(name='action', attrs={'id':actionId})
@@ -141,7 +151,7 @@ class Container(SingletonClass):
                 try:
                     XBMCInterfaceUtils.play()
                 except Exception, e:
-                    logging.exception(e)
+                    Logger.logFatal(e)
             else:
                 if self.response_obj.get_xbmc_sort_method() is not None:
                     XBMCInterfaceUtils.sortItems(self.response_obj.get_xbmc_sort_method())
@@ -158,7 +168,7 @@ class Container(SingletonClass):
         ProgressDisplayer().start('Processing request...')
          
         while actionId is not None:
-            logging.log(logging.INFO, 'Action to be performed ::' + actionId)
+            Logger.logInfo('Action to be performed ::' + actionId)
             turtle_route = self.getTurtleRoute(actionId)
             for move in turtle_route.moves:
                 self.moveTurtle(move)

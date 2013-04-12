@@ -99,3 +99,7 @@
 [B]Version v1.4.3 - v1.4.4[/B]
 
 -Enabled LIVE video quality selection option.
+
+[B]Version v2.0.0 - v2.0.4[B]
+
+-Brand new version of Willow TV add-on enables stable LIVE link

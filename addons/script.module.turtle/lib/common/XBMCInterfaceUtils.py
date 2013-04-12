@@ -6,9 +6,8 @@ Created on Nov 12, 2011
 import xbmcgui, xbmcplugin, xbmc  # @UnresolvedImport
 import urllib
 from common.Singleton import SingletonClass
-from common import AddonUtils, ExceptionHandler
+from common import AddonUtils, ExceptionHandler, Logger
 import sys
-import logging
 
 SUPPRESS_DIALOG_MSG = False
 
@@ -21,17 +20,17 @@ def setSuppressDialogMsg(suppressMsg=False):
 
 
 def updateListItem_With_VideoHostingInfo(video_hosting_info, xbmc_list_item):
-    new_label = video_hosting_info.get_video_hosting_name()
-    if new_label is not None and new_label != '':
-        new_label = xbmc_list_item.getLabel()
+    new_label = xbmc_list_item.getLabel()
+    if new_label is None or new_label == '':
+        new_label = video_hosting_info.get_video_hosting_name()
     xbmc_list_item.setLabel(new_label)
     xbmc_list_item.setThumbnailImage(video_hosting_info.get_video_hosting_image())
 
 
 def updateListItem_With_VideoInfo(video_info, xbmc_list_item):
-    new_label = video_info.get_video_hosting_info().get_video_hosting_name()
-    if new_label is not None and new_label != '':
-        new_label = video_info.get_video_name()
+    new_label = video_info.get_video_name()
+    if new_label is None or new_label == '':
+        new_label = video_info.get_video_hosting_info().get_video_hosting_name()
     xbmc_list_item.setLabel(new_label)
     xbmc_list_item.setThumbnailImage(video_info.get_video_image())
     
@@ -45,7 +44,7 @@ def callBackDialogProgressBar(function_obj, function_args, heading, failure_mess
         pDialog = xbmcgui.DialogProgress()
         pDialog.create(heading, line1, line2.replace('$total_it', str(total_iteration)).replace('$current_index', str(current_index)), line3)
         pDialog.update(1)
-    logging.log(logging.DEBUG, 'Total Iterations = ' + str(total_iteration))
+    Logger.logDebug('Total Iterations = ' + str(total_iteration))
     function_returns = []
     isCanceled = False
     for arg in function_args:
@@ -67,7 +66,7 @@ def callBackDialogProgressBar(function_obj, function_args, heading, failure_mess
                 pDialog.close()
                 dialog = xbmcgui.Dialog()
                 dialog.ok('Process Failed', failure_message, 'You may like to try again later or use other source if available')
-            logging.exception(e)
+            Logger.logFatal(e)
             raise Exception(ExceptionHandler.DONOT_DISPLAY_ERROR, '')
         if isCanceled:
             raise Exception(ExceptionHandler.PROCESS_STOPPED, 'It looks like you don\'t want wait more|Process was stopped in between')

@@ -4,7 +4,7 @@ Created on Dec 4, 2011
 @author: ajju
 '''
 from TurtleContainer import AddonContext
-from common import AddonUtils, XBMCInterfaceUtils, HttpUtils, ExceptionHandler
+from common import AddonUtils, XBMCInterfaceUtils, HttpUtils, ExceptionHandler, Logger
 from common.DataObjects import ListItem
 from common.HttpUtils import HttpClient
 import BeautifulSoup
@@ -15,7 +15,6 @@ import xbmcgui, xbmcplugin  # @UnresolvedImport
 from moves import SnapVideo
 from snapvideo import Dailymotion, YouTube, GoogleDocs, Playwire, Putlocker
 import base64
-import logging
 
 
 '''
@@ -66,12 +65,12 @@ def __retrieveChannelTVShows__(tvChannelObj):
         if(len(running_tvshows) == 0):
             running_tvshows.append({"name":"ENTER TO VIEW :: This is the only easy way to view!", "url":BASE_WSITE_URL + tvChannelObj["running_tvshows_url"]})
     except Exception, e:
-        logging.exception(e)
+        Logger.logFatal(e)
         print 'Failed to load a channel... Continue retrieval of next tv show'
     try:
         finished_tvshows = __retrieveTVShows__(tvChannelObj["finished_tvshows_url"])
     except Exception, e:
-        logging.exception(e)
+        Logger.logFatal(e)
         print 'Failed to load a channel... Continue retrieval of next tv show'
     tvChannelObj["running_tvshows"] = running_tvshows
     tvChannelObj["finished_tvshows"] = finished_tvshows
@@ -274,8 +273,7 @@ def displayTVChannels(request_obj, response_obj):
     if request_obj.get_data().has_key('tvChannels'):
         channelsList = request_obj.get_data()['tvChannels']
     else:
-        filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
-        channelsList = AddonUtils.getJsonFileObj(filepath)
+        channelsList = AddonContext().cache.cacheFunction(getTVChannelsList)
     if channelsList is None:
         raise Exception(ExceptionHandler.TV_CHANNELS_NOT_LOADED, 'Please delete data folder from add-on user data folder.')
     displayChannelType = int(AddonContext().addon.getSetting('drChannelType'))
@@ -296,8 +294,7 @@ def displayTVChannels(request_obj, response_obj):
         
 
 def displayTVShows(request_obj, response_obj):
-    filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
-    channelsList = AddonUtils.getJsonFileObj(filepath)
+    channelsList = AddonContext().cache.cacheFunction(getTVChannelsList)
     channelObj = channelsList[request_obj.get_data()['channelName']]
     channelType = request_obj.get_data()['channelType']
     if channelObj.has_key('running_tvshows'):
@@ -307,6 +304,13 @@ def displayTVShows(request_obj, response_obj):
         items = __displayTVShows__(channelObj['finished_tvshows'], channelType, True)
         response_obj.extendItemList(items)
         
+        
+def getTVChannelsList():
+    print 'ERROR'
+    filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
+    print filepath
+    return AddonUtils.getJsonFileObj(filepath)
+
             
 def __displayTVShows__(tvShowsList, channelType, finished=False):
     items = []
@@ -439,7 +443,7 @@ def retrieveVideoLinks(request_obj, response_obj):
                 try:
                     __prepareVideoLink__(video_link)
                 except Exception, e:
-                    logging.exception(e)
+                    Logger.logFatal(e)
                     video_hosting_info = SnapVideo.findVideoHostingInfo(video_link['videoLink'])
                     if video_hosting_info is None or video_hosting_info.get_video_hosting_name() == 'UrlResolver by t0mm0':
                         raise

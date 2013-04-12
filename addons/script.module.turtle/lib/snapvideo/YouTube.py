@@ -3,10 +3,9 @@ Created on Oct 29, 2011
 
 @author: ajju
 '''
-from common import HttpUtils, XBMCInterfaceUtils
+from common import HttpUtils, XBMCInterfaceUtils, Logger
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_LOW, \
     VIDEO_QUAL_SD, VIDEO_QUAL_HD_720, VIDEO_QUAL_HD_1080
-import logging
 import re
 import urllib
 
@@ -39,6 +38,7 @@ def retrieveVideoInfo(video_id):
             return video_info
         
         title = urllib.unquote_plus(re.compile('&title=(.+?)&').findall(html)[0]).replace('/\+/g', ' ')
+        video_info.set_video_name(title)
         stream_info = None
         if not re.search('url_encoded_fmt_stream_map=&', html):
             stream_info = re.compile('url_encoded_fmt_stream_map=(.+?)&').findall(html)
@@ -81,13 +81,11 @@ def retrieveVideoInfo(video_id):
         for formatContent in formatArray:
             if formatContent == '':
                 continue
-            print formatContent
-            print title
             formatUrl = ''
             try:
                 formatUrl = urllib.unquote(re.compile("url=([^&]+)").findall(formatContent)[0]) + "&title=" + urllib.quote_plus(title)   
             except Exception, e:
-                logging.exception(e)     
+                Logger.logFatal(e)     
             if re.search("rtmpe", stream_map):
                 try:
                     conn = urllib.unquote(re.compile("conn=([^&]+)").findall(formatContent)[0]);
@@ -97,7 +95,7 @@ def retrieveVideoInfo(video_id):
                     
                     formatUrl = "-r %22rtmpe:\/\/" + host + "\/" + path + "%22 -V -a %22" + path + "%22 -f %22WIN 11,3,300,268%22 -W %22http:\/\/s.ytimg.com\/yt\/swfbin\/watch_as3-vfl7aCF1A.swf%22 -p %22http:\/\/www.youtube.com\/watch?v=" + video_id + "%22 -y %22" + urllib.unquote(stream) + "%22"
                 except Exception, e:
-                    logging.exception(e)
+                    Logger.logFatal(e)
             if formatUrl == '':
                 continue
             if(formatUrl[0: 4] == "http" or formatUrl[0: 2] == "-r"):
@@ -157,7 +155,7 @@ def retrieveVideoInfo(video_id):
 
             video_info.set_video_stopped(False)
     except Exception, e:
-        logging.exception(e)
+        Logger.logFatal(e)
         video_info.set_video_stopped(True)
     return video_info
 

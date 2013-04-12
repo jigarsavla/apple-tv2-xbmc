@@ -4,13 +4,13 @@ Created on Nov 5, 2011
 @author: ajju
 '''
 import re
-from common import XBMCInterfaceUtils, DataObjects, AddonUtils, ExceptionHandler
+from common import XBMCInterfaceUtils, DataObjects, AddonUtils, ExceptionHandler,\
+    Logger
 import sys
 from TurtleContainer import AddonContext
 from common.HttpUtils import HttpClient
 from common.DataObjects import ListItem
 import xbmcgui  # @UnresolvedImport
-import logging
 
 
 class Snapper(object):
@@ -115,7 +115,7 @@ def addVideoHostingInfoInPlayableItems(request_obj, response_obj):
     try:
         XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
     except Exception, e:
-        logging.exception(e)
+        Logger.logFatal(e)
 
 def __addVideoHostingInfo_in_item(item):
     videoHostingInfo = findVideoHostingInfo(item.get_moving_data()['videoUrl'])
@@ -134,7 +134,7 @@ def addVideoInfoInPlayableItems(request_obj, response_obj):
     try:
         XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
     except Exception, e:
-        logging.exception(e)
+        Logger.logFatal(e)
 
 def __addVideoInfo_in_item(item):
     __processAndAddVideoInfo__(item, item.get_moving_data()['videoUrl'])
@@ -153,7 +153,7 @@ def addEmbeddedVideoInfoInPlayableItems(request_obj, response_obj):
     try:
         XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addEmbeddedVideoInfo_in_item__'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
     except Exception, e:
-        logging.exception(e)
+        Logger.logFatal(e)
 
 def __addEmbeddedVideoInfo_in_item__(item):
     video_url = item.get_moving_data()['videoUrl']
@@ -201,7 +201,7 @@ def addPlaylistVideosInfoInPlayableItems(request_obj, response_obj):
                     items.remove(item)
                     items.extend(videoItems)
     except Exception, e:
-        logging.exception(e)
+        Logger.logFatal(e)
             
     
 def __processPlaylistAndAddVideoItem__(item):

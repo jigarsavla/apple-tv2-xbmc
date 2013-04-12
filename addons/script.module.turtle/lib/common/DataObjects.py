@@ -5,8 +5,7 @@ Created on Oct 30, 2011
 '''
 
 from common.Singleton import SingletonClass
-from common import HttpUtils, AddonUtils
-import logging
+from common import HttpUtils, AddonUtils, Logger
 
 class Request(SingletonClass):
     '''
@@ -14,7 +13,7 @@ class Request(SingletonClass):
     '''
 
     def __initialize__(self, params=None):
-        logging.log(logging.DEBUG, params)
+        Logger.logDebug(params)
         self.set_action_id('__start__')
         if params is None:
             self.set_params({})

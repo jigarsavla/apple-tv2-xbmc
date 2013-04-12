@@ -4,7 +4,7 @@ Created on Oct 29, 2011
 @author: ajju
 '''
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_SD, \
-    VIDEO_QUAL_HD_720, VIDEO_QUAL_HD_1080
+    VIDEO_QUAL_HD_720, VIDEO_QUAL_HD_1080, VIDEO_QUAL_LOW
 from common import HttpUtils
 import re
 import urllib
@@ -52,11 +52,14 @@ def retrieveVideoInfo(video_id):
         else:
             
             newseqeunce = urllib.unquote(sequence[0]).decode('utf8').replace('\\/', '/')
+            
             jObj = json.loads(newseqeunce)
             for sequenceItem in jObj['sequence'][0]['layerList'][0]['sequenceList']:
-                if sequenceItem['name'] == 'main':
+                if sequenceItem['name'] == 'main' or sequenceItem['name'] == 'reporting':
                     for layerItem in sequenceItem['layerList']:
-                        if layerItem['name'] == 'video' and layerItem['type'] == 'VideoFrame':
+                        if layerItem['name'] == 'reporting' and layerItem['type'] == 'Reporting':
+                            video_info.set_video_name((layerItem['param']['extraParams']['videoTitle']).replace('+',' '))
+                        elif layerItem['name'] == 'video' and layerItem['type'] == 'VideoFrame':
                             params = layerItem['param']
                             if not params.has_key('sdURL') and not params.has_key('hqURL'):
                                 autoURL = params['autoURL']
@@ -83,15 +86,14 @@ def retrieveVideoInfo(video_id):
                                     video_info.add_video_link(VIDEO_QUAL_HD_1080, dm_1080, addReferer=True, refererUrl=video_link)
                                 video_info.set_video_stopped(False)
                             else:
+                                if params.has_key('IdURL'):
+                                    video_info.add_video_link(VIDEO_QUAL_LOW, params['IdURL'])
                                 if params.has_key('sdURL'):
-                                    dm_low = params['sdURL']
-                                    video_info.add_video_link(VIDEO_QUAL_SD, dm_low)
+                                    video_info.add_video_link(VIDEO_QUAL_SD, params['sdURL'])
                                 if params.has_key('hqURL'):
-                                    dm_high = params['hqURL']
-                                    video_info.add_video_link(VIDEO_QUAL_SD, dm_high)
+                                    video_info.add_video_link(VIDEO_QUAL_SD, params['hqURL'])
                                 if params.has_key('hd720URL'):
-                                    dm_high = params['hd720URL']
-                                    video_info.add_video_link(VIDEO_QUAL_HD_720, dm_high)
+                                    video_info.add_video_link(VIDEO_QUAL_HD_720, params['hd720URL'])
                                 video_info.set_video_stopped(False)
                         elif layerItem['name'] == 'relatedBackground' and layerItem['type'] == 'Background':
                             params = layerItem['param']
