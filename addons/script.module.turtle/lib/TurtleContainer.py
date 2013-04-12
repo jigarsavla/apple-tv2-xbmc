@@ -35,8 +35,8 @@ class AddonContext(SingletonClass):
         self.turtle_addonPath = self.turtle_addon.getAddonInfo('path')
         self.turtle_addonProfile = self.turtle_addon.getAddonInfo('profile')
         
-        cache = StorageServer.StorageServer(addon_id, 12)
-        self.turtle_map = cache.cacheFunction(self.loadTurtleMap)
+        self.cache = StorageServer.StorageServer(addon_id, 12)
+        self.turtle_map = self.cache.cacheFunction(self.loadTurtleMap)
         
     
     def loadTurtleMap(self):
