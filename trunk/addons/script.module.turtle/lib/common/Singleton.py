@@ -4,6 +4,7 @@ Created on Oct 28, 2011
 @author: singleton recipe
 '''
 # import thread
+from common import Logger
 
 class SingletonClass(object):
     '''Implement Pattern: SINGLETON'''
@@ -27,8 +28,8 @@ class SingletonClass(object):
                 if cls.__instance is None:
                     cls.__instance = object.__new__(cls)
             except Exception, e:
-                logging.log(logging.CRITICAL, 'Error occurred while creating singleton obj ')
-                logging.exception(e)
+                Logger.logFatal('Error occurred while creating singleton obj')
+                Logger.logFatal(e)
                 raise
 #            finally:
 #                #  Exit from critical section whatever happens
@@ -41,8 +42,8 @@ class SingletonClass(object):
                 if cls.__instance is not None:
                     cls.__instance.__initialize__(**kargs)
             except Exception, e:
-                logging.log(logging.CRITICAL, 'Error occurred while initialization of singleton obj')
-                logging.exception(e)
+                Logger.logFatal('Error occurred while initialization of singleton obj')
+                Logger.logFatal(e)
                 raise
             cls.__initialized = True
 #        else:

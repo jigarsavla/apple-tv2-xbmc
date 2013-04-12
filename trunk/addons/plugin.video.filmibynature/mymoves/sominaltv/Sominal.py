@@ -20,10 +20,6 @@ try:
 except ImportError:
     import simplejson as json
 from common import HttpUtils
-try:
-    import StorageServer
-except:
-    import storageserverdummy as StorageServer
 
 
 PREFERRED_DIRECT_PLAY_ORDER = [GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
@@ -39,8 +35,7 @@ def listMovies(request_obj, response_obj):
     if request_obj.get_data().has_key('page'):
         page = int(request_obj.get_data()['page'])
     
-    cache = StorageServer.StorageServer(TurtlePlugin.__addon_id__, 12)
-    titles = cache.cacheFunction(retrieveMovies, categoryUrlSuffix)
+    titles = AddonContext().cache.cacheFunction(retrieveMovies, categoryUrlSuffix)
     
     count = -1
     start = 0

@@ -1,11 +1,10 @@
 '''
 @author: ajju
 '''
-from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_SD, \
-    VIDEO_QUAL_HD_720
+from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_LOW, VIDEO_QUAL_SD, \
+    VIDEO_QUAL_HD_720, VIDEO_QUAL_HD_1080
 from common import HttpUtils
 import re
-import urllib
 import logging
 
 VIDEO_HOSTING_NAME = 'Google Docs'
@@ -22,6 +21,8 @@ def retrieveVideoInfo(video_id):
     video_info.set_video_id(video_id)
     try:
         html = HttpUtils.HttpClient().getHtmlContent(url='https://docs.google.com/file/' + str(video_id) + '?pli=1')
+        title = re.compile('title":"(.+?)"').findall(html)[0]
+        video_info.set_video_name(title)
         stream_map = re.compile('fmt_stream_map":"(.+?)"').findall(html)[0].replace("\/", "/")
         formatArray = stream_map.split(',')
         for formatContent in formatArray:
