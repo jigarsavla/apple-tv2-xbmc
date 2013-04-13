@@ -12,15 +12,6 @@ from common import XBMCInterfaceUtils
 
 
 def displayMainMenu(request_obj, response_obj):
-    # HD Movies
-    hd_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='HD_Movies_V1.png')
-    item = ListItem()
-    item.set_next_action_name('listMovies')
-    item.add_request_data('categoryUrlSuffix', 'BluRay')
-    xbmcListItem = xbmcgui.ListItem(label='HD MOVIES', iconImage=hd_movie_icon_filepath, thumbnailImage=hd_movie_icon_filepath)
-    item.set_xbmc_list_item_obj(xbmcListItem)
-    response_obj.addListItem(item)
-    
     
     # Hindi Movies
     hindi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Hindi_Movies_V1.png')
@@ -75,6 +66,24 @@ def displayMainMenu(request_obj, response_obj):
     xbmcListItem = xbmcgui.ListItem(label='BENGALI', iconImage=bengali_movie_icon_filepath, thumbnailImage=bengali_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
+    
+    # English Subtitles Movies
+    punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
+    item = ListItem()
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'English%20Subtitled')
+    xbmcListItem = xbmcgui.ListItem(label='English Subtitles', iconImage=punjabi_movie_icon_filepath, thumbnailImage=punjabi_movie_icon_filepath)
+    item.set_xbmc_list_item_obj(xbmcListItem)
+    response_obj.addListItem(item)
+    
+    # Hindi Dubbed Movies
+    punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
+    item = ListItem()
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'Hindi%20Dubbed')
+    xbmcListItem = xbmcgui.ListItem(label='Hindi Dubbed', iconImage=punjabi_movie_icon_filepath, thumbnailImage=punjabi_movie_icon_filepath)
+    item.set_xbmc_list_item_obj(xbmcListItem)
+    response_obj.addListItem(item)
 
 
 def displayUC(request_obj, response_obj):
@@ -123,5 +132,22 @@ def displayAtoZList(request_obj, response_obj):
     categoryUrl = char + request_obj.get_data()['categorySuffix']
     request_obj.set_data({'categoryUrlSuffix': categoryUrl})
     
+
+def displayYearList(request_obj, response_obj):
+    d = xbmcgui.Dialog()
+    years = ['2013', '2012', '2011', '2010', '2009', '2008-2005', '2004-2000', 'Pre 2000']
+    index = d.select('Select year:', years)
+    if index == -1:
+        raise Exception(ExceptionHandler.EXCEPTIONS.CATEGORY_NOT_SELECTED);
+    year = years[index]
+    request_obj.set_data({'categoryUrlSuffix': year})
     
+def displayGenreList(request_obj, response_obj):
+    d = xbmcgui.Dialog()
+    genres = ['Action', 'Comedy', 'Crime', 'Drama', 'Horror', 'Romance', 'Social', 'Thriller']
+    index = d.select('Select genre:', genres)
+    if index == -1:
+        raise Exception(ExceptionHandler.EXCEPTIONS.CATEGORY_NOT_SELECTED);
+    genre = genres[index]
+    request_obj.set_data({'categoryUrlSuffix': genre})
     
