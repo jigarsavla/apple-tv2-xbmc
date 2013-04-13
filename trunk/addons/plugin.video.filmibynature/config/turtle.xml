@@ -6,6 +6,8 @@
 	<action id="__start__"
 		pmessage="Welcome to Filmi BY NATURE|presented by AJ|based on Turtle">
 		<move module="mymoves.Home" function="displayMenuItems" />
+		<next-action name="listMovies" id="display_SOM_Movies"
+			isfolder="true" />
 		<next-action name="Movie" id="display_Movie_Section"
 			isfolder="true" />
 		<next-action name="Trailer" id="display_SOM_Trailers"
@@ -13,6 +15,36 @@
 		<next-action name="YouTube" id="display_YouTube_Channels"
 			isfolder="true" />
 		<next-action name="AZ" id="display_AZ_Menu_Section"
+			isfolder="true" />
+		<next-action name="ByGenre" id="display_Genre_Section"
+			isfolder="true" />
+		<next-action name="ByYear" id="display_Year_Section"
+			isfolder="true" />
+	</action>
+
+	<action id="display_Genre_Section">
+		<move module="mymoves.movie.Menu" function="displayGenreList"
+			pmessage="Retrieving HD movie collection" />
+		<move module="mymoves.sominaltv.Sominal" function="listMovies"
+			pmessage="Retrieving HD movie collection" />
+		<move module="mymoves.movie.Metadata" function="retieveMovieInfoAndAddItem"
+			pmessage="Reading saved information|Preparing TV Channels to be displayed" />
+		<next-action name="Movie_Streams" id="display_SOM_Movie_Streams"
+			isfolder="true" />
+		<next-action name="Next_Page" id="display_SOM_Movies"
+			isfolder="true" />
+	</action>
+
+	<action id="display_Year_Section">
+		<move module="mymoves.movie.Menu" function="displayYearList"
+			pmessage="Retrieving HD movie collection" />
+		<move module="mymoves.sominaltv.Sominal" function="listMovies"
+			pmessage="Retrieving HD movie collection" />
+		<move module="mymoves.movie.Metadata" function="retieveMovieInfoAndAddItem"
+			pmessage="Reading saved information|Preparing TV Channels to be displayed" />
+		<next-action name="Movie_Streams" id="display_SOM_Movie_Streams"
+			isfolder="true" />
+		<next-action name="Next_Page" id="display_SOM_Movies"
 			isfolder="true" />
 	</action>
 

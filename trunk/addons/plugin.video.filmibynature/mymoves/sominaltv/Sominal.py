@@ -6,7 +6,7 @@ Created on Nov 20, 2012
 from TurtleContainer import AddonContext
 from common.DataObjects import ListItem
 import xbmcgui  # @UnresolvedImport
-from common import AddonUtils
+from common import AddonUtils, Logger
 import base64
 import re
 import sys
@@ -164,7 +164,12 @@ def retieveMovieStreams(request_obj, response_obj):
         return
     videoSources = []
     videoSourceLinks = None
-    for divTag in soup.findAll('div', attrs={'class':'separator'}, recursive=True):
+    divTags = []
+    loadLastTags(soup, 'div', divTags)
+    
+    for divTag in divTags:
+        Logger.logDebug(divTag)
+        Logger.logDebug('----------------------------------------------')
         if re.search('^(Source|ONLINE)', divTag.getText(), re.IGNORECASE):
             if videoSourceLinks is not None and len(videoSourceLinks) > 0:
                 videoSources.append(videoSourceLinks)
@@ -179,13 +184,26 @@ def retieveMovieStreams(request_obj, response_obj):
                 videoSourceLinks.append(infoLink)
     if videoSourceLinks is not None and len(videoSourceLinks) > 0:
         videoSources.append(videoSourceLinks)
+    new_items = []
+    sourceCount = 0
+    for videoSource in videoSources:
+        sourceCount = sourceCount + 1
+        new_items.extend(__prepareVideoSourceLinks__(videoSource, str(sourceCount)))
     
-    new_items = XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__prepareVideoSourceLinks__'), videoSources, 'Resolving links for source', 'Failed to retrieve stream information, please try again later')
     response_obj.set_item_list(new_items)
     
     playNowItem = __findPlayNowStream__(response_obj.get_item_list())
     if playNowItem is not None:
         request_obj.set_data({'videoPlayListItems': playNowItem.get_request_data()['videoPlayListItems']})
+    
+    
+def loadLastTags(soup, findTag, tags):
+    childs = soup.findAll(findTag, recursive=False)
+    if childs is None or len(childs) == 0:
+        tags.append(soup)
+    else:
+        for newSoup in childs:
+            loadLastTags(newSoup, findTag, tags)
     
     
 def __findPlayNowStream__(new_items):
@@ -207,7 +225,7 @@ def __findPlayNowStream__(new_items):
     return selectedSource
     
     
-def __preparePlayListItem__(video_items):
+def __preparePlayListItem__(video_items, source):
     video_playlist_items = []
     video_source_img = None
     video_source_name = None
@@ -224,19 +242,19 @@ def __preparePlayListItem__(video_items):
     item.add_moving_data('isContinuousPlayItem', True)
     item.add_moving_data('videoSourceName', video_source_name)
     item.set_next_action_name('Play_AllStreams')
-    xbmcListItem = xbmcgui.ListItem(label='[COLOR blue]' + AddonUtils.getBoldString('Continuous Play') + '[/COLOR]' + ' | ' + 'Parts = ' + str(len(video_playlist_items)) , iconImage=video_source_img, thumbnailImage=video_source_img)
+    xbmcListItem = xbmcgui.ListItem(label='[COLOR blue]' + AddonUtils.getBoldString('Continuous Play') + '[/COLOR]' + ' | ' + 'Source #' + source + ' | ' + 'Parts = ' + str(len(video_playlist_items)) , iconImage=video_source_img, thumbnailImage=video_source_img)
     item.set_xbmc_list_item_obj(xbmcListItem)
     return item
     
     
-def __prepareVideoSourceLinks__(videoSourceLinks):
-    new_items = XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__prepareVideoLink__'), videoSourceLinks, 'Retrieving streaming links for source', 'Failed to retrieve stream information, please try again later')
+def __prepareVideoSourceLinks__(videoSourceLinks, source):
+    new_items = XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__prepareVideoLink__'), videoSourceLinks, 'Retrieving streaming links for source #' + source, 'Failed to retrieve stream information, please try again later')
     count = 0
     for item in new_items:
         xbmcItem = item.get_xbmc_list_item_obj()
         count = count + 1
-        xbmcItem.setLabel(xbmcItem.getLabel() + str(count))
-    new_items.append(__preparePlayListItem__(new_items))
+        xbmcItem.setLabel('Source #' + source + ' | ' + xbmcItem.getLabel() + str(count))
+    new_items.append(__preparePlayListItem__(new_items, source))
     return new_items
     
     
@@ -259,12 +277,12 @@ def __prepareVideoLink__(videoSourceLink):
         video_source_img = video_hosting_info.get_video_hosting_image()
         
         new_item = ListItem()
-        new_item.add_request_data('videoTitle', 'Video Part #')
+        new_item.add_request_data('videoTitle', 'Part #')
         new_item.add_request_data('videoLink', video_url)
         new_item.add_moving_data('videoSourceImg', video_source_img)
         new_item.add_moving_data('videoSourceName', video_hosting_info.get_video_hosting_name())
         new_item.set_next_action_name('Play_Stream')
-        xbmcListItem = xbmcgui.ListItem(label='Video Part #', iconImage=video_source_img, thumbnailImage=video_source_img)
+        xbmcListItem = xbmcgui.ListItem(label='Part #', iconImage=video_source_img, thumbnailImage=video_source_img)
         new_item.set_xbmc_list_item_obj(xbmcListItem)
         new_items.append(new_item)
     
