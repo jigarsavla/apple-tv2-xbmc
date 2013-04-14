@@ -75,10 +75,10 @@ def listMovies(request_obj, response_obj):
         if categoryUrlSuffix != 'BluRay':
             if(len(movieInfo[0]) >= 3):
                 quality = unicode(movieInfo[0][2]).encode('utf-8')
-                if quality == '*HD*':
-                    quality = '[COLOR red]' + quality + '[/COLOR]'
+                if quality == '*BluRay*':
+                    quality = '[COLOR red]*HD*[/COLOR]'
                 elif quality == 'DVD':
-                    quality = '[COLOR orange]' + quality + '[/COLOR]'
+                    quality = '[COLOR orange]DVD[/COLOR]'
                 quality = ' :: ' + quality
                 
         movieInfoUrl = entry['link']
