@@ -1,3 +1,6 @@
+[B]Version v2.1.1[/B]
+- Few improvements related to movie title formatting.
+
 [B]Version v2.1.0[/B]
 - Replaced Bluray with HD.
 
