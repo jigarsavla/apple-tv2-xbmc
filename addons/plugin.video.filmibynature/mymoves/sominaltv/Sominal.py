@@ -62,6 +62,12 @@ def listMovies(request_obj, response_obj):
             else:
                 count = count + 1
         titleInfo = entry['info']
+        
+        isHindiDubbed = False
+        if re.compile('Hindi Dubbed').findall(titleInfo) is not None:
+            isHindiDubbed = True
+            titleInfo = titleInfo.replace('(Hindi Dubbed)', '').replace('Hindi Dubbed', '')
+        
         movieInfo = re.compile("(.+?)\((\d+)\) (.*)").findall(titleInfo)
         if(len(movieInfo) == 0):
             movieInfo = re.compile("(.+?)\((\d+)\)").findall(titleInfo)
@@ -74,10 +80,10 @@ def listMovies(request_obj, response_obj):
         quality = ''
         if categoryUrlSuffix != 'BluRay':
             if(len(movieInfo[0]) >= 3):
-                quality = unicode(movieInfo[0][2]).encode('utf-8')
-                if quality == '*BluRay*':
+                quality = unicode(movieInfo[0][2]).encode('utf-8').strip()
+                if quality == '*BluRay*' or quality == '*BluRay* (Hindi Dubbed)' or quality == '*BluRay* Hindi Dubbed':
                     quality = '[COLOR red]*HD*[/COLOR]'
-                elif quality == 'DVD':
+                elif quality == 'DVD' or quality == 'DVD (Hindi Dubbed)' or quality == 'DVD Hindi Dubbed':
                     quality = '[COLOR orange]DVD[/COLOR]'
                 quality = ' :: ' + quality
                 

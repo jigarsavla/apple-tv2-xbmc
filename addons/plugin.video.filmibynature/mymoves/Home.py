@@ -56,6 +56,25 @@ def displayMenuItems(request_obj, response_obj):
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
     
+    # English Subtitles Movies
+    punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
+    item = ListItem()
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'English%20Subtitled')
+    xbmcListItem = xbmcgui.ListItem(label='English Subtitles', iconImage=punjabi_movie_icon_filepath, thumbnailImage=punjabi_movie_icon_filepath)
+    item.set_xbmc_list_item_obj(xbmcListItem)
+    response_obj.addListItem(item)
+    
+    # Hindi Dubbed Movies
+    punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
+    item = ListItem()
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'Hindi%20Dubbed')
+    xbmcListItem = xbmcgui.ListItem(label='Hindi Dubbed', iconImage=punjabi_movie_icon_filepath, thumbnailImage=punjabi_movie_icon_filepath)
+    item.set_xbmc_list_item_obj(xbmcListItem)
+    response_obj.addListItem(item)
+    
+    
     # Trailers
     trailer_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Trailers.png')
     item = ListItem()
@@ -73,5 +92,4 @@ def displayMenuItems(request_obj, response_obj):
     xbmcListItem = xbmcgui.ListItem(label='YouTube Channels', iconImage=youtube_icon_filepath, thumbnailImage=youtube_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
-
 
