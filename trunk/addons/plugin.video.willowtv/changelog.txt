@@ -103,3 +103,7 @@
 [B]Version v2.0.0 - v2.0.4[B]
 
 -Brand new version of Willow TV add-on enables stable LIVE link
+
+[B]Version v2.0.5[B]
+
+-Added new Turtle v1.3.2 dependency. Turtle takes care of cleaning objects.

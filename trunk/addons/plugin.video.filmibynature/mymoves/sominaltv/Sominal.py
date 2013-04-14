@@ -3,7 +3,7 @@ Created on Nov 20, 2012
 
 @author: ajju
 '''
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 from common.DataObjects import ListItem
 import xbmcgui  # @UnresolvedImport
 from common import AddonUtils, Logger
@@ -25,7 +25,7 @@ from common import HttpUtils
 PREFERRED_DIRECT_PLAY_ORDER = [GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
 BASE_WSITE_URL = base64.b64decode('aHR0cDovL3d3dy5zb21pbmFsdHZmaWxtcy5jb20v')
 pageDict = {0:25, 1:50, 2:100}
-TITLES_PER_PAGE = pageDict[int(AddonContext().addon.getSetting('moviesPerPage'))]
+TITLES_PER_PAGE = pageDict[int(Container().getAddonContext().addon.getSetting('moviesPerPage'))]
 
 
 
@@ -35,7 +35,7 @@ def listMovies(request_obj, response_obj):
     if request_obj.get_data().has_key('page'):
         page = int(request_obj.get_data()['page'])
     
-    titles = AddonContext().cache.cacheFunction(retrieveMovies, categoryUrlSuffix)
+    titles = Container().getAddonContext().cache.cacheFunction(retrieveMovies, categoryUrlSuffix)
     
     count = -1
     start = 0

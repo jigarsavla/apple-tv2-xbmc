@@ -72,7 +72,7 @@ def callBackDialogProgressBar(function_obj, function_args, heading, failure_mess
             raise Exception(ExceptionHandler.PROCESS_STOPPED, 'It looks like you don\'t want wait more|Process was stopped in between')
     return function_returns
     
-def sortItems(xbmc_sort_method):
+def sortMethod(xbmc_sort_method):
     xbmcplugin.addSortMethod(handle=int(sys.argv[1]), sortMethod=xbmc_sort_method)
     
 def setContentType(content_type):
@@ -168,3 +168,14 @@ def getUserInput(heading='Input', isPassword=False):
 def displayNotification(header, message='', time='3000', iconimage=''):
     notification = "XBMC.Notification(%s,%s,%s,%s)" % (header, message, time, iconimage)
     xbmc.executebuiltin(notification)
+    
+def setSortMethods():
+    
+    # set sort methods - probably we don't need all of them
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_UNSORTED )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RATING )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_PROGRAM_COUNT )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RUNTIME )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_GENRE )

@@ -1,5 +1,5 @@
 from common import HttpUtils, AddonUtils, XBMCInterfaceUtils
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 from common.DataObjects import ListItem
 import calendar
 import re
@@ -59,7 +59,7 @@ def __retrieveEventMatches__(eventTarget):
         else:
             title = '[COLOR blue][B]' + row.findChild('td').getText() + '[/B][/COLOR]'
             next_action_name = 'Series'
-        cricket_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='cricket-icon.png')
+        cricket_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='cricket-icon.png')
         item = ListItem()
         item.add_request_data('matchLinks', matchLinks)
         item.set_next_action_name(next_action_name)

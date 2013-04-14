@@ -3,7 +3,7 @@ Created on Dec 10, 2011
 
 @author: ajju
 '''
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 from common import AddonUtils, ExceptionHandler
 from common.DataObjects import ListItem
 import xbmcgui, xbmcplugin #@UnresolvedImport
@@ -13,7 +13,7 @@ CHANNELS_JSON_FILE = 'Free-Channels.json'
     
 
 def selectChannelsCategory(request_obj, response_obj):
-    filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
+    filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonPath, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
     freeChannels = AddonUtils.getJsonFileObj(filepath)
     d = xbmcgui.Dialog()
     catSelect = d.select('SELECT Category', freeChannels.keys())

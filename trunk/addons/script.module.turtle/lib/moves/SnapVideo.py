@@ -4,10 +4,10 @@ Created on Nov 5, 2011
 @author: ajju
 '''
 import re
-from common import XBMCInterfaceUtils, DataObjects, AddonUtils, ExceptionHandler,\
+from common import XBMCInterfaceUtils, DataObjects, AddonUtils, ExceptionHandler, \
     Logger
 import sys
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 from common.HttpUtils import HttpClient
 from common.DataObjects import ListItem
 import xbmcgui  # @UnresolvedImport
@@ -69,9 +69,9 @@ class Snapper(object):
 snappers = None
 
 def __initializeSnappers():
-    snapper_filepath = AddonUtils.getCompleteFilePath(AddonContext().addonPath, 'snapvideo', 'snappers.xml')
+    snapper_filepath = AddonUtils.getCompleteFilePath(Container().getAddonContext().addonPath, 'snapvideo', 'snappers.xml')
     if not AddonUtils.doesFileExist(snapper_filepath):
-        snapper_filepath = AddonUtils.getCompleteFilePath(AddonContext().turtle_addonPath, 'lib/snapvideo', 'snappers.xml')
+        snapper_filepath = AddonUtils.getCompleteFilePath(Container().getAddonContext().turtle_addonPath, 'lib/snapvideo', 'snappers.xml')
         print 'Loading snappers.xml from turtle library... ' + snapper_filepath
     snappers_xml = AddonUtils.getBeautifulSoupObj(snapper_filepath)
     global snappers
@@ -171,7 +171,7 @@ def __processAndAddVideoInfo__(item, data):
     if video_info.is_video_stopped():
         raise Exception(ExceptionHandler.VIDEO_STOPPED, 'Video is either removed or not found. Please check other links.')
     XBMCInterfaceUtils.updateListItem_With_VideoInfo(video_info, item.get_xbmc_list_item_obj())
-    qual = int(AddonContext().addon.getSetting('playbackqual'))
+    qual = int(Container().getAddonContext().addon.getSetting('playbackqual'))
     video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_HD_1080)
     if video_strm_link == None or qual != 0:
         video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_HD_720)

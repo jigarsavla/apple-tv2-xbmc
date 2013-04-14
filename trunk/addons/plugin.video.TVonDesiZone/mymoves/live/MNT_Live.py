@@ -3,7 +3,7 @@ Created on Dec 10, 2011
 
 @author: ajju
 '''
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 import time
 from common.HttpUtils import HttpClient
 import xbmcgui #@UnresolvedImport
@@ -27,8 +27,8 @@ def selectChannelsCategory(request_obj, response_obj):
         
 
 def login(request_obj, response_obj):
-    username = AddonContext().addon.getSetting('mnt_username')
-    password = AddonContext().addon.getSetting('mnt_password')
+    username = Container().getAddonContext().addon.getSetting('mnt_username')
+    password = Container().getAddonContext().addon.getSetting('mnt_password')
     if username == '' or password == '':
         raise Exception(ExceptionHandler.USER_PWD_NOT_PROVIDED, 'User and password is not provided to access desitvstreams.com')
     millis = str(int(round(time.time())))
@@ -44,7 +44,7 @@ def login(request_obj, response_obj):
 
 
 def displayChannels(request_obj, response_obj):
-    server = int(AddonContext().addon.getSetting('mnt_server')) + 1
+    server = int(Container().getAddonContext().addon.getSetting('mnt_server')) + 1
     
     channels = re.compile('<tr><tdwidth="80"height="50"valign="middle">(.+?)</td><tdwidth="31"></td><tdwidth="122"valign="middle"><imgwidth=50height=40src="(.+?)">(.+?)href="(.+?)"').findall(request_obj.get_data()['htmlContent'])
     for chId, chLogo, chtemp, chlink in channels: #@UnusedVariable

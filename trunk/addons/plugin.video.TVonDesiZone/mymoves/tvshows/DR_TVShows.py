@@ -3,7 +3,7 @@ Created on Dec 4, 2011
 
 @author: ajju
 '''
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 from common import AddonUtils, XBMCInterfaceUtils, HttpUtils, ExceptionHandler, Logger
 from common.DataObjects import ListItem
 from common.HttpUtils import HttpClient
@@ -77,11 +77,11 @@ def __retrieveChannelTVShows__(tvChannelObj):
         
 
 def retrieveTVShowsAndSave(request_obj, response_obj):
-    oldfilepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=OLD_CHANNELS_JSON_FILE, makeDirs=True)
+    oldfilepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=OLD_CHANNELS_JSON_FILE, makeDirs=True)
     AddonUtils.deleteFile(oldfilepath)
     
-    filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=True)
-    refresh = AddonContext().addon.getSetting('drForceRefresh')
+    filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=True)
+    refresh = Container().getAddonContext().addon.getSetting('drForceRefresh')
     if refresh == None or refresh != 'true':
         lastModifiedTime = AddonUtils.getFileLastModifiedTime(filepath)
         if lastModifiedTime is not None:
@@ -265,7 +265,7 @@ def retrieveTVShowsAndSave(request_obj, response_obj):
     status = AddonUtils.saveObjToJsonFile(filepath, tvChannels)
     if status is not None:
         print 'Saved status = ' + str(status)
-    AddonContext().addon.setSetting('drForceRefresh', 'false')
+    Container().getAddonContext().addon.setSetting('drForceRefresh', 'false')
 
 
 def displayTVChannels(request_obj, response_obj):
@@ -273,10 +273,10 @@ def displayTVChannels(request_obj, response_obj):
     if request_obj.get_data().has_key('tvChannels'):
         channelsList = request_obj.get_data()['tvChannels']
     else:
-        channelsList = AddonContext().cache.cacheFunction(getTVChannelsList)
+        channelsList = Container().getAddonContext().cache.cacheFunction(getTVChannelsList)
     if channelsList is None:
         raise Exception(ExceptionHandler.TV_CHANNELS_NOT_LOADED, 'Please delete data folder from add-on user data folder.')
-    displayChannelType = int(AddonContext().addon.getSetting('drChannelType'))
+    displayChannelType = int(Container().getAddonContext().addon.getSetting('drChannelType'))
     for channelName in channelsList:
         channelObj = channelsList[channelName]
         if ((displayChannelType == 1 and channelObj['channelType'] == CHANNEL_TYPE_IND) 
@@ -294,7 +294,7 @@ def displayTVChannels(request_obj, response_obj):
         
 
 def displayTVShows(request_obj, response_obj):
-    channelsList = AddonContext().cache.cacheFunction(getTVChannelsList)
+    channelsList = Container().getAddonContext().cache.cacheFunction(getTVChannelsList)
     channelObj = channelsList[request_obj.get_data()['channelName']]
     channelType = request_obj.get_data()['channelType']
     if channelObj.has_key('running_tvshows'):
@@ -307,7 +307,7 @@ def displayTVShows(request_obj, response_obj):
         
 def getTVChannelsList():
     print 'ERROR'
-    filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
+    filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
     print filepath
     return AddonUtils.getJsonFileObj(filepath)
 

@@ -25,12 +25,15 @@ def __addMovieInfo_in_item(item):
             xbmc_item.setThumbnailImage(meta['cover_url'])
             videoInfo = {'trailer_url':meta['trailer_url']}
             for key, value in meta.items():
-                if key in ['genre', 'title', 'year', 'rating', 'tagline', 'writer', 'director', 'rating', 'votes', 'plot', 'duration', 'cast', 'mpaa', 'studio', 'premiered']:
-                    if type(value) is str:
-                        value = unicode(value).encode('utf-8')
-                    videoInfo['key'] = value
+                if type(value) is str:
+                    value = unicode(value).encode('utf-8')
+                videoInfo[key] = value
             xbmc_item.setInfo('video', videoInfo)
             xbmc_item.setProperty('fanart_image', meta['backdrop_url'])
+            
+            contextMenuItems = []
+            contextMenuItems.append(('Movie Information', 'XBMC.Action(Info)'))
+            xbmc_item.addContextMenuItems(contextMenuItems, replaceItems=False)
         else:
             xbmc_item.setInfo('video', {'title':title, 'year':year})
 

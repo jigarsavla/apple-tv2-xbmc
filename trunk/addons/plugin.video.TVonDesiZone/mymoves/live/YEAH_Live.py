@@ -3,7 +3,7 @@ Created on Dec 10, 2011
 
 @author: ajju
 '''
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 from common import AddonUtils, ExceptionHandler
 from common.DataObjects import ListItem
 import xbmcgui, xbmcplugin #@UnresolvedImport
@@ -12,9 +12,9 @@ import xbmcgui, xbmcplugin #@UnresolvedImport
 CHANNELS_JSON_FILE = 'Yeah-Channels.json'
 
 def addYeahLiveItem(request_obj, response_obj):
-    yeahfilepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=False)
+    yeahfilepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=False)
     if AddonUtils.doesFileExist(yeahfilepath):
-        yeah_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='YEAH.png')
+        yeah_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='YEAH.png')
         item = ListItem()
         item.set_next_action_name('Yeah_TV')
         xbmcListItem = xbmcgui.ListItem(label='[B]YEAH[/B] STREAMS', iconImage=yeah_icon_filepath, thumbnailImage=yeah_icon_filepath)
@@ -33,7 +33,7 @@ def selectChannelsCategory(request_obj, response_obj):
 
 
 def displayChannels(request_obj, response_obj):
-    filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
+    filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
     channelsList = AddonUtils.getJsonFileObj(filepath)
     for channelUrl in channelsList:
         if request_obj.get_data()['category'] == channelsList[channelUrl]['category']:

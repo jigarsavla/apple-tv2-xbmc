@@ -86,6 +86,18 @@ class AddonContext(SingletonClass):
             services.append(Service(serviceTag['name'], serviceTag['action-id']))
         return services
     
+    def cleanUp(self):
+        del self.addon
+        del self.addonPath
+        del self.addonProfile
+        
+        del self.cache
+        
+        del self.turtle_addon
+        del self.turtle_addonPath
+        del self.turtle_addonProfile
+        del self.turtle_map
+    
         
 '''CONTAINER FUNCTIONS START FROM HERE'''
 #INITIALIZE CONTAINER
@@ -146,6 +158,7 @@ class Container(SingletonClass):
                 else:
                     is_Folder = self.addon_context.isNextActionFolder(actionObj.get_action_id(), item.get_next_action_name())
                     XBMCInterfaceUtils.addFolderItem(item, nextActionId, is_Folder)
+                del item #deletes item
             if isAnyVideoItem == True:
                 ProgressDisplayer().end()
                 try:
@@ -154,9 +167,10 @@ class Container(SingletonClass):
                     Logger.logFatal(e)
             else:
                 if self.response_obj.get_xbmc_sort_method() is not None:
-                    XBMCInterfaceUtils.sortItems(self.response_obj.get_xbmc_sort_method())
+                    XBMCInterfaceUtils.sortMethod(self.response_obj.get_xbmc_sort_method())
                 if self.response_obj.get_xbmc_content_type() is not None:
                     XBMCInterfaceUtils.setContentType(self.response_obj.get_xbmc_content_type())
+                XBMCInterfaceUtils.setSortMethods()
 
         else:
             redirectActionId = actionObj.get_redirect_action_map()[self.response_obj.get_redirect_action_name()]
@@ -175,3 +189,11 @@ class Container(SingletonClass):
             actionId = self.judgeTurtleNextAction(turtle_route)
             
         ProgressDisplayer().end()
+        
+    
+    def cleanUp(self):
+        self.addon_context.cleanUp()
+        del self.addon_context
+        
+        del self.response_obj
+        del self.request_obj
