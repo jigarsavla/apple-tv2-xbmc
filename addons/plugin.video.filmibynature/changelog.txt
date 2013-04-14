@@ -1,7 +1,7 @@
-[B]Version v2.0.9[/B]
+[B]Version v2.1.0[/B]
 - Replaced Bluray with HD.
 
-[B]Version v2.0.8[/B]
+[B]Version v2.0.8 - v2.0.9[/B]
 - Added new Turtle v1.3.2 dependency. Turtle takes care of cleaning objects.
 - Fixed movie information issue.
 
