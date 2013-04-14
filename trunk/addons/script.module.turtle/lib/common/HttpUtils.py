@@ -153,3 +153,7 @@ class HttpClient(SingletonClass):
         for extraHeaderName in extraExtraHeaders:
             url = url + extraHeaderName + '=' + urllib.quote_plus(extraExtraHeaders[extraHeaderName])
         return url
+    
+    def cleanUp(self):
+        del self.__cookiejar
+        del self.__cookiesEnabled
