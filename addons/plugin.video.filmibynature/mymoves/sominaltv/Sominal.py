@@ -75,7 +75,7 @@ def listMovies(request_obj, response_obj):
         if categoryUrlSuffix != 'BluRay':
             if(len(movieInfo[0]) >= 3):
                 quality = unicode(movieInfo[0][2]).encode('utf-8')
-                if quality == '*BluRay*':
+                if quality == '*HD*':
                     quality = '[COLOR red]' + quality + '[/COLOR]'
                 elif quality == 'DVD':
                     quality = '[COLOR orange]' + quality + '[/COLOR]'
