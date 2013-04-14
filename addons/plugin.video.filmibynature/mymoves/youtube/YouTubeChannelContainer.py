@@ -1,4 +1,4 @@
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 from common import AddonUtils, XBMCInterfaceUtils
 import xbmcgui, xbmc  # @UnresolvedImport
 from common.DataObjects import ListItem
@@ -12,14 +12,15 @@ CHANNELS_JSON_FILE = "YouTubeChannels.json"
 PRE_LOADED_CHANNELS = ['SominalTvTheaters', 'SominalTvHindiMusic', 'erosentertainment', 'tseries', 'UTVMotionPictures', 'Saavn', 'yrf', 'YRFsongs', 'yrfTV', 'YRFTrailers', 'YRFMovies', 'RelianceBigCinemas', 'VenusMovies']
 
 def displayChannels(request_obj, response_obj):
+    addonContext = Container().getAddonContext()
     item = ListItem()
     item.set_next_action_name('add_Channel')
-    youtube_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Add_New_YouTube_V1.png')
+    youtube_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Add_New_YouTube_V1.png')
     xbmcListItem = xbmcgui.ListItem(label='Add New Channel', iconImage=youtube_icon_filepath, thumbnailImage=youtube_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)   
                 
-    filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=True)
+    filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=True)
     if not AddonUtils.doesFileExist(filepath):
         new_items = XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__retrieveYouTubeUserInfo__'), PRE_LOADED_CHANNELS, 'Loading default list of channels...', 'Remove the channel you hate in default list using context menu.')
         index = 0
@@ -66,7 +67,7 @@ def removeChannel(request_obj, response_obj):
     d = xbmcgui.Dialog()
     if not d.yesno('Remove Channel : [B]' + channelName + '[/B]', 'Do you want to continue?', 'Note: This action will not delete channel from YouTube.'):
         return
-    filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=True)
+    filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=True)
     if AddonUtils.doesFileExist(filepath):
         try:
             channelsJsonObj = AddonUtils.getJsonFileObj(filepath)
@@ -100,7 +101,7 @@ def addNewChannel(request_obj, response_obj):
         else:
             try:
                 channelsJsonObj = {}
-                filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=True)
+                filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=True)
                 if AddonUtils.doesFileExist(filepath):
                     try:
                         channelsJsonObj = AddonUtils.getJsonFileObj(filepath)

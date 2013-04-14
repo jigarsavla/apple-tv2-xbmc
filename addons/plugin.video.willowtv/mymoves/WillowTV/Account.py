@@ -1,4 +1,4 @@
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 from common import AddonUtils, HttpUtils, XBMCInterfaceUtils
 import time
 import re
@@ -11,10 +11,10 @@ COOKIES_FILENAME = 'CookieStore'
 
 def login(request_obj, response_obj):
     HttpUtils.HttpClient().enableCookies()
-    cookieStore = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=COOKIES_FILENAME, makeDirs=True)
+    cookieStore = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=COOKIES_FILENAME, makeDirs=True)
     
     success = True
-    relogin = AddonContext().addon.getSetting('relogin') == 'true'
+    relogin = Container().getAddonContext().addon.getSetting('relogin') == 'true'
     if not relogin:
         relogin = __checkAndLoadCookieStore__(cookieStore)
     if relogin:
@@ -26,7 +26,7 @@ def login(request_obj, response_obj):
         request_obj.get_data()['isLoginSuccess'] = True
     else:
         request_obj.get_data()['isLoginSuccess'] = False
-    AddonContext().addon.setSetting('relogin', 'false')
+    Container().getAddonContext().addon.setSetting('relogin', 'false')
     
     
 def __checkAndLoadCookieStore__(cookieStore):
@@ -44,12 +44,12 @@ def __checkAndLoadCookieStore__(cookieStore):
     
 def __loginAndSaveCookieStore__(cookieStore):
     AddonUtils.deleteFile(cookieStore)
-    email = AddonContext().addon.getSetting('email')
-    password = AddonContext().addon.getSetting('password')
+    email = Container().getAddonContext().addon.getSetting('email')
+    password = Container().getAddonContext().addon.getSetting('password')
     if email == None or email == '' or password == None or password == '':
         d = xbmcgui.Dialog()
         d.ok('Welcome to Willow TV', 'Watch LIVE CRICKET on your favorite Willow TV.', 'Please provide your login details for both', 'Willow TV and YouTube.')
-        AddonContext().addon.openSettings(sys.argv[ 0 ])
+        Container().getAddonContext().addon.openSettings(sys.argv[ 0 ])
         return False
     params = {'Email': email, 'Password': password, 'KeepSigned': 'true', 'LoginFormSubmit': 'true'}
     html = HttpUtils.HttpClient().getHtmlContent(LOGIN_URL, params)

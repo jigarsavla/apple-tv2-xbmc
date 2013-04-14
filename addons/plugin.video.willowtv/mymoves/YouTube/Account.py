@@ -1,4 +1,4 @@
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 from common import AddonUtils, HttpUtils, XBMCInterfaceUtils, ExceptionHandler
 import time
 import re
@@ -13,10 +13,10 @@ LOGIN_URL = 'https://accounts.google.com/ServiceLogin?service=youtube&continue=h
 COOKIES_FILENAME = 'YTCookieStore'
 
 def login(request_obj, response_obj):
-    cookieStore = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=COOKIES_FILENAME, makeDirs=True)
+    cookieStore = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=COOKIES_FILENAME, makeDirs=True)
      
     success = True
-    relogin = AddonContext().addon.getSetting('relogin') == 'true'
+    relogin = Container().getAddonContext().addon.getSetting('relogin') == 'true'
     if not relogin:
         relogin = __checkAndLoadCookieStore__(cookieStore)
     if relogin:
@@ -28,7 +28,7 @@ def login(request_obj, response_obj):
         request_obj.get_data()['isLoginSuccess'] = True
     else:
         request_obj.get_data()['isLoginSuccess'] = False
-    AddonContext().addon.setSetting('relogin', 'false')
+    Container().getAddonContext().addon.setSetting('relogin', 'false')
     
     
 def __checkAndLoadCookieStore__(cookieStore):
@@ -46,14 +46,14 @@ def __checkAndLoadCookieStore__(cookieStore):
     
 def __loginAndSaveCookieStore__(cookieStore):
     AddonUtils.deleteFile(cookieStore)
-    email = AddonContext().addon.getSetting('yt_email')
-    password = AddonContext().addon.getSetting('yt_password')
+    email = Container().getAddonContext().addon.getSetting('yt_email')
+    password = Container().getAddonContext().addon.getSetting('yt_password')
     if email == None or email == '' or password == None or password == '':
         d = xbmcgui.Dialog()
         d.ok('Welcome to Willow TV', 'Watch LIVE CRICKET on your favorite Willow TV.', 'Please provide your login details for YouTube Account.')
-        AddonContext().addon.openSettings(sys.argv[ 0 ])
-        email = AddonContext().addon.getSetting('yt_email')
-        password = AddonContext().addon.getSetting('yt_password')
+        Container().getAddonContext().addon.openSettings(sys.argv[ 0 ])
+        email = Container().getAddonContext().addon.getSetting('yt_email')
+        password = Container().getAddonContext().addon.getSetting('yt_password')
     successInd = __loginYouTube__(LOGIN_URL, email, password)
     if successInd:
         HttpUtils.HttpClient().saveCookiesToFile(cookieStore)

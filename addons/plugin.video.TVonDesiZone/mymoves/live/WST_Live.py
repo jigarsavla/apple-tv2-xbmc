@@ -3,7 +3,7 @@ Created on Dec 10, 2011
 
 @author: ajju
 '''
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 import time
 from common.HttpUtils import HttpClient
 import re
@@ -15,8 +15,8 @@ import xbmcgui, xbmcplugin #@UnresolvedImport
 
 
 def login(request_obj, response_obj):
-    username = AddonContext().addon.getSetting('wst_username')
-    password = AddonContext().addon.getSetting('wst_password')
+    username = Container().getAddonContext().addon.getSetting('wst_username')
+    password = Container().getAddonContext().addon.getSetting('wst_password')
     if username == '' or password == '':
         raise Exception(ExceptionHandler.USER_PWD_NOT_PROVIDED, 'User and password is not provided to access desitvstreams.com')
     millis = str(int(round(time.time())))

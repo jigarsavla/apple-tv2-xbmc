@@ -4,15 +4,14 @@ Created on Oct 30, 2011
 @author: ajju
 '''
 
-from common.Singleton import SingletonClass
 from common import HttpUtils, AddonUtils, Logger
 
-class Request(SingletonClass):
+class Request(object):
     '''
     classdocs
     '''
 
-    def __initialize__(self, params=None):
+    def __init__(self, params=None):
         Logger.logDebug(params)
         self.set_action_id('__start__')
         if params is None:
@@ -67,7 +66,7 @@ class Request(SingletonClass):
     data = property(get_data, set_data, del_data, "data's docstring")
         
         
-class Response(SingletonClass):
+class Response(object):
     '''
     classdocs
     '''
@@ -84,7 +83,7 @@ class Response(SingletonClass):
         del self.__service_response_obj
 
 
-    def __initialize__(self):
+    def __init__(self):
         self.__item_list = []
         self.__redirect_action_name = None
         self.__xbmc_sort_method = None

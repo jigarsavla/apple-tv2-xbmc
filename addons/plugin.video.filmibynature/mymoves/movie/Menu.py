@@ -3,7 +3,7 @@ Created on Mar 30, 2013
 
 @author: ajju
 '''
-from TurtleContainer import AddonContext
+from TurtleContainer import Container
 from common.DataObjects import ListItem
 import xbmcgui  # @UnresolvedImport
 from common import AddonUtils, ExceptionHandler
@@ -12,9 +12,10 @@ from common import XBMCInterfaceUtils
 
 
 def displayMainMenu(request_obj, response_obj):
+    addonContext = Container().getAddonContext()
     
     # Hindi Movies
-    hindi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Hindi_Movies_V1.png')
+    hindi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Hindi_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
     item.add_request_data('categoryUrlSuffix', 'Hindi%20Movies')
@@ -23,7 +24,7 @@ def displayMainMenu(request_obj, response_obj):
     response_obj.addListItem(item)
     
     # Telugu Movies
-    telugu_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Telugu_Movies_V1.png')
+    telugu_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Telugu_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
     item.add_request_data('categoryUrlSuffix', 'Telugu')
@@ -32,7 +33,7 @@ def displayMainMenu(request_obj, response_obj):
     response_obj.addListItem(item)
     
     # Tamil Movies
-    tamil_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Tamil_Movies_V1.png')
+    tamil_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Tamil_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
     item.add_request_data('categoryUrlSuffix', 'Tamil')
@@ -41,7 +42,7 @@ def displayMainMenu(request_obj, response_obj):
     response_obj.addListItem(item)
     
     # Punjabi Movies
-    punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
+    punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
     item.add_request_data('categoryUrlSuffix', 'Punjabi')
@@ -50,7 +51,7 @@ def displayMainMenu(request_obj, response_obj):
     response_obj.addListItem(item)
     
     # Malayalam Movies
-    malayalam_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Malayalam_Movies_V1.png')
+    malayalam_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Malayalam_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
     item.add_request_data('categoryUrlSuffix', 'Malayalam')
@@ -59,7 +60,7 @@ def displayMainMenu(request_obj, response_obj):
     response_obj.addListItem(item)
     
     # Bengali Movies
-    bengali_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Bengali_Movies_V1.png')
+    bengali_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Bengali_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
     item.add_request_data('categoryUrlSuffix', 'Bengali')
@@ -68,7 +69,7 @@ def displayMainMenu(request_obj, response_obj):
     response_obj.addListItem(item)
     
     # English Subtitles Movies
-    punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
+    punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
     item.add_request_data('categoryUrlSuffix', 'English%20Subtitled')
@@ -77,7 +78,7 @@ def displayMainMenu(request_obj, response_obj):
     response_obj.addListItem(item)
     
     # Hindi Dubbed Movies
-    punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
+    punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
     item.add_request_data('categoryUrlSuffix', 'Hindi%20Dubbed')
@@ -92,8 +93,9 @@ def displayUC(request_obj, response_obj):
     
     
 def displayAtoZMenu(request_obj, response_obj):
+    addonContext = Container().getAddonContext()
     # Hindi Movies
-    hindi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Hindi_Movies_V1.png')
+    hindi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Hindi_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('ChooseChar')
     item.add_request_data('categorySuffix', '_H')
@@ -102,7 +104,7 @@ def displayAtoZMenu(request_obj, response_obj):
     response_obj.addListItem(item)
     
     # Telugu Movies
-    telugu_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Telugu_Movies_V1.png')
+    telugu_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Telugu_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('ChooseChar')
     item.add_request_data('categorySuffix', '_T')
@@ -111,7 +113,7 @@ def displayAtoZMenu(request_obj, response_obj):
     response_obj.addListItem(item)
     
     # Tamil Movies
-    tamil_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=AddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Tamil_Movies_V1.png')
+    tamil_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Tamil_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('ChooseChar')
     item.add_request_data('categorySuffix', '_TT')

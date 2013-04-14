@@ -1,22 +1,22 @@
+[B]Version v2.0.8[/B]
+- Added new Turtle v1.3.2 dependency. Turtle takes care of cleaning objects.
+- Fixed movie information issue.
+
 [B]Version v2.0.7[/B]
-Fixed "Trailer" section.
+- Fixed "Trailer" section.
 
 [B]Version v2.0.6[/B]
-Added caching of menu section to make things work faster.
+- Added caching of menu section to make things work faster.
 
 [B]Version v2.0.3 - v2.0.5[/B]
-Enabled YouTube Menu link with pre-loaded list of Indian Entertainment channels
+- Enabled YouTube Menu link with pre-loaded list of Indian Entertainment channels
 
 [B]Version v1.9.9[/B]
-
-DirectPlay is redefined as PDP (Preferred Direct Play). 
-Continuous Play: a new replacement for DirectPlay existing functionality
+- DirectPlay is redefined as PDP (Preferred Direct Play). 
+- Continuous Play: a new replacement for DirectPlay existing functionality
 
 [B]Version v1.9.7[/B]
-
-Enabled HD Movies and other categories. Caching and pagination added.
+- Enabled HD Movies and other categories. Caching and pagination added.
 
 [B]Version v1.9.1[/B]
-
-New way to watch DESI MOVIES coming up!
-
+- New way to watch DESI MOVIES coming up!
