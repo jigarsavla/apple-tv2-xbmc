@@ -33,7 +33,7 @@ class Snapper(object):
         self.__snapper_modulepath = modulePath + ':' + functionName
         self.__getVideoInfo = getattr(module, functionName)
         self.getVideoHostingInfo = getattr(module, 'getVideoHostingInfo')
-        print 'Snapper loaded = ' + modulePath
+        Logger.logDebug('Snapper loaded = ' + modulePath)
 
     def isPlaylistSnapper(self):
         return self.__is_playlist
@@ -45,7 +45,7 @@ class Snapper(object):
         isVideoHoster = False
         videoId = self.getVideoId(video_url)
         if videoId is not None:
-            print 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url
+            Logger.logDebug('Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url)
             isVideoHoster = True
         return isVideoHoster
     
@@ -53,7 +53,7 @@ class Snapper(object):
         videoInfo = None
         videoId = self.getVideoId(video_url)
         if videoId is not None:
-            print 'Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url
+            Logger.logDebug('Snapper selected = ' + self.getModuleName() + ' for video URL = ' + video_url)
             videoInfo = self.__getVideoInfo(videoId)
         return videoInfo
     
@@ -72,12 +72,12 @@ def __initializeSnappers():
     snapper_filepath = AddonUtils.getCompleteFilePath(Container().getAddonContext().addonPath, 'snapvideo', 'snappers.xml')
     if not AddonUtils.doesFileExist(snapper_filepath):
         snapper_filepath = AddonUtils.getCompleteFilePath(Container().getAddonContext().turtle_addonPath, 'lib/snapvideo', 'snappers.xml')
-        print 'Loading snappers.xml from turtle library... ' + snapper_filepath
-    snappers_xml = AddonUtils.getBeautifulSoupObj(snapper_filepath)
     global snappers
     if snappers is not None:
         return snappers
     snappers = []
+    Logger.logDebug('Loading snappers.xml from path... ' + snapper_filepath)
+    snappers_xml = AddonUtils.getBeautifulSoupObj(snapper_filepath)
     for snapperTag in snappers_xml.findAll('snapper', attrs={'enabled':'true'}):
         snappers.append(Snapper(snapperTag))
     return snappers

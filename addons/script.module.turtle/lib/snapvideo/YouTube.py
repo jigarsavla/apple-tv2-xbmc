@@ -37,7 +37,8 @@ def retrieveVideoInfo(video_id):
             video_info.set_video_stopped(True)
             return video_info
         
-        title = urllib.unquote_plus(re.compile('&title=(.+?)&').findall(html)[0]).replace('/\+/g', ' ')
+        Logger.logDebug(html)
+        title = urllib.unquote_plus(re.compile('title=(.+?)&').findall(html)[0]).replace('/\+/g', ' ')
         video_info.set_video_name(title)
         stream_info = None
         if not re.search('url_encoded_fmt_stream_map=&', html):
@@ -50,14 +51,14 @@ def retrieveVideoInfo(video_id):
             
         if stream_map is None:
             params = HttpUtils.getUrlParams(html)
-            print 'ENTERING live video scenario...'
+            Logger.logDebug('ENTERING live video scenario...')
             for key in params:
-                print key + " : " + urllib.unquote_plus(params[key])
+                Logger.logDebug(key + " : " + urllib.unquote_plus(params[key]))
             hlsvp = urllib.unquote_plus(params['hlsvp'])
             playlistItems = HttpUtils.HttpClient().getHtmlContent(url=hlsvp).splitlines()
             qualityIdentified = None
             for item in playlistItems:
-                print item
+                Logger.logDebug(item)
                 if item.startswith('#EXT-X-STREAM-INF'):
                     if item.endswith('1280x720'):
                         qualityIdentified = VIDEO_QUAL_HD_720
@@ -105,7 +106,7 @@ def retrieveVideoInfo(video_id):
         
             qual = formatQual
             url = HttpUtils.HttpClient().addHttpCookiesToUrl(formatUrl, extraExtraHeaders={'Referer':'https://www.youtube.com/watch?v=' + video_id})
-            print 'quality ---> ' + qual
+            Logger.logDebug('quality ---> ' + qual)
             if(qual == '52' or qual == '60'):  # Incorrect stream should be skipped. Causes Svere Crash
                 XBMCInterfaceUtils.displayDialogMessage('XBMC Unsupported codec skipped', 'YouTube has started new stream is currently cannot be decoded by XBMC player, causes crash.', 'Skipped this video quality.')
                 continue
@@ -155,7 +156,7 @@ def retrieveVideoInfo(video_id):
 
             video_info.set_video_stopped(False)
     except Exception, e:
-        Logger.logFatal(e)
+        Logger.logError(e)
         video_info.set_video_stopped(True)
     return video_info
 

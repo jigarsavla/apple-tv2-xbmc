@@ -12,6 +12,7 @@ __addon_id__ = None
 
 def start(addon_id):
     try:
+        Logger.logDebug(sys.argv)
         global __addon_id__
         __addon_id__ = addon_id
         

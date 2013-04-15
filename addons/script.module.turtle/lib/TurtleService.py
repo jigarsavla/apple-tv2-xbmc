@@ -5,7 +5,7 @@ Created on Dec 27, 2011
 '''
 from TurtleContainer import Container
 import xbmc  # @UnresolvedImport
-import time
+import time, sys
 from common import ExceptionHandler, AddonUtils, XBMCInterfaceUtils, Logger
 from common.Singleton import SingletonClass
 from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCRequestHandler
@@ -23,8 +23,8 @@ def serviceMethod(name, **params):
     actionId = __registered_services__[name]
     data = {'data':AddonUtils.encodeData(params)}
     service_response_obj = None
+    containerObj = Container(addon_id=__addon_id__)
     try:
-        containerObj = Container(addon_id=__addon_id__)
         
         iconimage = AddonUtils.getCompleteFilePath(baseDirPath=containerObj.getAddonContext().addonPath, filename='icon.png')
         XBMCInterfaceUtils.displayNotification(__service_name__ + ' Service', 'Processing received request...', iconimage=iconimage)
@@ -32,16 +32,21 @@ def serviceMethod(name, **params):
         containerObj.reloadTurtleRequest(data)
         containerObj.performAction(actionId)
         service_response_obj = containerObj.getTurtleResponse().get_service_response_obj()
+        
     except Exception, e:
-        Logger.logFatal(__service_name__ + ' Service :: ERROR OCCURRED: ' + str(e))
+        Logger.logError(__service_name__ + ' Service :: UNEXPECTED ERROR OCCURRED')
+        Logger.logError(e)
         ExceptionHandler.handle(e)
         service_response_obj = {"status":"exception", "message":"an unexpected error occurred, please check your input"}
         XBMCInterfaceUtils.displayNotification(__service_name__ + ' Service', 'Error while processing your request', time='5000')
+    containerObj.cleanRequest()
     return service_response_obj
 
 
 def start(addon_id, service_name, context_root, default_port, allowed_port_range):
     try:
+        sys.argv = None  # To handle the situations where some library expects system arguments. Main change made for t0mm0 urlresolver library.
+        
         global __addon_id__
         global __registered_services__
         global __context_root__
@@ -80,9 +85,19 @@ def start(addon_id, service_name, context_root, default_port, allowed_port_range
         while not xbmc.abortRequested:
             time.sleep(5)
         Logger.logInfo(__service_name__ + ' Service :: ABORT request received from XBMC. PlayIt service will stop now.')
+        cleanUp()
     except Exception, e:
         Logger.logFatal(__service_name__ + ' Service :: ERROR OCCURRED: ' + str(e))
         ExceptionHandler.handle(e)
+
+
+def cleanUp():
+    containerObj = Container()
+    containerObj.cleanUp()
+    del containerObj
+    httpClient = HttpUtils.HttpClient()
+    httpClient.cleanUp()
+    del httpClient
     
     
 def log_request(self, *args, **kwargs):
