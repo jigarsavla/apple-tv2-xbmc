@@ -122,9 +122,7 @@ class Container(SingletonClass):
         
     def reloadTurtleRequest(self, params):
         self.request_obj = DataObjects.Request(params=params)
-        self.request_obj.__initialize__(params)
         self.response_obj = DataObjects.Response()
-        self.response_obj.reset_item_list()
         
     def getTurtleRoute(self, actionId):
         return self.addon_context.getTurtleRoute(actionId)
@@ -190,7 +188,10 @@ class Container(SingletonClass):
             
         ProgressDisplayer().end()
         
-    
+    def cleanRequest(self):
+        del self.response_obj
+        del self.request_obj
+        
     def cleanUp(self):
         self.addon_context.cleanUp()
         del self.addon_context

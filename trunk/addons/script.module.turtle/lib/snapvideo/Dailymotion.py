@@ -5,7 +5,7 @@ Created on Oct 29, 2011
 '''
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_SD, \
     VIDEO_QUAL_HD_720, VIDEO_QUAL_HD_1080, VIDEO_QUAL_LOW
-from common import HttpUtils
+from common import HttpUtils, Logger
 import re
 import urllib
 try:
@@ -99,7 +99,7 @@ def retrieveVideoInfo(video_id):
                             params = layerItem['param']
                             video_info.set_video_image(params['imageURL'])
     except Exception, e:
-        logging.exception(e)
+        Logger.logError(e)
         video_info.set_video_stopped(True)
     return video_info
 
