@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
   "name": "PlayIt",
-  "version": "2.3",
+  "version": "2.4",
   "background": { "scripts": ["playit.js","rpc.js"] },
   "options_page": "options.html",
-  "description": "PlayIt extension will send play video request to XBMC running on remote/local machine.",
+  "description": "PlayIt extension will send play video request to XBMC running on remote/local machine. Use add-on button or its context menu item.",
   "browser_action": {
     "default_icon": "small-icon.png",
     "default_title": "Play video on XBMC",
@@ -13,7 +13,8 @@
   "permissions": [
     "http://*/PlayIt",
     "notifications",
-    "tabs"
+    "tabs",
+    "contextMenus"
   ],
   "icons": {
     "16": "small-icon.png",
