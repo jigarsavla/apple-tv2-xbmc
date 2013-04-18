@@ -15,20 +15,10 @@ def logDebug(message):
     xbmc.log(message, xbmc.LOGDEBUG)
     
 def logError(message):
-    if type(message) is not str:
-        if type(message) is Exception:
-            logging.exception(message)
-            return
-        message = str(message)
-    xbmc.log(message, xbmc.LOGERROR)
+    logging.exception(message)
     
 def logFatal(message):
-    if type(message) is not str:
-        if type(message) is Exception:
-            logging.exception(message)
-            return
-        message = str(message)
-    xbmc.log(message, xbmc.LOGFATAL)
+    logging.exception(message)
     
 def logNotice(message):
     if type(message) is not str:
@@ -36,12 +26,7 @@ def logNotice(message):
     xbmc.log(message, xbmc.LOGNOTICE)
     
 def logSevere(message):
-    if type(message) is not str:
-        if type(message) is Exception:
-            logging.exception(message)
-            return
-        message = str(message)
-    xbmc.log(message, xbmc.LOGSEVERE)
+    logging.exception(message)
 
 def logWarning(message):
     if type(message) is not str:

@@ -17,7 +17,7 @@ import logging
 VIDEO_HOSTING_NAME = 'Dailymotion'
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
-    video_hosting_info.set_video_hosting_image('http://aux.iconpedia.net/uploads/1687271053.png')
+    video_hosting_info.set_video_hosting_image('http://press.dailymotion.com/fr/wp-content/uploads/logo-Dailymotion.png')
     video_hosting_info.set_video_hosting_name(VIDEO_HOSTING_NAME)
     return video_hosting_info
     

@@ -174,8 +174,6 @@ def retieveMovieStreams(request_obj, response_obj):
     loadLastTags(soup, 'div', divTags)
     
     for divTag in divTags:
-        Logger.logDebug(divTag)
-        Logger.logDebug('----------------------------------------------')
         if re.search('^(Source|ONLINE)', divTag.getText(), re.IGNORECASE):
             if videoSourceLinks is not None and len(videoSourceLinks) > 0:
                 videoSources.append(videoSourceLinks)
@@ -242,7 +240,9 @@ def __preparePlayListItem__(video_items, source):
         video_playlist_items.append(video_item)
         video_source_img = item.get_moving_data()['videoSourceImg']
         video_source_name = item.get_moving_data()['videoSourceName']
-    
+    Logger.logDebug('IMAGE :: ')
+    Logger.logDebug(video_source_img)
+    Logger.logDebug(type(video_source_img))
     item = ListItem()
     item.add_request_data('videoPlayListItems', video_playlist_items)
     item.add_moving_data('isContinuousPlayItem', True)
@@ -255,6 +255,10 @@ def __preparePlayListItem__(video_items, source):
     
 def __prepareVideoSourceLinks__(videoSourceLinks, source):
     new_items = XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__prepareVideoLink__'), videoSourceLinks, 'Retrieving streaming links for source #' + source, 'Failed to retrieve stream information, please try again later')
+    if len(new_items) == 0:
+        XBMCInterfaceUtils.displayDialogMessage('No video items found!', 'Unable to resolve video items from source #' + source, 'Continuing with next source...')
+        return []
+    
     count = 0
     for item in new_items:
         xbmcItem = item.get_xbmc_list_item_obj()
@@ -269,14 +273,16 @@ def __prepareVideoLink__(videoSourceLink):
     url = videoSourceLink
     if re.search('wp.me', url, re.I):
         url = HttpUtils.getRedirectedUrl(url)
-    video_link = {}
-    contentDiv = BeautifulSoup.SoupStrainer('div', {'class':'left'})
-    soup = HttpUtils.HttpClient().getBeautifulSoup(url=url, parseOnlyThese=contentDiv)
-    children = soup.findChildren('embed')
+    Logger.logDebug(url)
+#     contentDiv = BeautifulSoup.SoupStrainer('div', {'class':'left_articles'})
+#     soup = BeautifulSoup.BeautifulSoup(html, contentDiv)
+    html = HttpUtils.HttpClient().getHtmlContent(url)
+    children = re.compile('<embed(.+?)>').findall(html)
     if children is None or len(children) == 0:
-        children = soup.findChildren('iframe')
+        children = re.compile('<iframe(.+?)>').findall(html)
+    Logger.logDebug(children)
     for child in children:
-        video_url = child['src']
+        video_url = re.compile('src="(.+?)"').findall(child)[0]
         if(re.search('http://ads', video_url, re.I) or re.search('http://ax-d', video_url, re.I)):
             continue
         video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
