@@ -1,3 +1,6 @@
+[B]Version v2.1.3[/B]
+- Added download video context menu. (Using Simple Downloader v1.9.4)
+
 [B]Version v2.1.2[/B]
 - Made fixes for new website changes.
 
