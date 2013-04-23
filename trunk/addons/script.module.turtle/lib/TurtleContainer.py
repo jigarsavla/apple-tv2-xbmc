@@ -8,10 +8,9 @@ from common.Singleton import SingletonClass
 from common.XBMCInterfaceUtils import ProgressDisplayer
 from definition.Turtle import Action, Move, Service
 import sys
-import xbmcaddon #@UnresolvedImport
-
+import xbmcaddon  # @UnresolvedImport
 try:
-    import StorageServer #@UnresolvedImport
+    import StorageServer  # @UnresolvedImport
 except:
     import common.storageserverdummy as StorageServer
     
@@ -26,7 +25,7 @@ class AddonContext(SingletonClass):
     '''
     def __initialize__(self, addon_id):
         
-        #Addon information
+        # Addon information
         self.addon = xbmcaddon.Addon(id=addon_id)
         self.addonPath = self.addon.getAddonInfo('path')
         self.addonProfile = self.addon.getAddonInfo('profile')
@@ -77,7 +76,14 @@ class AddonContext(SingletonClass):
         actionTag = self.turtle_map.find(name='action', attrs={'id':actionId})
         nextActionTag = actionTag.find(name='next-action', attrs={'name':nextActionName})
         return (nextActionTag['isfolder'] == 'true')
-        
+    
+    def getDownloadActionIfDownloadable(self, actionId, nextActionName):
+        actionTag = self.turtle_map.find(name='action', attrs={'id':actionId})
+        nextActionTag = actionTag.find(name='next-action', attrs={'name':nextActionName})
+        if (nextActionTag.has_key('downloadable') and nextActionTag['downloadable'] == 'true'):
+            return nextActionTag['download-action-id']
+        else:
+            None
         
     def getTurtleServices(self):
         services = []
@@ -100,7 +106,7 @@ class AddonContext(SingletonClass):
     
         
 '''CONTAINER FUNCTIONS START FROM HERE'''
-#INITIALIZE CONTAINER
+# INITIALIZE CONTAINER
 class Container(SingletonClass):
     
     def __initialize__(self, addon_id):
@@ -147,16 +153,27 @@ class Container(SingletonClass):
                 nextActionId = actionObj.get_next_action_map()[item.get_next_action_name()]
                 if nextActionId == '__play__':
                     if not isAnyVideoItem:
-                        XBMCInterfaceUtils.clearPlayList() #Clear playlist item only when at least one video item is found.
+                        XBMCInterfaceUtils.clearPlayList()  # Clear playlist item only when at least one video item is found.
                     XBMCInterfaceUtils.addPlayListItem(item)
                     isAnyVideoItem = True
                 elif nextActionId == '__service_response__':
-                    #Do Nothing , get response object from container for parameters to be returned
+                    # Do Nothing , get response object from container for parameters to be returned
                     pass
+                elif nextActionId == '__download__':
+                    downloadPath = self.addon_context.addon.getSetting('downloadPath')
+                    if downloadPath is None or downloadPath == '':
+                        XBMCInterfaceUtils.displayDialogMessage("Download path not provided", "Please provide download path in add-on settings.", "The download path should be a local directory.")
+                        self.addon_context.addon.openSettings(sys.argv[ 0 ])
+                        downloadPath = self.addon_context.addon.getSetting('downloadPath')
+                    if downloadPath is not None and downloadPath != '':
+                        XBMCInterfaceUtils.downloadVideo(item, downloadPath)
                 else:
                     is_Folder = self.addon_context.isNextActionFolder(actionObj.get_action_id(), item.get_next_action_name())
+                    downloadAction = self.addon_context.getDownloadActionIfDownloadable(actionObj.get_action_id(), item.get_next_action_name())
+                    if(downloadAction is not None):
+                        XBMCInterfaceUtils.addContextMenuItem(item, 'Download Video', downloadAction)
                     XBMCInterfaceUtils.addFolderItem(item, nextActionId, is_Folder)
-                del item #deletes item
+                del item  # deletes item
             if isAnyVideoItem == True:
                 ProgressDisplayer().end()
                 try:

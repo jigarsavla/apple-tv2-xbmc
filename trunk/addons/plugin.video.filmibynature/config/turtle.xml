@@ -117,7 +117,7 @@
 		<move module="moves.SnapVideo" function="addVideoInfoInPlayableItems" />
 		<next-action name="Play" id="__play__" isfolder="false" />
 		<next-action name="Play_Stream" id="snap_and_play_video"
-			isfolder="false" />
+			isfolder="false" downloadable="true" download-action-id="snap_and_download_video" />
 		<next-action name="Play_AllStreams" id="snap_and_continuousplay_playlist"
 			isfolder="false" />
 	</action>
@@ -141,7 +141,7 @@
 		<move module="mymoves.youtube.YouTubeChannelContainer" function="addNewChannel"
 			pmessage="" />
 	</action>
-	
+
 	<action id="remove_YouTube_Channel">
 		<move module="mymoves.youtube.YouTubeChannelContainer" function="removeChannel"
 			pmessage="" />
@@ -161,7 +161,7 @@
 		<next-action name="show_Videos" isfolder="true"
 			id="display_YouTube_Channel_Videos" />
 		<next-action name="play_Video" isfolder="false"
-			id="snap_and_play_video" />
+			id="snap_and_play_video" downloadable="true" download-action-id="snap_and_download_video" />
 	</action>
 
 	<action id="display_YouTube_Channel_Playlists">
@@ -179,7 +179,7 @@
 		<next-action name="show_Playlist_Videos" isfolder="true"
 			id="display_YouTube_Channel_Playlist_Videos" />
 		<next-action name="play_Video" isfolder="false"
-			id="snap_and_play_video" />
+			id="snap_and_play_video" downloadable="true" download-action-id="snap_and_download_video" />
 	</action>
 
 	<!-- Common Video Link Player Moves -->
@@ -190,6 +190,13 @@
 		<move module="moves.SnapVideo" function="addPlaylistVideosInfo" />
 		<move module="moves.SnapVideo" function="addVideoInfo" />
 		<next-action name="Play" id="__play__" isfolder="false" />
+	</action>
+
+	<action id="snap_and_download_video">
+		<move module="moves.PreProcessor" function="prepareVideoItem" />
+		<move module="moves.SnapVideo" function="addPlaylistVideosInfo" />
+		<move module="moves.SnapVideo" function="addVideoInfo" />
+		<next-action name="Play" id="__download__" isfolder="false" />
 	</action>
 
 	<action id="snap_and_continuousplay_playlist">

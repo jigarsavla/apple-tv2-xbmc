@@ -81,11 +81,29 @@ def setContentType(content_type):
 def addFolderItem(item, item_next_action_id, is_folder=True):
     u = sys.argv[0] + '?actionId=' + urllib.quote_plus(item_next_action_id) + '&data=' + urllib.quote_plus(AddonUtils.encodeData(item.get_request_data()))
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=item.get_xbmc_list_item_obj(), isFolder=is_folder)
+    
+def addContextMenuItem(item, label, action_id, data=None):
+    if data is None:
+        data = item.get_request_data()
+    contextMenuItems = []
+    data = '?actionId=' + urllib.quote_plus(action_id) + '&data=' + urllib.quote_plus(AddonUtils.encodeData(item.get_request_data()))
+    contextMenuItems.append((label, 'XBMC.RunPlugin(%s?%s)' % (sys.argv[0], data)))
+    item.get_xbmc_list_item_obj().addContextMenuItems(contextMenuItems, replaceItems=True)
 
 def addPlayListItem(item):
     if item.get_moving_data().has_key('videoStreamUrl'):
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.add(url=item.get_moving_data()['videoStreamUrl'], listitem=item.get_xbmc_list_item_obj())
+        
+def downloadVideo(item, downloadPath):
+    if item.get_moving_data().has_key('videoStreamUrl'):
+        import SimpleDownloader as downloader  # @UnresolvedImport
+        downloader = downloader.SimpleDownloader()
+        videoUrl = item.get_moving_data()['videoStreamUrl'].partition('|')[0]
+        params = { "url": videoUrl, "download_path": downloadPath}
+        downloader.download(item.get_xbmc_list_item_obj().getLabel(), params)
+    else:
+        displayDialogMessage("Download failure!", "Unable to resolve video URL.", "Please try again with different source.")
     
 def clearPlayList():
     playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
@@ -172,10 +190,10 @@ def displayNotification(header, message='', time='3000', iconimage=''):
 def setSortMethods():
     
     # set sort methods - probably we don't need all of them
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_UNSORTED )
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RATING )
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_PROGRAM_COUNT )
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RUNTIME )
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_GENRE )
+    xbmcplugin.addSortMethod(handle=int(sys.argv[ 1 ]), sortMethod=xbmcplugin.SORT_METHOD_UNSORTED)
+    xbmcplugin.addSortMethod(handle=int(sys.argv[ 1 ]), sortMethod=xbmcplugin.SORT_METHOD_LABEL)
+    xbmcplugin.addSortMethod(handle=int(sys.argv[ 1 ]), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RATING)
+    xbmcplugin.addSortMethod(handle=int(sys.argv[ 1 ]), sortMethod=xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(handle=int(sys.argv[ 1 ]), sortMethod=xbmcplugin.SORT_METHOD_PROGRAM_COUNT)
+    xbmcplugin.addSortMethod(handle=int(sys.argv[ 1 ]), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RUNTIME)
+    xbmcplugin.addSortMethod(handle=int(sys.argv[ 1 ]), sortMethod=xbmcplugin.SORT_METHOD_GENRE)
