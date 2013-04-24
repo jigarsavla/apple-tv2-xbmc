@@ -4,5 +4,7 @@ document.addEventListener("contextmenu", handleContextMenu, false);
 function handleContextMenu(event) {
 	if(event.target.nodeName == 'A'){
 		safari.self.tab.setContextMenuEventUserInfo(event, [event.target.href,event.target.textContent.trim()]);
+	}else if(event.target.parentNode.nodeName == 'A'){
+		safari.self.tab.setContextMenuEventUserInfo(event, [event.target.parentNode.href,event.target.parentNode.textContent.trim()]);
 	}
 }
