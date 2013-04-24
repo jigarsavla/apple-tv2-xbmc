@@ -84,8 +84,14 @@ function myAlert(title, msg) {
 // Handles context menu item on click event
 function cmClickHandler(info) {
 	if (info.menuItemId == "playIt") {
-		myAlert("Video selected", info.selectionText)
-		playIt(info.linkUrl)
+		if (info.linkUrl === undefined) {
+			myAlert("Selection cannot be played!", info.selectionText)
+		} else {
+			if (info.selectionText !== undefined) {
+				myAlert("Video selected", info.selectionText)
+			}
+			playIt(info.linkUrl)
+		}
 	}
 }
 
@@ -103,7 +109,7 @@ chrome.runtime.onInstalled.addListener(function() {
 		"type" : "normal",
 		"title" : "PlayIt on XBMC",
 		"id" : "playIt",
-		"contexts" : [ "link" ],
+		"contexts" : [ "link", "image", "video", "audio" ],
 		"onclick" : cmClickHandler
 	};
 	// Create a parent item and two children.
