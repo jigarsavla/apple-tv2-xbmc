@@ -162,6 +162,7 @@ def retrieveVideoInfo(video_id):
 
 
 def retrievePlaylistVideoItems(playlistId):
+    Logger.logFatal('YouTube Playlist ID = ' + playlistId)
     soupXml = HttpUtils.HttpClient().getBeautifulSoup('http://gdata.youtube.com/feeds/api/playlists/' + playlistId)
     videoItemsList = []
     for media in soupXml.findChildren('media:player'):
@@ -170,6 +171,7 @@ def retrievePlaylistVideoItems(playlistId):
     return videoItemsList
     
 def retrieveReloadedPlaylistVideoItems(playlistId):
+    Logger.logFatal('YouTube Reloaded Playlist ID = ' + playlistId)
     soupXml = HttpUtils.HttpClient().getBeautifulSoup('http://gdata.youtube.com/feeds/api/playlists/' + playlistId)
     videoItemsList = []
     for media in soupXml.findChildren('track'):

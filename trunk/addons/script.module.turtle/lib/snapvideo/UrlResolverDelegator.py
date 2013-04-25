@@ -4,7 +4,6 @@ Created on Nov 21, 2012
 @author: ajju
 '''
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_SD
-import urlresolver  # @UnresolvedImport
 
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
@@ -19,6 +18,7 @@ def retrieveVideoInfo(videoUrl):
     video_info.set_video_id(videoUrl)
     try:
         sources = []
+        import urlresolver  # @UnresolvedImport
         hosted_media = urlresolver.HostedMediaFile(url=videoUrl)
         sources.append(hosted_media)
         source = urlresolver.choose_source(sources)
