@@ -19,6 +19,8 @@
 		<video-id regex="youtube.com/p/(.+?)\?" />
 		<video-id regex="youtube.com/p/(.+?)&amp;" />
 		<video-id regex="youtube.com/feeds/api/playlists/(.+?)&amp;" />
+		<video-id regex="youtube.com/watch\?v=.*?&amp;list=PL(.+?)&amp;"/>
+		<video-id regex="youtube.com/view_play_list\?.*?&p=(.+?)&amp;"/>
 	</snapper>
 
 	<snapper module="snapvideo.YouTube" function="retrieveReloadedPlaylistVideoItems"
