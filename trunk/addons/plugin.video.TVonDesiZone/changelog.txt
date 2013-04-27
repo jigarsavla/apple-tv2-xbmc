@@ -127,3 +127,6 @@ Continuous Play: a new replacement for DirectPlay existing functionality
 [B]Version v1.4.8[/B]
 - Moved to new directory structure.
 
+[B]Version v1.4.9[/B]
+- Updated turtle version to 1.4.0.
+

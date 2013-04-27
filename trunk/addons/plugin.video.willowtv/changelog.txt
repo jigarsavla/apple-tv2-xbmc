@@ -111,3 +111,7 @@
 [B]Version v2.0.8[/B]
 
 - Moved to new directory structure.
+
+[B]Version v2.0.9[/B]
+
+- Updated turtle version to 1.4.0.

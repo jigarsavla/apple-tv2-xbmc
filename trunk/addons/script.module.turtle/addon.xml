@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.module.turtle" name="Turtle" version="1.3.9"
+<addon id="script.module.turtle" name="Turtle" version="1.4.0"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
@@ -8,6 +8,7 @@
 		<import addon="script.module.urlresolver" version="0.0.1" />
 		<import addon="script.common.plugin.cache"/>
 		<import addon="script.module.simple.downloader"/>
+		<import addon="repository.googlecode.apple-tv2-xbmc" version="1.5.2" />
 	</requires>
 	<extension point="xbmc.python.module" library="lib" />
 	<extension point="xbmc.addon.metadata">
