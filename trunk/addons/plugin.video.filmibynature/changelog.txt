@@ -1,3 +1,6 @@
+[B]Version v2.1.6[/B]
+- Moved to new directory structure.
+
 [B]Version v2.1.3[/B]
 - Added download video context menu. (Using Simple Downloader v1.9.4)
 
