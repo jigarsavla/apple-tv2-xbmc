@@ -107,3 +107,7 @@
 [B]Version v2.0.5[B]
 
 -Added new Turtle v1.3.2 dependency. Turtle takes care of cleaning objects.
+
+[B]Version v2.0.8[/B]
+
+- Moved to new directory structure.
