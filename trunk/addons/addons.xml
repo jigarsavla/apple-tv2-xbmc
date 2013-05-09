@@ -111,7 +111,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtle" name="Turtle" version="1.4.0"
+<addon id="script.module.turtle" name="Turtle" version="1.4.1"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
@@ -143,13 +143,13 @@
 	</extension>
 </addon>
 
-<addon id="service.playit" name="PlayIt" version="0.1.9"
+<addon id="service.playit" name="PlayIt" version="0.2.0"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtle" version="1.4.0" />
+		<import addon="script.module.turtle" version="1.4.1" />
 	</requires>
 	<extension point="xbmc.service" library="TurtleMain.py"
 		start="login">
