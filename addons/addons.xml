@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
 <addon id="plugin.video.filmibynature" name="Filmi BY NATURE"
-	version="2.1.8" provider-name="AJ">
+	version="2.1.9" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtle" version="1.4.0" />
-		<import addon="script.module.metahandler" version="1.0.1"/>
+		<import addon="script.module.turtle" version="1.4.2" />
+		<import addon="script.module.metahandler" version="1.0.2"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
 		<provides>video</provides>
@@ -32,12 +32,12 @@
 </addon>
 
 <addon id="plugin.video.TVonDesiZone" name="TV on DESI ZONE"
-	version="1.4.9" provider-name="AJ">
+	version="1.5.0" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtle" version="1.4.0" />
+		<import addon="script.module.turtle" version="1.4.2" />
 		<import addon="script.module.metahandler" version="1.0.1"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
@@ -62,13 +62,13 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.willowtv" name="Willow TV" version="2.0.9"
+<addon id="plugin.video.willowtv" name="Willow TV" version="2.1.0"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtle" version="1.4.0" />
+		<import addon="script.module.turtle" version="1.4.2" />
 		<import addon="script.module.mechanize" version="0.2.5" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
@@ -111,13 +111,13 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtle" name="Turtle" version="1.4.1"
+<addon id="script.module.turtle" name="Turtle" version="1.4.2"
 	provider-name="AJ">
 	<requires>
-		<import addon="xbmc.python" version="2.0" />
+		<import addon="xbmc.python" version="2.0"/>
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.urlresolver" version="0.0.1" />
+		<import addon="script.module.urlresolver" version="1.0.9" />
 		<import addon="script.common.plugin.cache"/>
 		<import addon="script.module.simple.downloader"/>
 		<import addon="repository.googlecode.apple-tv2-xbmc" version="1.5.2" />
@@ -143,13 +143,13 @@
 	</extension>
 </addon>
 
-<addon id="service.playit" name="PlayIt" version="0.2.0"
+<addon id="service.playit" name="PlayIt" version="0.2.1"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtle" version="1.4.1" />
+		<import addon="script.module.turtle" version="1.4.2" />
 	</requires>
 	<extension point="xbmc.service" library="TurtleMain.py"
 		start="login">

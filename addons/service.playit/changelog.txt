@@ -1,3 +1,6 @@
+[B]Version v0.2.1[/B]
+- Updated turtle version to 1.4.2.
+
 [B]Version v0.2.0[/B]
 - Added Zappy's Glass service.
 - Added support to play direct media links.
