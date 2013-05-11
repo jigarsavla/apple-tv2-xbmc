@@ -25,8 +25,7 @@
 			Internet web site where from data is retrieved or otherwise relating
 			to such materials or on any sites linked to this addon. Videos are
 			soruced from video-hosting websites that are having full rights to
-			remove such access to video if required.
-		</disclaimer>
+			remove such access to video if required.</disclaimer>
 		<platform>all</platform>
 		<license>GNU GPL v3</license>
 	</extension>
@@ -39,7 +38,7 @@
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
 		<import addon="script.module.turtle" version="1.4.2" />
-		<import addon="script.module.metahandler" version="1.0.1"/>
+		<import addon="script.module.metahandler" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
 		<provides>video</provides>
@@ -126,8 +125,7 @@
 	<extension point="xbmc.addon.metadata">
 		<summary>XBMC add-on framework</summary>
 		<description>XBMC add-on provides a simplest way to configure actions
-			to be performed for each add-on request using XML.
-		</description>
+			to be performed for each add-on request using XML.</description>
 		<disclaimer>This addon makes no warranties, expressed or implied, and
 			hereby disclaims and negates all other warranties, including without
 			limitation, implied warranties or conditions of merchantability,
@@ -138,8 +136,7 @@
 			web site where from data is retrieved or otherwise relating to such
 			materials or on any sites linked to this addon. Videos are soruced
 			from video-hosting websites that are having full rights to remove
-			such access to video if required.
-		</disclaimer>
+			such access to video if required.</disclaimer>
 		<license>GNU GPL v3</license>
 		<platform>all</platform>
 	</extension>

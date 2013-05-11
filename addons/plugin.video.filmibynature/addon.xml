@@ -24,8 +24,7 @@
 			Internet web site where from data is retrieved or otherwise relating
 			to such materials or on any sites linked to this addon. Videos are
 			soruced from video-hosting websites that are having full rights to
-			remove such access to video if required.
-		</disclaimer>
+			remove such access to video if required.</disclaimer>
 		<platform>all</platform>
 		<license>GNU GPL v3</license>
 	</extension>
