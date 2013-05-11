@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
 <addon id="plugin.video.filmibynature" name="Filmi BY NATURE"
-	version="2.2.0" provider-name="AJ">
+	version="2.2.1" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtle" version="1.4.3" />
+		<import addon="script.module.turtle" version="1.4.4" />
 		<import addon="script.module.metahandler" version="1.0.2"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
@@ -111,7 +111,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtle" name="Turtle" version="1.4.3"
+<addon id="script.module.turtle" name="Turtle" version="1.4.4"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0"/>
