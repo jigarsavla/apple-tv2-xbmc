@@ -1,3 +1,7 @@
+[B]Version v2.2.1[/B]
+- Added videoInfo to playing video stream.
+- Remove English Subtitles menu, will be added in upcoming release through settings.
+
 [B]Version v2.2.0[/B]
 - Updated turtle dependency version to 1.4.3.
 - Fixed Add new YouTube channel issue.
