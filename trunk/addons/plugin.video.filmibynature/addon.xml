@@ -6,7 +6,7 @@
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
 		<import addon="script.module.turtle" version="1.4.4" />
-		<import addon="script.module.metahandler" version="1.0.2"/>
+		<import addon="script.module.metahandler" version="1.0.2" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
 		<provides>video</provides>
@@ -24,7 +24,8 @@
 			Internet web site where from data is retrieved or otherwise relating
 			to such materials or on any sites linked to this addon. Videos are
 			soruced from video-hosting websites that are having full rights to
-			remove such access to video if required.</disclaimer>
+			remove such access to video if required.
+		</disclaimer>
 		<platform>all</platform>
 		<license>GNU GPL v3</license>
 	</extension>
