@@ -119,3 +119,7 @@
 [B]Version v2.1.0[/B]
 
 - Updated turtle version to 1.4.2.
+
+[B]Version v2.1.1[/B]
+
+- Updated turtle lib version to 1.4.7 for immediate fixes.
