@@ -1,3 +1,6 @@
+[B]Version v2.2.3[/B]
+- Clever kode cannot be fixed message.
+
 [B]Version v2.2.2[/B]
 - Updated turtle dependency version to 1.4.7 for immediate fixes.
 - Skipped one version to accommodate mistake.
