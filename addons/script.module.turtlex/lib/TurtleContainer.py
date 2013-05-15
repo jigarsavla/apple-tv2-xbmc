@@ -30,7 +30,7 @@ class AddonContext(SingletonClass):
         self.addonPath = self.addon.getAddonInfo('path')
         self.addonProfile = self.addon.getAddonInfo('profile')
         
-        self.turtle_addon = xbmcaddon.Addon(id='script.module.turtle')
+        self.turtle_addon = xbmcaddon.Addon(id='script.module.turtlex')
         self.turtle_addonPath = self.turtle_addon.getAddonInfo('path')
         self.turtle_addonProfile = self.turtle_addon.getAddonInfo('profile')
         
