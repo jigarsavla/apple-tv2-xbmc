@@ -1,6 +1,9 @@
+[B]Version v0.2.3[/B]
+- Updated turtle lib version to 1.4.7 for immediate fixes.
+
 [B]Version v0.2.2[/B]
 - Added new setting to select type of playback when new request is pushed.
-- Updated turtle version to 1.4.6 for fixing YouTube Standard quality video.
+- Fixing YouTube Standard quality video.
 
 [B]Version v0.2.1[/B]
 - Updated turtle version to 1.4.2.

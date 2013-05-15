@@ -1,3 +1,7 @@
+[B]Version v2.2.2[/B]
+- Updated turtle dependency version to 1.4.7 for immediate fixes.
+- Skipped one version to accommodate mistake.
+
 [B]Version v2.2.0[/B]
 - Added videoInfo to playing video stream.
 - Remove English Subtitles menu, will be added in upcoming release through settings.
