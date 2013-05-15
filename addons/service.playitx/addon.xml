@@ -11,12 +11,8 @@
 		start="login">
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary>Play the request received from PlayIt service clients like
-			safari browser extension</summary>
-		<description>PlayIt will allow you to send hosted video url from
-			websites like YouTube, Dailymotion and many more. This addon is
-			created using Turtle framework designed to ease the development of
-			XBMC video addon.</description>
+		<summary>Play the video received from PlayIt service clients like Web Browser extensions</summary>
+		<description>PlayIt is capable of playing almost all type of videos from most of hosted video sources.</description>
 		<disclaimer>This addon makes no warranties, expressed or implied, and
 			hereby disclaims and negates all other warranties, including without
 			limitation, implied warranties or conditions of merchantability,
