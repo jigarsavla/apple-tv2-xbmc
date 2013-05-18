@@ -3,12 +3,13 @@ Created on Dec 27, 2011
 
 @author: ajju
 '''
+from TurtleContainer import Container
 from common import XBMCInterfaceUtils, Logger
 from common.DataObjects import ListItem
 from moves import SnapVideo
+from urllib2 import HTTPError
 import re
-import xbmcgui # @UnresolvedImport
-from TurtleContainer import Container
+import xbmcgui  # @UnresolvedImport
 
 def ping(request_obj, response_obj):
     print request_obj.get_data()
@@ -33,24 +34,31 @@ def playHostedVideo(request_obj, response_obj):
             XBMCInterfaceUtils.stopPlayer()
             
         video_url = request_obj.get_data()['videoLink']
-        if __check_media_url(video_url):
-            response_obj.set_redirect_action_name('play_direct')
-        else:
-            video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
-            if video_hosting_info is None:
-                response_obj.addServiceResponseParam("status", "error")
-                response_obj.addServiceResponseParam("message", "Video URL is currently not supported by PlayIt")
-                item = ListItem()
-                item.set_next_action_name('respond')
-                response_obj.addListItem(item)
+        try:
+            if __check_media_url(video_url):
+                response_obj.set_redirect_action_name('play_direct')
             else:
-                response_obj.addServiceResponseParam("status", "success")
-                if not XBMCInterfaceUtils.isPlayingVideo():
-                    response_obj.addServiceResponseParam("message", "Enjoy your video!")
+                video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
+                if video_hosting_info is None:
+                    response_obj.addServiceResponseParam("status", "error")
+                    response_obj.addServiceResponseParam("message", "Video URL is currently not supported by PlayIt")
+                    item = ListItem()
+                    item.set_next_action_name('respond')
+                    response_obj.addListItem(item)
                 else:
-                    response_obj.addServiceResponseParam("message", "Your video has been added to player queue.")
-                response_obj.set_redirect_action_name('play_it')
-                request_obj.get_data()['videoTitle'] = 'PlayIt Video'
+                    response_obj.addServiceResponseParam("status", "success")
+                    if not XBMCInterfaceUtils.isPlayingVideo():
+                        response_obj.addServiceResponseParam("message", "Enjoy your video!")
+                    else:
+                        response_obj.addServiceResponseParam("message", "Your video has been added to player queue.")
+                    response_obj.set_redirect_action_name('play_it')
+                    request_obj.get_data()['videoTitle'] = 'PlayIt Video'
+        except HTTPError:
+            response_obj.addServiceResponseParam("status", "error")
+            response_obj.addServiceResponseParam("message", "Video URL is not valid one! Please check and try again.")
+            item = ListItem()
+            item.set_next_action_name('respond')
+            response_obj.addListItem(item)
         
     
 def playRawVideo(request_obj, response_obj):
@@ -88,10 +96,11 @@ def __check_media_url(video_url):
     import urllib2
     request = urllib2.Request(video_url)
     request.get_method = lambda : 'HEAD'
-    
     response = urllib2.urlopen(request)
     content_type = response.info().gettype()
     try:
         return (APPLICATION_MEDIA_TYPES.index(content_type) >= 0)
     except ValueError:
         return re.search('[video|audio]/', content_type)
+    
+        
