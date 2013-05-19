@@ -4,12 +4,12 @@ Created on Dec 27, 2011
 @author: ajju
 '''
 from TurtleContainer import Container
-from common import XBMCInterfaceUtils, Logger
+from common import XBMCInterfaceUtils, Logger, HttpUtils
 from common.DataObjects import ListItem
 from moves import SnapVideo
 from urllib2 import HTTPError
 import re
-import xbmcgui  # @UnresolvedImport
+import xbmcgui # @UnresolvedImport
 
 def ping(request_obj, response_obj):
     print request_obj.get_data()
@@ -34,6 +34,11 @@ def playHostedVideo(request_obj, response_obj):
             XBMCInterfaceUtils.stopPlayer()
             
         video_url = request_obj.get_data()['videoLink']
+        if video_url.startswith('http://goo.gl/'):
+            Logger.logDebug('Found google short URL = ' + video_url)
+            video_url = HttpUtils.getRedirectedUrl(video_url)
+            Logger.logDebug('After finding out redirected URL = ' + video_url)
+            request_obj.get_data()['videoLink'] = video_url
         try:
             if __check_media_url(video_url):
                 response_obj.set_redirect_action_name('play_direct')

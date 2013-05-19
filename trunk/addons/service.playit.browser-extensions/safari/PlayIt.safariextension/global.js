@@ -9,22 +9,39 @@ safari.application.addEventListener("command", performCommand, false);
 function performCommand(event) {
 	// Make sure event comes from the button
 	if (event.command == "execute-playIt") {
-		active_url = safari.application.activeBrowserWindow.activeTab.url
-		playIt(active_url)
+		active_url = safari.application.activeBrowserWindow.activeTab.url;
+		playIt(active_url);
 	} else if (event.command == "execute-playIt-cm") {
-		myAlert('Video selected',event.userInfo[1])
-		playIt(event.userInfo[0])
+		myAlert('Video selected', event.userInfo[1]);
+		playIt(event.userInfo[0]);
+	} else if (event.command == "execute-playIt-view"
+			|| event.command == "execute-playIt-view-btn") {
+		myAlert('PlayIt Frame View',
+				'Please click on PlayIt bar appears on top of video frame.');
+		event.currentTarget.activeBrowserWindow.activeTab.page.dispatchMessage(
+				"showFrameView",
+				"Please click on PlayIt bar appears on top of video frame.");
 	}
 }
 
-//Adding context menu item programmatically
-safari.application.addEventListener("contextmenu", handleContextMenu, false);
-//For hyperlink adds context menu item runtime.
-function handleContextMenu(event) {
-    if (event.userInfo != undefined) {
-        event.contextMenu.appendContextMenuItem("execute-playIt-cm", "PlayIt on XBMC");
-    }
+// Handling PlayIt messages from current window in Frame View
+// Respond to message from PlayIt
+function respondToMessage(theMessageEvent) {
+	if (theMessageEvent.name === "playIt") {
+		playIt(theMessageEvent.message);
+	}
 }
+safari.application.addEventListener("message", respondToMessage, false);
+
+// Adding context menu item programmatically, for hyperlink adds context menu
+// item runtime.
+function handleContextMenu(event) {
+	if (event.userInfo != undefined) {
+		event.contextMenu.appendContextMenuItem("execute-playIt-cm",
+				"PlayIt on XBMC");
+	}
+}
+safari.application.addEventListener("contextmenu", handleContextMenu, false);
 
 function playIt(active_url) {
 	service_url = "http://" + safari.extension.settings.serverip + ":"
