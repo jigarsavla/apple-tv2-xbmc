@@ -4,19 +4,18 @@ Created on Nov 25, 2011
 @author: ajju
 '''
 from TurtleContainer import Container
-from common import AddonUtils, HttpUtils, XBMCInterfaceUtils, ExceptionHandler,\
+from common import AddonUtils, HttpUtils, XBMCInterfaceUtils, ExceptionHandler, \
     Logger
 from common.DataObjects import ListItem
 from common.HttpUtils import HttpClient
 import BeautifulSoup
 import base64
-import logging
 import re
 import string
 import sys
 import time
-import xbmcgui # @UnresolvedImport
-import xbmcplugin # @UnresolvedImport
+import xbmcgui  # @UnresolvedImport
+import xbmcplugin  # @UnresolvedImport
 
 '''
 Creating a JSON object in following format:
@@ -58,7 +57,7 @@ def __retrieveChannels__(tvChannels, dtUrl, channelType):
                         channelImg = str(tag.find('img')['file'])
                     channelName = re.compile(BASE_WSITE_URL + '/category/(tv-serials|pakistan-tvs)/(.+?)/').findall(str(tag.find('a')['href']))[0][1]
                     channelName = string.upper(channelName.replace('-', ' '))
-                    print channelName
+                    Logger.logDebug(channelName)
                     tvChannels[channelName] = tvChannel
                     tvChannel['iconimage'] = channelImg
                     tvChannel['channelType'] = channelType
@@ -66,7 +65,7 @@ def __retrieveChannels__(tvChannels, dtUrl, channelType):
                 else:
                     if tag.name == 'div' and tag.get('class') == 'dtLink':
                         txt = tag.getText()
-                        print '       ' + txt
+                        Logger.logDebug(txt)
                         if re.search('running', txt, flags=re.IGNORECASE):
                             tmp_tvshows_list = running_tvshows
                             tvChannel['running_tvshows'] = running_tvshows
@@ -74,16 +73,15 @@ def __retrieveChannels__(tvChannels, dtUrl, channelType):
                             tmp_tvshows_list = finished_tvshows
                             tvChannel['finished_tvshows'] = finished_tvshows
                         else:
-                            print 'UNKNOWN TV SHOW CATEGORY'
+                            Logger.logWarning('UNKNOWN TV SHOW CATEGORY')
                     elif tag.name == 'a':
                         tvshowUrl = str(tag['href'])
                         tvshowName = tag.getText().encode('utf-8')
-                        print '               ' + tvshowName
+                        Logger.logDebug(tvshowName)
                         tmp_tvshows_list.append({'name':HttpUtils.unescape(tvshowName), 'url':tvshowUrl})
         except Exception, e:
-            logging.exception(e)
-            print '*****Failed to load a tv channel links from following tag:*****'
-            print tvChannelTag
+            Logger.logFatal(e)
+            Logger.logDebug(tvChannelTag)
 
 def retrieveTVShowsAndSave(request_obj, response_obj):
     oldfilepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=OLD_CHANNELS_JSON_FILE, makeDirs=True)
@@ -98,9 +96,9 @@ def retrieveTVShowsAndSave(request_obj, response_obj):
             if diff < 720:
                 return
             else:
-                print CHANNELS_JSON_FILE + ' was last created 30 days ago, refreshing data.'
+                Logger.logDebug(CHANNELS_JSON_FILE + ' was last created 30 days ago, refreshing data.')
     else:
-        print CHANNELS_JSON_FILE + ' request to forcely refresh data. '
+        Logger.logDebug(CHANNELS_JSON_FILE + ' request to forcely refresh data. ')
     
     tvChannels = {}
     __retrieveChannels__(tvChannels, BASE_WSITE_URL + '/', CHANNEL_TYPE_IND)
@@ -110,7 +108,7 @@ def retrieveTVShowsAndSave(request_obj, response_obj):
     
     status = AddonUtils.saveObjToJsonFile(filepath, tvChannels)
     if status is not None:
-        print 'Saved status = ' + str(status)
+        Logger.logDebug('Saved status = ' + str(status))
     Container().getAddonContext().addon.setSetting('dtForceRefresh', 'false')
         
         
@@ -365,7 +363,7 @@ def __prepareVideoLink__(item):
     elif re.search('pw', video_url, flags=re.I):
         new_video_url = 'http://cdn.playwire.com/12272/embed/' + video_id + '.xml'
         
-    print "NEW VIDEO URL = " + new_video_url
+    Logger.logDebug("NEW VIDEO URL = " + new_video_url)
         
     if new_video_url is not None:
         item.add_moving_data('videoUrl', new_video_url)
