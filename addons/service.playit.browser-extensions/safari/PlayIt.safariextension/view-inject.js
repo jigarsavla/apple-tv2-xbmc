@@ -14,7 +14,8 @@ var seekForFrameAndEmbed = function() {
 						if (src !== undefined && src.match("^http")
 								&& height > 300 && width > 300) {
 
-							var div = $("<div style=\"position:absolute; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white;\"></div>");
+							var div = $(
+									"<div style=\"position:absolute; margin-top:10px; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white\"></div>");
 							div.hover(function() {
 								div.css('opacity', '0.7');
 								div.css('cursor', 'hand');
@@ -31,21 +32,19 @@ var seekForFrameAndEmbed = function() {
 							var left = $(this).scrollLeft();
 
 							img.scrollTop(top + 5);
-							if (left !== 0) {
-								img.scrollLeft(left + 5);
-							}
+							img.scrollLeft(left + 5);
+
 							div.click(src, handlePlayItAction)
 
 							div.width(width);
 							div.height(65);
 							div.scrollTop(top);
-							if (left !== 0) {
-								div.scrollLeft(left);
-							}
+							div.scrollLeft(left);
+
 							$(this).before(div);
 							div.append(img);
 							div
-									.append('<p style=" text-align: center; margin-left: 80px;">PlayIt on XBMC</p>');
+									.append('<p style=" text-align: center; margin-left: 80px;margin-left: 10px;">PlayIt on XBMC</p>');
 						}
 					});
 
