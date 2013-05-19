@@ -66,12 +66,12 @@ def __retrieveChannelTVShows__(tvChannelObj):
             running_tvshows.append({"name":"ENTER TO VIEW :: This is the only easy way to view!", "url":BASE_WSITE_URL + tvChannelObj["running_tvshows_url"]})
     except Exception, e:
         Logger.logFatal(e)
-        print 'Failed to load a channel... Continue retrieval of next tv show'
+        Logger.logDebug('Failed to load a channel... Continue retrieval of next tv show')
     try:
         finished_tvshows = __retrieveTVShows__(tvChannelObj["finished_tvshows_url"])
     except Exception, e:
         Logger.logFatal(e)
-        print 'Failed to load a channel... Continue retrieval of next tv show'
+        Logger.logDebug('Failed to load a channel... Continue retrieval of next tv show')
     tvChannelObj["running_tvshows"] = running_tvshows
     tvChannelObj["finished_tvshows"] = finished_tvshows
         
@@ -89,9 +89,9 @@ def retrieveTVShowsAndSave(request_obj, response_obj):
             if diff < 720:
                 return
             else:
-                print CHANNELS_JSON_FILE + ' was last created 30 days ago, refreshing data.'
+                Logger.logNotice(CHANNELS_JSON_FILE + ' was last created 30 days ago, refreshing data.')
     else:
-        print CHANNELS_JSON_FILE + ' request to force refresh data. '
+        Logger.logNotice(CHANNELS_JSON_FILE + ' request to force refresh data. ')
     tvChannels = {"UTV Stars":
                   {"iconimage":"http://www.lyngsat-logo.com/logo/tv/uu/utv_stars.jpg",
                    "channelType": "IND",
@@ -264,7 +264,7 @@ def retrieveTVShowsAndSave(request_obj, response_obj):
     request_obj.get_data()['tvChannels'] = tvChannels
     status = AddonUtils.saveObjToJsonFile(filepath, tvChannels)
     if status is not None:
-        print 'Saved status = ' + str(status)
+        Logger.logNotice('Saved status = ' + str(status))
     Container().getAddonContext().addon.setSetting('drForceRefresh', 'false')
 
 
@@ -273,7 +273,7 @@ def displayTVChannels(request_obj, response_obj):
     if request_obj.get_data().has_key('tvChannels'):
         channelsList = request_obj.get_data()['tvChannels']
     else:
-        channelsList = Container().getAddonContext().cache.cacheFunction(getTVChannelsList)
+        channelsList = getTVChannelsList()
     if channelsList is None:
         raise Exception(ExceptionHandler.TV_CHANNELS_NOT_LOADED, 'Please delete data folder from add-on user data folder.')
     displayChannelType = int(Container().getAddonContext().addon.getSetting('drChannelType'))
@@ -294,7 +294,7 @@ def displayTVChannels(request_obj, response_obj):
         
 
 def displayTVShows(request_obj, response_obj):
-    channelsList = Container().getAddonContext().cache.cacheFunction(getTVChannelsList)
+    channelsList = getTVChannelsList()
     channelObj = channelsList[request_obj.get_data()['channelName']]
     channelType = request_obj.get_data()['channelType']
     if channelObj.has_key('running_tvshows'):
@@ -306,9 +306,8 @@ def displayTVShows(request_obj, response_obj):
         
         
 def getTVChannelsList():
-    print 'ERROR'
     filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
-    print filepath
+    Logger.logDebug(filepath)
     return AddonUtils.getJsonFileObj(filepath)
 
             
@@ -461,7 +460,7 @@ def retrieveVideoLinks(request_obj, response_obj):
                 item.set_xbmc_list_item_obj(xbmcListItem)
                 response_obj.addListItem(item)
             except:
-                print 'Unable to recognize a source = ' + video_link['videoLink']
+                Logger.logWarning('Unable to recognize a source = ' + str(video_link['videoLink']))
                 video_source_img = None
                 video_source_name = None
                 video_part_index = 0
@@ -527,7 +526,7 @@ def __findPlayNowStream__(new_items):
     for item in new_items:
         if item.get_moving_data().has_key('isContinuousPlayItem') and item.get_moving_data()['isContinuousPlayItem']:
             try:
-                print item.get_moving_data()['videoSourceName']
+                Logger.logDebug(item.get_moving_data()['videoSourceName'])
                 preference = PREFERRED_DIRECT_PLAY_ORDER.index(item.get_moving_data()['videoSourceName'])
                 if preference == 0:
                     selectedSource = item

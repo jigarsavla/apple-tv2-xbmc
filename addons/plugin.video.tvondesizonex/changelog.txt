@@ -1,3 +1,7 @@
+[B]Version v1.5.2[/B]
+- Removed caching of json file content.
+- Added logger statements
+
 [B]Version v1.5.1[/B]
 - Updated DT TV Shows parsing and also added continuous play feature.
 - Updated turtle version to 1.4.7 for immediate fixes.
