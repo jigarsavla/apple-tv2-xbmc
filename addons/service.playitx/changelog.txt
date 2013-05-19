@@ -1,3 +1,6 @@
+[B]Version v0.3.3[/B]
+- Handled google shortened URL.
+
 [B]Version v0.3.2[/B]
 - Handled HttpError occurs when incorrect URL passed.
 
