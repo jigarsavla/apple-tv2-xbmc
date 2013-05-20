@@ -12,7 +12,7 @@ import time
 import xbmc  # @UnresolvedImport
 from common import Logger
     
-UA_TRACK = 'UA-22779680-2'
+UA_TRACK = 'UA-22779680-3'
 
 class GAClient(SingletonClass):
     
