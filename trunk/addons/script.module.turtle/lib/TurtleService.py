@@ -46,7 +46,7 @@ def serviceMethod(name, **params):
 def start(addon_id, service_name, context_root, default_port, allowed_port_range):
     try:
         sys.argv = None  # To handle the situations where some library expects system arguments. Main change made for t0mm0 urlresolver library.
-        XBMCInterfaceUtils.displayDialogMessage('[B][COLOR red]OLD VERSION ALERT[/COLOR][/B]','You are at old version of add-on.','Uninstall existing AJ Add-ons from "Add-on Information" option','Install new add-ons from AJ Add-ons repo.')
+        XBMCInterfaceUtils.displayDialogMessage('[B][COLOR red]OLD VERSION ALERT[/COLOR][/B]','You are at old version of add-on.','Steps: http://goo.gl/OLn9P','Install new add-ons from AJ Add-ons repo.')
         
         global __addon_id__
         global __registered_services__

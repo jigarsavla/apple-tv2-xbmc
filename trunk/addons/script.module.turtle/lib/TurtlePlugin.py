@@ -4,7 +4,7 @@ Created on Oct 16, 2011
 @author: ajju
 '''
 from TurtleContainer import Container
-from common import ExceptionHandler, Logger, HttpUtils
+from common import ExceptionHandler, Logger, HttpUtils, XBMCInterfaceUtils
 import sys
 import xbmcplugin  # @UnresolvedImport
 
@@ -12,7 +12,7 @@ __addon_id__ = None
 
 def start(addon_id):
     try:
-        XBMCInterfaceUtils.displayDialogMessage('[B][COLOR red]OLD VERSION ALERT[/COLOR][/B]','You are at old version of add-on.','Uninstall existing AJ Add-ons from "Add-on Information" option','Install new add-ons from AJ Add-ons repo.')
+        XBMCInterfaceUtils.displayDialogMessage('[B][COLOR red]OLD VERSION ALERT[/COLOR][/B]','You are at old version of add-on.','Steps: http://goo.gl/OLn9P','Install new add-ons from AJ Add-ons repo.')
         Logger.logDebug(sys.argv)
         global __addon_id__
         __addon_id__ = addon_id
