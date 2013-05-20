@@ -1,3 +1,6 @@
+[B]Version v1.6.3[/B]
+- Making compatible with new Turtle version Google Analytics.
+
 [B]Version v1.5.2[/B]
 - Removed caching of json file content.
 - Added logger statements

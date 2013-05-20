@@ -18,12 +18,13 @@ __port__ = 8181
 __port_range__ = [8100, 8199]
 __service_name__ = ''
 __addon_id__ = None
+__addon_ver__ = None
 
 def serviceMethod(name, **params):
     actionId = __registered_services__[name]
     data = {'data':AddonUtils.encodeData(params)}
     service_response_obj = None
-    containerObj = Container(addon_id=__addon_id__)
+    containerObj = Container(addon_id=__addon_id__, addon_ver=__addon_ver__)
     try:
         
         iconimage = AddonUtils.getCompleteFilePath(baseDirPath=containerObj.getAddonContext().addonPath, filename='icon.png')
@@ -43,22 +44,25 @@ def serviceMethod(name, **params):
     return service_response_obj
 
 
-def start(addon_id, service_name, context_root, default_port, allowed_port_range):
+def start(addon_id, addon_ver, service_name, context_root, default_port, allowed_port_range):
+    server = None
     try:
         sys.argv = None  # To handle the situations where some library expects system arguments. Main change made for t0mm0 urlresolver library.
         
         global __addon_id__
+        global __addon_ver__
         global __registered_services__
         global __context_root__
         global __port__
         global __port_range__
         global __service_name__
         __addon_id__ = addon_id
+        __addon_ver__ = addon_ver
         __context_root__ = context_root
         __port__ = default_port
         __port_range__ = allowed_port_range
         __service_name__ = service_name
-        containerObj = Container(addon_id=addon_id)
+        containerObj = Container(addon_id=addon_id, addon_ver=addon_ver)
         iconimage = AddonUtils.getCompleteFilePath(baseDirPath=containerObj.getAddonContext().addonPath, filename='icon.png')
         serviceport = int(containerObj.getAddonContext().addon.getSetting('serviceport'))
         
@@ -83,21 +87,26 @@ def start(addon_id, service_name, context_root, default_port, allowed_port_range
         XBMCInterfaceUtils.displayNotification(__service_name__ + ' Service has started', 'Use web browser PlayIt extension to play video.', iconimage=iconimage)
         
         while not xbmc.abortRequested:
-            time.sleep(5)
+            time.sleep(1)
         Logger.logInfo(__service_name__ + ' Service :: ABORT request received from XBMC. PlayIt service will stop now.')
-        cleanUp()
     except Exception, e:
         Logger.logFatal(__service_name__ + ' Service :: ERROR OCCURRED: ' + str(e))
         ExceptionHandler.handle(e)
+    if server is not None:
+        server.stop()
+    cleanUp()
 
 
 def cleanUp():
-    containerObj = Container()
-    containerObj.cleanUpForService()
-    del containerObj
-    httpClient = HttpUtils.HttpClient()
-    httpClient.cleanUp()
-    del httpClient
+    try:
+        containerObj = Container()
+        containerObj.cleanUpForService()
+        del containerObj
+        httpClient = HttpUtils.HttpClient()
+        httpClient.cleanUp()
+        del httpClient
+    except:
+        pass
     
     
 def log_request(self, *args, **kwargs):
@@ -119,6 +128,13 @@ class JSONRPCServer(SingletonClass):
         self.server_proc = Thread(target=self.server.serve_forever)
         self.server_proc.daemon = True
         self.server_proc.start()
+        self.started = True
     
     def stop(self):
-        pass
+        try:
+            if self.started:
+                self.server.shutdown()
+            self.server.server_close()
+        except:
+            pass
+    

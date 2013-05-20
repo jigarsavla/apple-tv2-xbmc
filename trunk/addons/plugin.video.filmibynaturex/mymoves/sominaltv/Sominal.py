@@ -6,7 +6,7 @@ Created on Nov 20, 2012
 from TurtleContainer import Container
 from common.DataObjects import ListItem
 import xbmcgui  # @UnresolvedImport
-from common import AddonUtils, Logger
+from common import AddonUtils, Logger, EnkDekoder
 import base64
 import re
 import sys
@@ -198,6 +198,8 @@ def retieveMovieStreams(request_obj, response_obj):
     if playNowItem is not None:
         request_obj.set_data({'videoPlayListItems': playNowItem.get_request_data()['videoPlayListItems']})
     
+    XBMCInterfaceUtils.displayDialogMessage('Do you know?', 'The content of this add-on is from www.sominaltvfilms.com.','Please help SomnialTV by visiting his website regularly.','AJ has no relation with www.sominaltvfilms.com. OK to proceed!',msgType='[B]INFO & REQUEST: [/B]')
+    
     
 def __addVideoInfo__(video_items, videoInfo):
     for video_item in video_items:
@@ -280,10 +282,9 @@ def __prepareVideoLink__(videoSourceLink):
 #     contentDiv = BeautifulSoup.SoupStrainer('div', {'class':'left_articles'})
 #     soup = BeautifulSoup.BeautifulSoup(html, contentDiv)
     html = HttpUtils.HttpClient().getHtmlContent(url)
-    dekoded = dekoder(html)
-    if dekoded is not None:
-        html = dekoded.replace('\\', '')
-        Logger.logDebug('deKoded HTML = ' + html)
+    dek = EnkDekoder.dekode(html)
+    if dek is not None:
+        html = dek
         
     html = html.replace('\n\r', '').replace('\r', '').replace('\n', '')
     children = re.compile('<embed(.+?)>').findall(html)
@@ -294,6 +295,10 @@ def __prepareVideoLink__(videoSourceLink):
         video_url = re.compile('src="(.+?)"').findall(child)[0]
         if(re.search('http://ads', video_url, re.I) or re.search('http://ax-d', video_url, re.I)):
             continue
+        if video_url.startswith('http://goo.gl/'):
+            Logger.logDebug('Found google short URL = ' + video_url)
+            video_url = HttpUtils.getRedirectedUrl(video_url)
+            Logger.logDebug('After finding out redirected URL = ' + video_url)
         video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
         video_source_img = video_hosting_info.get_video_hosting_image()
         
@@ -310,17 +315,3 @@ def __prepareVideoLink__(videoSourceLink):
     return new_items
 
 
-def dekoder(html):
-    convtd = None
-    kode = re.compile('kode\=\\\\"(.+?)\\\\";').findall(html)
-    Logger.logDebug('Kode found = ' + str(kode))
-    if len(kode) == 1:
-        XBMCInterfaceUtils.displayDialogMessage("Clever kode", "SominalTV has introduced a new clever kode", "Unparsable data, the update to this will take time", "To support the development please join xbmchub.com")
-        return None
-    while len(kode) == 1:
-        convtd = ''
-        for nbr in kode[0].split():
-            convtd += chr(int(nbr) - 3)
-        kode = re.compile('kode\="(.+?)";').findall(convtd)
-        Logger.logDebug('Kode convereted = ' + convtd)
-    return convtd
