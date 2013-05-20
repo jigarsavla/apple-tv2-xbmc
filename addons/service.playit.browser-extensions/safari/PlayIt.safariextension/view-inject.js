@@ -12,9 +12,10 @@ var seekForFrameAndEmbed = function() {
 						var width = $(this).width();
 
 						if (src !== undefined && src.match("^http")
-								&& height > 300 && width > 300) {
+								&& !src.match(".swf$") && height > 300
+								&& width > 300) {
 
-							var div = $("<div style=\"position:absolute; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white\"></div>");
+							var div = $("<div style=\"position:absolute; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; text-align:center; color:white\"></div>");
 							div.hover(function() {
 								div.css('opacity', '0.7');
 								div.css('cursor', 'hand');
@@ -23,7 +24,7 @@ var seekForFrameAndEmbed = function() {
 								div.css('opacity', '0.4');
 							});
 
-							var img = $("<img style=\"background-color:white; position: absolute;\"/>");
+							var img = $("<img style=\"-webkit-border-radius:0px; border-radius:0px; padding:0px; background-color:white; position: absolute;\"/>");
 							img.attr("src", safari.extension.baseURI
 									+ "Icon-64.png");
 
@@ -43,7 +44,7 @@ var seekForFrameAndEmbed = function() {
 							$(this).before(div);
 							div.append(img);
 							div
-									.append('<p style=" text-align: center; margin-left: 80px;margin-left: 10px;">PlayIt on XBMC</p>');
+									.append('<p style=" text-align: center; margin-left: 80px;margin-top: 30px;margin-left: 10px;">PlayIt on XBMC</p>');
 						}
 					});
 
