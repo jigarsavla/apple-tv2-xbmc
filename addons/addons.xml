@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
 <addon id="plugin.video.filmibynaturex" name="Filmi BY NATURE"
-	version="2.3.1" provider-name="AJ">
+	version="2.3.2" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
@@ -32,7 +32,7 @@
 </addon>
 
 <addon id="plugin.video.tvondesizonex" name="TV on DESI ZONE"
-	version="1.6.2" provider-name="AJ">
+	version="1.6.3" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
@@ -62,7 +62,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.willowtvx" name="Willow TV" version="2.2.1"
+<addon id="plugin.video.willowtvx" name="Willow TV" version="2.2.2"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
@@ -111,7 +111,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtle" name="Turtle" version="1.4.9"
+<addon id="script.module.turtle" name="Turtle" version="1.5.0"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
@@ -142,7 +142,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtlex" name="Turtle X" version="1.5.2"
+<addon id="script.module.turtlex" name="Turtle X" version="1.5.4"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
@@ -173,7 +173,7 @@
 	</extension>
 </addon>
 
-<addon id="service.playitx" name="PlayIt" version="0.3.3"
+<addon id="service.playitx" name="PlayIt" version="0.3.4"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />

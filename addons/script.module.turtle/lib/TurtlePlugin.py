@@ -12,6 +12,7 @@ __addon_id__ = None
 
 def start(addon_id):
     try:
+        XBMCInterfaceUtils.displayDialogMessage('[B][COLOR red]OLD VERSION ALERT[/COLOR][/B]','You are at old version of add-on.','Uninstall existing AJ Add-ons from "Add-on Information" option','Install new add-ons from AJ Add-ons repo.')
         Logger.logDebug(sys.argv)
         global __addon_id__
         __addon_id__ = addon_id

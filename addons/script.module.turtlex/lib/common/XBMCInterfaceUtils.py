@@ -162,7 +162,7 @@ class ProgressDisplayer(SingletonClass):
 #        self.pDialog.close()
         pass
 
-def displayDialogMessage(heading='', line1='', line2='', line3='', dmessage=None):
+def displayDialogMessage(heading='', line1='', line2='', line3='', dmessage=None, msgType='[B][COLOR red]FAILURE: [/COLOR][/B]'):
     ProgressDisplayer().end()
     if dmessage is not None:
         lines = dmessage.split('|')
@@ -177,7 +177,7 @@ def displayDialogMessage(heading='', line1='', line2='', line3='', dmessage=None
             line1 = lines[0]
     if not SUPPRESS_DIALOG_MSG:
         dialog = xbmcgui.Dialog()
-        dialog.ok('Process Failed: ' + heading, line1, line2, line3)
+        dialog.ok(msgType + heading, line1, line2, line3)
 
 def getUserInput(heading='Input', isPassword=False):
     keyb = xbmc.Keyboard()

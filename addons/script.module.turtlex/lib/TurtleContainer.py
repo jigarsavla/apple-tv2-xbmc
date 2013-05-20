@@ -4,6 +4,7 @@ Modified on Apr 11, 2013 :: Added cache support
 '''
 
 from common import DataObjects, XBMCInterfaceUtils, AddonUtils, Logger
+from common.GoogleAnalytics import GAClient
 from common.Singleton import SingletonClass
 from common.XBMCInterfaceUtils import ProgressDisplayer
 from definition.Turtle import Action, Move, Service
@@ -15,7 +16,6 @@ except:
     import common.storageserverdummy as StorageServer
     
 __author__ = "ajju"
-__version__ = "1.0.1"
 
 
 
@@ -23,14 +23,18 @@ class AddonContext(SingletonClass):
     '''
     AddonContext will provide a way for container to access the route
     '''
-    def __initialize__(self, addon_id):
+    def __initialize__(self, addon_id, addon_ver=None, turtle_id='script.module.turtlex', turtle_ver='1.5.4'):
         
         # Addon information
         self.addon = xbmcaddon.Addon(id=addon_id)
+        self.addon_id = addon_id
+        self.addon_ver = addon_ver
         self.addonPath = self.addon.getAddonInfo('path')
         self.addonProfile = self.addon.getAddonInfo('profile')
         
         self.turtle_addon = xbmcaddon.Addon(id='script.module.turtlex')
+        self.turtle_id = turtle_id
+        self.turtle_ver = turtle_ver
         self.turtle_addonPath = self.turtle_addon.getAddonInfo('path')
         self.turtle_addonProfile = self.turtle_addon.getAddonInfo('profile')
         
@@ -109,8 +113,10 @@ class AddonContext(SingletonClass):
 # INITIALIZE CONTAINER
 class Container(SingletonClass):
     
-    def __initialize__(self, addon_id):
-        self.addon_context = AddonContext(addon_id=addon_id)
+    def __initialize__(self, addon_id, addon_ver=None):
+        self.addon_context = AddonContext(addon_id=addon_id, addon_ver=addon_ver)
+        self.ga_client = GAClient(addon_context=self.addon_context)
+        self.ga_client.reportAppLaunch()
         
     def getAddonContext(self):
         return self.addon_context
@@ -197,7 +203,7 @@ class Container(SingletonClass):
 
     def performAction(self, actionId):
         ProgressDisplayer().start('Processing request...')
-         
+        self.ga_client.reportAction(actionId) 
         while actionId is not None:
             Logger.logInfo('Action to be performed ::' + actionId)
             turtle_route = self.getTurtleRoute(actionId)
