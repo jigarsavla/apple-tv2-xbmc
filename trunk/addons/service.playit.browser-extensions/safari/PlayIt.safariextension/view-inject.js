@@ -14,8 +14,7 @@ var seekForFrameAndEmbed = function() {
 						if (src !== undefined && src.match("^http")
 								&& height > 300 && width > 300) {
 
-							var div = $(
-									"<div style=\"position:absolute; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white\"></div>");
+							var div = $("<div style=\"position:absolute; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white\"></div>");
 							div.hover(function() {
 								div.css('opacity', '0.7');
 								div.css('cursor', 'hand');
@@ -24,15 +23,15 @@ var seekForFrameAndEmbed = function() {
 								div.css('opacity', '0.4');
 							});
 
-							var img = $("<img style=\"background-color:white; opacity:0.6; position: absolute;\"/>");
+							var img = $("<img style=\"background-color:white; position: absolute;\"/>");
 							img.attr("src", safari.extension.baseURI
 									+ "Icon-64.png");
 
 							var top = $(this).scrollTop();
 							var left = $(this).scrollLeft();
 
-//							img.scrollTop(top);
-//							img.scrollLeft(left);
+							img.css('margin-top', '5px');
+							img.css('margin-left', '5px');
 
 							div.click(src, handlePlayItAction)
 
