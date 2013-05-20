@@ -15,7 +15,7 @@ var seekForFrameAndEmbed = function() {
 								&& height > 300 && width > 300) {
 
 							var div = $(
-									"<div style=\"position:absolute; margin-top:10px; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white\"></div>");
+									"<div style=\"position:absolute; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white\"></div>");
 							div.hover(function() {
 								div.css('opacity', '0.7');
 								div.css('cursor', 'hand');
@@ -31,13 +31,13 @@ var seekForFrameAndEmbed = function() {
 							var top = $(this).scrollTop();
 							var left = $(this).scrollLeft();
 
-							img.scrollTop(top + 5);
-							img.scrollLeft(left + 5);
+//							img.scrollTop(top);
+//							img.scrollLeft(left);
 
 							div.click(src, handlePlayItAction)
 
 							div.width(width);
-							div.height(65);
+							div.height(74);
 							div.scrollTop(top);
 							div.scrollLeft(left);
 
