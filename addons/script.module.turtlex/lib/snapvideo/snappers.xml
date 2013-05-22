@@ -43,13 +43,14 @@
 	<snapper module="snapvideo.YouTube" function="retrieveVideoInfo"
 		enabled="true" desc="www.youtube.com video hosting website">
 		<video-id regex="youtube.com/watch\?v=(.+?)&amp;" />
+		<video-id regex="youtube.com/watch\?feature=player_embedded&amp;v=(.+?)&amp;" />
 		<video-id regex="youtube.com/embed/(.+?)&amp;" />
 		<video-id regex="href=&quot;http://youtu.be/(.+?)&quot;" />
 		<video-id regex="\&#39;VIDEO_ID\&#39;: &quot;(.+?)&quot;" />
 		<video-id regex="youtube.com/v/(.+?)\?" />
 		<video-id regex="youtube.com/v/(.+?)&amp;" />
 		<video-id regex="youtube.com/v/(.+?)&quot;" />
-		<video-id regex="youtube.com/watch\?[a-zA-Z0-9&amp;=]*&amp;v=(.+?)&amp;" />
+		<video-id regex="youtube.com/watch\?[a-zA-Z0-9&amp;=_]*&amp;v=(.+?)&amp;" />
 	</snapper>
 	<snapper module="snapvideo.ZShare" function="retrieveVideoInfo"
 		enabled="true" desc="www.zshare.net video hosting website">
