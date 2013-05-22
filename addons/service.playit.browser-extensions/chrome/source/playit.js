@@ -68,16 +68,16 @@ function playIt(active_url) {
 
 // Function to display HTML 5 notification to user.
 function myAlert(title, msg) {
-	title = 'PlayIt: ' + title
+	title = 'PlayIt: ' + title;
 	if (webkitNotifications.checkPermission() == 0) {
 		var notification = window.webkitNotifications.createNotification(
-				'Icon-128.png', title, msg);
+				'Icon-48.png', title, msg);
 		notification.show();
 		setTimeout(function() {
-			notification.cancel()
+			notification.cancel();
 		}, 2000);
 	} else {
-		alert(title + ' -> ' + msg)
+		alert(title + ' -> ' + msg);
 	}
 }
 
@@ -85,44 +85,66 @@ function myAlert(title, msg) {
 function cmClickHandler(info) {
 	if (info.menuItemId == "playIt") {
 		if (info.linkUrl === undefined) {
-			myAlert("Selection cannot be played!", info.selectionText)
+			myAlert("Selection cannot be played!", info.selectionText);
 		} else {
 			if (info.selectionText !== undefined) {
-				myAlert("Video selected", info.selectionText)
+				myAlert("Video selected", info.selectionText);
 			}
-			playIt(info.linkUrl)
+			playIt(info.linkUrl);
 		}
+	} else if (info.menuItemId == "playItFrameView") {
+		playItFrameViewEnabler();
 	}
 }
 
-// Handles add-on button click event
-function buttonClickHandler() {
+// Handles playIt button click event
+function playItRequestHandler() {
 	chrome.tabs.getSelected(null, function(tab) {
 		var active_url = tab.url;
 		playIt(active_url);
 	});
 }
 
-// Adds context menu item
-/*chrome.runtime.onInstalled.addListener(function() {
-	var properties = {
-		"type" : "normal",
-		"title" : "PlayIt on XBMC",
-		"id" : "playIt",
-		"contexts" : [ "link", "image", "video", "audio" ],
-		"onclick" : cmClickHandler
-	};
-	// Create a parent item and two children.
-	chrome.contextMenus.create(properties);
-});*/
-//Add context menu item always
-var properties = {
+// Handles playIt Frame View button click event
+function playItFrameViewEnabler() {
+	myAlert("PlayIt Frame View",
+			"Please click on PlayIt bar appears on top of video frame.");
+	chrome.tabs.executeScript(null, {
+		file : "jquery-2.0.0.min.js"
+	}, function() {
+		chrome.tabs.executeScript(null, {
+			file : "view-inject.js"
+		});
+	});
+}
+
+// Handles playIt request from frame or embed videos
+function playItRequestFromFrameHandler(port) {
+	// This will get called by the view-inject script when frame is clicked for
+	// play.
+	port.onMessage.addListener(function(req) {
+		playIt(req.url);
+	});
+}
+
+// Add context menu item always
+var playItOnXBMCContextMenuItem = {
 	"type" : "normal",
 	"title" : "PlayIt on XBMC",
 	"id" : "playIt",
 	"contexts" : [ "link", "image", "video", "audio" ],
 	"onclick" : cmClickHandler
 };
-// Create a parent item and two children.
-chrome.contextMenus.create(properties);
-chrome.browserAction.onClicked.addListener(buttonClickHandler);
+
+// Add context menu item always
+var playItFrameViewContextMenuItem = {
+	"type" : "normal",
+	"title" : "PlayIt Frame View",
+	"id" : "playItFrameView",
+	"contexts" : [ "all" ],
+	"onclick" : cmClickHandler
+};
+
+chrome.contextMenus.create(playItOnXBMCContextMenuItem);
+chrome.contextMenus.create(playItFrameViewContextMenuItem);
+chrome.runtime.onConnect.addListener(playItRequestFromFrameHandler);
