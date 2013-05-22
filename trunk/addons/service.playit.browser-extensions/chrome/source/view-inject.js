@@ -1,6 +1,8 @@
 var handlePlayItAction = function(event) {
-	console.log("Got playit action for URL = " + event.data);
-	safari.self.tab.dispatchMessage("playIt", event.data);
+	var playItReq = {
+		"url" : event.data
+	};
+	chrome.runtime.connect().postMessage(playItReq);
 }
 
 var seekForFrameAndEmbed = function() {
@@ -11,10 +13,9 @@ var seekForFrameAndEmbed = function() {
 						var height = $(this).height();
 						var width = $(this).width();
 
-						if (src !== undefined
-								&& src.match("^http")
-								&& !src.match(".swf$")
-								&& height > 300 && width > 300) {
+						if (src !== undefined && src.match("^http")
+								&& !src.match(".swf$") && height > 300
+								&& width > 300) {
 
 							var div = $("<div style=\"position:absolute; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white\"></div>");
 							div.hover(function() {
@@ -26,8 +27,8 @@ var seekForFrameAndEmbed = function() {
 							});
 
 							var img = $("<img style=\"-webkit-border-radius:0px; border-radius:0px; padding:0px; background-color:white; position: absolute;\"/>");
-							img.attr("src", safari.extension.baseURI
-									+ "Icon-64.png");
+							img.attr("src", chrome.extension
+									.getURL("Icon-64.png"));
 
 							var top = $(this).scrollTop();
 							var left = $(this).scrollLeft();
@@ -50,11 +51,4 @@ var seekForFrameAndEmbed = function() {
 					});
 
 }
-
-function respondToMessage(theMessageEvent) {
-	if (theMessageEvent.name === "showFrameView") {
-		seekForFrameAndEmbed();
-	}
-}
-
-safari.self.addEventListener("message", respondToMessage, false);
+seekForFrameAndEmbed();
