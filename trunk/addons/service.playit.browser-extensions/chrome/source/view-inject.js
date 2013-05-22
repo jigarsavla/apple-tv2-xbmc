@@ -30,8 +30,7 @@ var seekForFrameAndEmbed = function() {
 							img.attr("src", chrome.extension
 									.getURL("Icon-64.png"));
 
-							var top = $(this).scrollTop();
-							var left = $(this).scrollLeft();
+							var position = $(this).offset();
 
 							img.css('margin-top', '5px');
 							img.css('margin-left', '5px');
@@ -40,8 +39,7 @@ var seekForFrameAndEmbed = function() {
 
 							div.width(width);
 							div.height(74);
-							div.scrollTop(top);
-							div.scrollLeft(left);
+							div.css(position);
 
 							$(this).before(div);
 							div.append(img);
