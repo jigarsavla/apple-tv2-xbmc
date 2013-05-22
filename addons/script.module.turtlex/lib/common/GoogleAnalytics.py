@@ -19,7 +19,7 @@ class GAClient(SingletonClass):
     def __initialize__(self, addon_context):
         self.addon_context = addon_context
         self.addon_name = addon_context.addon_id.replace('plugin.video.', '')
-        self.addon_version = (addon_context.addon_ver if addon_context.addon_ver is not None else "x") + ":" + addon_context.turtle_ver
+        self.addon_version = (addon_context.addon_ver if addon_context.addon_ver is not None else "0.0.0") + "." + addon_context.turtle_ver
         if addon_context.addon.getSetting('ga_visitor') == '':
             from random import randint
             addon_context.addon.setSetting('ga_visitor', str(randint(0, 0x7fffffff)))
