@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
 <addon id="plugin.video.filmibynaturex" name="Filmi BY NATURE"
-	version="2.3.2" provider-name="AJ">
+	version="2.3.3" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex" />
+		<import addon="script.module.turtlex"  version="1.5.6" />
 		<import addon="script.module.metahandler" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
@@ -32,12 +32,12 @@
 </addon>
 
 <addon id="plugin.video.tvondesizonex" name="TV on DESI ZONE"
-	version="1.6.3" provider-name="AJ">
+	version="1.6.4" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex" />
+		<import addon="script.module.turtlex" version="1.5.6" />
 		<import addon="script.module.metahandler"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
@@ -142,7 +142,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtlex" name="Turtle X" version="1.5.5"
+<addon id="script.module.turtlex" name="Turtle X" version="1.5.6"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
@@ -173,13 +173,13 @@
 	</extension>
 </addon>
 
-<addon id="service.playitx" name="PlayIt" version="0.3.4"
+<addon id="service.playitx" name="PlayIt" version="0.3.5"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex" />
+		<import addon="script.module.turtlex" version="1.5.6" />
 	</requires>
 	<extension point="xbmc.service" library="TurtleMain.py"
 		start="login">

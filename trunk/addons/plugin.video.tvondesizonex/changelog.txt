@@ -1,3 +1,6 @@
+[B]Version v1.6.4[/B]
+- Added Turtle version.
+
 [B]Version v1.6.3[/B]
 - Making compatible with new Turtle version Google Analytics.
 
