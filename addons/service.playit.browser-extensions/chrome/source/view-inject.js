@@ -17,7 +17,7 @@ var seekForFrameAndEmbed = function() {
 								&& !src.match(".swf$") && height > 300
 								&& width > 300) {
 
-							var div = $("<div style=\"position:absolute; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white\"></div>");
+							var div = $("<div style=\"position:absolute; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white; text-align: left;\"></div>");
 							div.hover(function() {
 								div.css('opacity', '0.7');
 								div.css('cursor', 'hand');
