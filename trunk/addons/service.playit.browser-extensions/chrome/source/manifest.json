@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "PlayIt on XBMC",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "background": {
     "scripts": [
       "playit.js",
@@ -12,8 +12,7 @@
   "description": "PlayIt on XBMC sends selected URL to PlayIt service add-on installed on XBMC that resolves link to video and play/queue in player.",
   "browser_action": {
     "default_icon": "small-icon.png",
-    "default_title": "PlayIt on XBMC",
-    "default_popup": "popup.html"
+    "default_title": "PlayIt on XBMC"
   },
   "web_accessible_resources": ["Icon-64.png","Icon-48.png"],
   "permissions": [

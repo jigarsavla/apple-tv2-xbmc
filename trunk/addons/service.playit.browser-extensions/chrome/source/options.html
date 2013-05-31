@@ -1,96 +1,84 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>PlayIt on XBMC</title>
-<style>
-label {
-	margin-top: 0;
-	margin-bottom: .833em;
-	font: 80% 'Lucida Grande', Geneva, Helvetica, Arial, sans-serif;
-	color: #999999;
-}
-
-
-button {
-	display: inline-block;
-	outline: none;
-	cursor: pointer;
-	text-align: center;
-	text-decoration: none;
-	font: 14px/100% Arial, Helvetica, sans-serif;
-	padding: .5em 1em .55em;
-	text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
-	-webkit-border-radius: .5em;
-	-moz-border-radius: .5em;
-	border-radius: .5em;
-	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
-	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
-	box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
-}
-
-button:hover {
-	text-decoration: none;
-}
-
-button:active {
-	position: relative;
-	top: 1px;
-}
-
-.orange {
-	color: #fef4e9;
-	border: solid 1px #da7c0c;
-	background: #f78d1d;
-	background: -webkit-gradient(linear, left top, left bottom, from(#faa51a),
-		to(#f47a20) );
-}
-
-.orange:hover {
-	background: #f47c20;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f88e11),
-		to(#f06015) );
-}
-
-.orange:active {
-	color: #fcd3a5;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f47a20),
-		to(#faa51a) );
+<style type="text/css">
+label.error {
+	color: #b94a48;
+	padding: 2px 8px;
+	margin-top: 0px;
 }
 </style>
+<title>PlayIt on XBMC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/m-buttons.min.css" rel="stylesheet">
 </head>
 <body>
-	<br>
-	<div align="center">
-		<form id="optionsForm" name="form" action="">
-			<table style="border: 1px solid #9f9f9f;">
-				<tr>
-					<td><label for="serviceAddressText">XBMC IP address:</label></td>
-					<td><input type="text" id="serviceAddress"
-						name="serviceAddress" required="required" value="apple-tv.local" />
-					</td>
-				</tr>
-				<tr>
-					<td><label for="servicePortText">PlayIt service port:</label>
-					</td>
-					<td><input type="text" id="servicePort" name="servicePort"
-						required="required" value="8181" size="4" maxlength="4"
-						pattern="81[0-9]{2}" />&nbsp;&nbsp;<label for="constraint"
-						style="color: #f47c20">[8100 - 8199]</label></td>
-				</tr>
-			</table>
-			<table>
-				<tr>
-					<td>
-						<button type="button" id="save" class="orange">Save</button>
-					</td>
-					<td>
-						<button type="button" id="reset" class="orange">Reset to
-							default</button>
-					</td>
-				</tr>
-			</table>
-		</form>
-	</div>
+	<br />
+	<div class="row">
+		<div class="span6" style="float: none; margin: 0 auto;">
+			<form class="form-horizontal well" id="optionsForm" name="form"
+				action="">
+				<fieldset>
 
+					<!-- Form Name -->
+					<legend> PlayIt Options</legend>
+
+					<!-- Text input-->
+					<div class="control-group">
+						<label class="control-label" for="serviceAddress">XBMC IP
+							address</label>
+						<div class="controls">
+							<input id="serviceAddress" name="serviceAddress" type="text"
+								value="apple-tv.local" class="input-medium">
+
+						</div>
+					</div>
+
+					<!-- Text input-->
+					<div class="control-group">
+						<label class="control-label" for="servicePort">PlayIt
+							service port</label>
+						<div class="controls">
+							<input id="servicePort" name="servicePort" type="text"
+								value="8181" class="input-mini">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="frameView">Frame View
+							button</label>
+						<div class="controls">
+							<label class="checkbox"> <input id="frameView"
+								name="frameView" type="checkbox" class="input-mini">
+								Visible
+							</label>
+						</div>
+					</div>
+
+
+					<!-- Button -->
+					<div class="control-group">
+						<div class="controls">
+							<button id="save" name="save" class="m-btn blue">
+								Save <i class="icon-share-alt icon-white"></i>
+							</button>
+							<button id="reset" name="reset" class="m-btn black">
+								<i class="icon-repeat"></i> Reset
+							</button>
+						</div>
+					</div>
+
+				</fieldset>
+			</form>
+		</div>
+	</div>
+	<script src="js/jquery-2.0.0.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.validate.min.js"></script>
+	<script src="js/additional-methods.min.js"></script>
+	<script src="options.js"></script>
 </body>
-<script type="text/javascript" src="options.js"></script>
 </html>
