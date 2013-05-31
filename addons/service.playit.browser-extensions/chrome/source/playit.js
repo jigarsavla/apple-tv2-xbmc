@@ -100,9 +100,17 @@ function cmClickHandler(info) {
 // Handles playIt button click event
 function playItRequestHandler() {
 	chrome.tabs.getSelected(null, function(tab) {
-		var active_url = tab.url;
-		playIt(active_url);
+		playIt(tab.url);
 	});
+}
+
+// Handles playIt button click event
+function playItActionRequestHandler(tab) {
+	if (localStorage.frameViewEnabled === "true") {
+
+	} else {
+		playIt(tab.url);
+	}
 }
 
 // Handles playIt Frame View button click event
@@ -110,7 +118,7 @@ function playItFrameViewEnabler() {
 	myAlert("PlayIt Frame View",
 			"Please click on PlayIt bar appears on top of video frame.");
 	chrome.tabs.executeScript(null, {
-		file : "jquery-2.0.0.min.js"
+		file : "js/jquery-2.0.0.min.js"
 	}, function() {
 		chrome.tabs.executeScript(null, {
 			file : "view-inject.js"
@@ -148,3 +156,12 @@ var playItFrameViewContextMenuItem = {
 chrome.contextMenus.create(playItOnXBMCContextMenuItem);
 chrome.contextMenus.create(playItFrameViewContextMenuItem);
 chrome.runtime.onConnect.addListener(playItRequestFromFrameHandler);
+chrome.browserAction.onClicked.addListener(playItActionRequestHandler);
+
+if (localStorage.frameViewEnabled === undefined
+		|| localStorage.frameViewEnabled === "true") {
+	localStorage.frameViewEnabled = "true";
+	chrome.browserAction.setPopup({
+		popup : "popup.html"
+	});
+}

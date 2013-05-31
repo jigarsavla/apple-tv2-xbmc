@@ -1,60 +1,38 @@
 function restoreValues(event) {
-	if (localStorage.serviceAddress) {
-		document.getElementById('serviceAddress').value = localStorage.serviceAddress
+	if (localStorage.serviceAddress !== undefined) {
+		$('#serviceAddress').val(localStorage.serviceAddress);
 	}
-	if (localStorage.servicePort) {
-		document.getElementById('servicePort').value = localStorage.servicePort
+	if (localStorage.servicePort !== undefined) {
+		$('#servicePort').val(localStorage.servicePort);
+	}
+	if (localStorage.frameViewEnabled !== undefined) {
+		if (localStorage.frameViewEnabled === "true") {
+			$('#frameView').prop('checked', localStorage.frameViewEnabled);
+		}
+	} else {
+		localStorage.frameViewEnabled = "true";
+		$('#frameView').prop('checked', localStorage.frameViewEnabled);
+		chrome.browserAction.setPopup({popup: "popup.html"});
 	}
 }
 
-function defaultValues(event) {
-	document.getElementById('serviceAddress').value = "apple-tv.local"
-	document.getElementById('servicePort').value = "8181"
+function defaultValues() {
+	$('#serviceAddress').val("apple-tv.local");
+	$('#servicePort').val("8181");
+	$('#frameView').prop('checked', true);
 }
 
-function saveValues(event) {
-	var serviceAddress = document.getElementById('serviceAddress').value;
-	var servicePort = document.getElementById('servicePort').value;
-	localStorage.serviceAddress = serviceAddress
-	localStorage.servicePort = servicePort
+function saveValues() {
+	localStorage.serviceAddress = $('#serviceAddress').val();
+	localStorage.servicePort = $('#servicePort').val();
+	localStorage.frameViewEnabled = $('#frameView').prop('checked');
+	if (localStorage.frameViewEnabled === "true") {
+		chrome.browserAction.setPopup({popup: "popup.html"});
+	}else{
+		chrome.browserAction.setPopup({popup: ""});
+	}
 	myAlert("Options saved!",
-			"PlayIt extension will use saved values for further requests.")
-//
-//	var serviceUrl = 'http://' + serviceAddress + ':' + servicePort + '/PlayIt';
-//	chrome.permissions
-//			.contains(
-//					{
-//						origins : [ serviceUrl ]
-//					},
-//					function(result) {
-//						if (result) {
-//							localStorage.serviceAddress = serviceAddress
-//							localStorage.servicePort = servicePort
-//
-//							myAlert("Options saved!",
-//									"PlayIt extension will use saved values for further requests.")
-//						} else {
-//
-//						}
-//					});
-//	chrome.permissions
-//			.request(
-//					{
-//						origins : [ serviceUrl ]
-//					},
-//					function(granted) {
-//						alert(granted)
-//						if (granted) {
-//							localStorage.serviceAddress = serviceAddress
-//							localStorage.servicePort = servicePort
-//
-//							myAlert("Options saved!",
-//									"PlayIt extension will use saved values for further requests.")
-//						} else {
-//							myAlert("Permission Grant Denied",
-//									"PlayIt extension has NOT saved the entered values.")
-//						}
-//					});
+			"PlayIt extension will use saved values for further requests.");
 	return false;
 }
 
@@ -71,6 +49,38 @@ function myAlert(title, msg) {
 		alert(title + ' -> ' + msg)
 	}
 }
-document.addEventListener('DOMContentLoaded', restoreValues);
-document.querySelector('#save').addEventListener('click', saveValues);
-document.querySelector('#reset').addEventListener('click', defaultValues);
+$(document).ready(function() {
+	restoreValues();
+	$("#optionsForm").validate({
+		rules : {
+			serviceAddress : {
+				required : true
+			},
+			servicePort : {
+				required : true,
+				maxlength : 4,
+				pattern : /81[0-9]{2}/
+			},
+			frameViewOption : {
+				required : true
+			}
+		},
+		messages : {
+			servicePort : {
+				pattern : 'Invalid Input. Value Range 8100 - 8199.',
+				maxlength : 'Invalid Input. Value Range 8100 - 8199.'
+			}
+		},
+		highlight : function(element) {
+			$(element).closest('.control-group').addClass('error');
+		},
+		success : function(element) {
+			$(element).closest('.control-group').removeClass('error');
+		},
+		submitHandler : function(form) {
+			// form.submit();
+			saveValues();
+		}
+	});
+	$('#reset').click(defaultValues);
+});
