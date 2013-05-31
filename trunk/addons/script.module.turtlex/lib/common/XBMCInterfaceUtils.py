@@ -90,7 +90,7 @@ def addContextMenuItem(item, label, action_id, data=None):
     contextMenuItems = []
     data = '?actionId=' + urllib.quote_plus(action_id) + '&data=' + urllib.quote_plus(AddonUtils.encodeData(item.get_request_data()))
     contextMenuItems.append((label, 'XBMC.RunPlugin(%s?%s)' % (sys.argv[0], data)))
-    item.get_xbmc_list_item_obj().addContextMenuItems(contextMenuItems, replaceItems=True)
+    item.get_xbmc_list_item_obj().addContextMenuItems(contextMenuItems, replaceItems=False)
 
 def addPlayListItem(item):
     if item.get_moving_data().has_key('videoStreamUrl'):
