@@ -3,10 +3,11 @@
 var data = require("sdk/self").data
 var prefs = require("sdk/simple-prefs").prefs
 var cm = require("sdk/context-menu");
+var widget = require("sdk/widget");
+var tabs = require("tabs");
 exports.main = function(){
-    
     //Adding widget to addon menu    
-    require("sdk/widget").Widget({
+    widget.Widget({
       id: "playit-btn",
       label: "PlayIt",
       contentURL: data.url("small-icon.png"), 
@@ -22,6 +23,32 @@ exports.main = function(){
       }
     });
     
+    widget.Widget({
+     id: "playit-frameView-btn",
+     label: "PlayIt Frame View",
+     contentURL: data.url("view-icon.png"), 
+     contentScriptWhen: "start",
+     contentScriptUrl: data.url("view-inject.js"),
+     onClick:function () {
+      worker = tabs.activeTab.attach({
+        contentScriptWhen: "start",
+        contentScriptFile: [data.url("jquery-2.0.0.min.js"),data.url("view-inject.js")]
+      });
+      myAlert("PlayIt Frame View", "Please click on PlayIt bar appears on top of video frame.");
+      worker.port.emit("viewFrame");
+      worker.port.on("playItFrameAction", function (playItReq) {
+        myAlert("Video selected", playItReq.url);
+        playIt(prefs.serviceAddress,prefs.servicePort,playItReq.url);
+      });
+     },
+      onMouseover: function() {
+        this.contentURL = data.url("Icon-32.png")
+      },
+      onMouseout: function() {
+        this.contentURL = data.url("view-icon.png")
+      }
+    });
+    
     //Adding context menu item
     cm.Item({
       label: "PlayIt on XBMC",
@@ -30,8 +57,8 @@ exports.main = function(){
                      '  self.postMessage([node.href,node.textContent.trim()]);' +
                      '});',
       onMessage: function (hyperlink) {
-          myAlert("Video selected", hyperlink[1])
-          playIt(prefs.serviceAddress,prefs.servicePort,hyperlink[0])
+          myAlert("Video selected", hyperlink[1]);
+          playIt(prefs.serviceAddress,prefs.servicePort,hyperlink[0]);
       }
     });
 
