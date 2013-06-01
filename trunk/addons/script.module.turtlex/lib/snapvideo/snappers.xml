@@ -44,6 +44,7 @@
 		enabled="true" desc="www.youtube.com video hosting website">
 		<video-id regex="youtube.com/watch\?v=(.+?)&amp;" />
 		<video-id regex="youtube.com/watch\?feature=player_embedded&amp;v=(.+?)&amp;" />
+		<video-id regex="youtube.com/embed/(.+?)\?" />
 		<video-id regex="youtube.com/embed/(.+?)&amp;" />
 		<video-id regex="href=&quot;http://youtu.be/(.+?)&quot;" />
 		<video-id regex="\&#39;VIDEO_ID\&#39;: &quot;(.+?)&quot;" />
