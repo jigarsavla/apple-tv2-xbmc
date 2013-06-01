@@ -226,38 +226,8 @@ rpc.ServiceProxy.prototype.__callMethod = function(methodName, params, successHa
 		}
 		//Asynchronous cross-domain call (JSON-in-Script) -----------------------------------------------------
 		if(this.__isCrossSite){ //then this.__isAsynchronous is implied
-			
-			//Create an ad hoc function specifically for this cross-site request; this is necessary because it is 
-			//  not possible pass an JSON-RPC request object with an id over HTTP Get requests.
-			rpc.callbacks['r' + String(rpc.requestCount)] = (function(instance, id){
-				var call = {instance: instance, id: id}; //Pass parameter into closure
-				return function(response){
-					if(typeof response == 'object' && (response.result || response.error)){
-						response.id = call.id;
-						instance.__doCallback(response);
-					}
-					else {//Allow data without response wrapper (i.e. GData)
-						instance.__doCallback({id: call.id, result: response});
-					}
-				}
-			})(this, rpc.requestCount);
-			//rpc.callbacks['r' + String(rpc.requestCount)] = new Function("response", 'response.id = ' + rpc.requestCount + '; this.__doCallback(response);');
-			
-			//Make the request by adding a SCRIPT element to the page
-			var script = document.createElement('script');
-			script.setAttribute('type', 'text/javascript');
-			var src = this.__serviceURL +
-						'/' + methodName +
-						'?' + this.__callbackParamName + '=rpc.callbacks.r' + (rpc.requestCount);
-			if(params)
-				src += '&' + rpc.toQueryString(params);
-			script.setAttribute('src', src);
-			script.setAttribute('id', 'rpc' + rpc.requestCount);
-			var head = document.getElementsByTagName('head')[0];
-			rpc.pendingRequests[rpc.requestCount].scriptElement = script;
-			head.appendChild(script);
-			
-			return undefined;
+			console.log('CrossSite scripting is not allowed.');
+			throw Error('CrossSite script is not allowed. Edited by ajju!!');
 		}
 		//Calls made with XMLHttpRequest ------------------------------------------------------------
 		else {
@@ -281,22 +251,6 @@ rpc.ServiceProxy.prototype.__callMethod = function(methodName, params, successHa
 				xml.push('</methodCall>');
 				postData = xml.join('');
 				
-				//request = new Document();
-				//var methodCallEl = document.createElement('methodCall');
-				//var methodNameEl = document.createElement('methodName');
-				//methodNameEl.appendChild(document.createTextNode(methodName));
-				//methodCallEl.appendChild(methodNameEl);
-				//if(params){
-				//	var paramsEl = document.createElement('params');
-				//	for(var i = 0; i < params.length; i++){
-				//		var paramEl = document.createElement('param');
-				//		paramEl.appendChild(this.__toXMLRPC(params[i]));
-				//		paramsEl.appendChild(paramEl);
-				//	}
-				//	methodCallEl.appendChild(paramsEl);
-				//}
-				//request.appendChild(methodCallEl);
-				//postData = request.serializeXML();
 			}
 			//Prepare the JSON-RPC request
 			else {
@@ -620,7 +574,7 @@ rpc.ServiceProxy.prototype.__evalJSON = function(json, sanitize){ //from Prototy
 	var err;
     try {
 		if(!sanitize || rpc.isJSON(json))
-			return eval('(' + json + ')');
+			return JSON.parse(json);
     }
 	catch(e){err = e;}
     throw new SyntaxError('Badly formed JSON string: ' + json + " ... " + (err ? err.message : ''));
@@ -743,91 +697,6 @@ rpc.ServiceProxy.prototype.__toXMLRPC = function(value){
 	xml.push('</value>');
 	return xml.join('');
 };
-
-//rpc.ServiceProxy.prototype.toXMLRPC = function(value){ //documentNode
-//	var valueEl = document.createElement('value');
-//	//var xml = ['<value>'];
-//	switch(typeof value){
-//		case 'number':
-//			if(!isFinite(value))
-//				//xml.push('<nil/>');
-//				valueEl.appendChild(document.createElement('nil'));
-//			//else if(parseInt(value) == Math.ceil(value)){
-//			//	var intEl = document.createElement('int');
-//			//	intEl.appendChild(document.createTextNode(value.toString()));
-//			//	valueEl.appendChild(intEl);
-//			//	//xml.push('<int>');
-//			//	//xml.push(value.toString());
-//			//	//xml.push('</int>');
-//			//}
-//			//else {
-//			//	var doubleEl = document.createElement('double');
-//			//	doubleEl.appendChild(document.createTextNode(value.toString()));
-//			//	valueEl.appendChild(doubleEl);
-//			//	//xml.push('<double>');
-//			//	//xml.push(value.toString());
-//			//	//xml.push('</double>');
-//			//}
-//			else {
-//				var numEl = document.createElement(parseInt(value) == Math.ceil(value) ? 'int' : 'double');
-//				numEl.appendChild(document.createTextNode(value.toString()));
-//				valueEl.appendChild(numEl);
-//			}
-//			return valueEl;
-//		case 'boolean':
-//			var boolEl = document.createElement('boolean');
-//			boolEl.appendChild(document.createTextNode(value ? '1' : '0'));
-//			valueEl.appendChild(boolEl);
-//			return valueEl;
-//			//xml.push('<boolean>');
-//			//xml.push(value ? '1' : '0');
-//			//xml.push('</boolean>');
-//		case 'string':
-//			var stringEl = document.createElement('string');
-//			stringEl.appendChild(document.createTextNode(value));
-//			valueEl.appendChild(stringEl);
-//			return valueEl;
-//		case 'object':
-//			if(value === null)
-//				valueEl.appendChild(document.createElement('nil'));
-//			else if(value instanceof Array){
-//				var arrayEl = document.createElement('array');
-//				var dataEl = document.createElement('data');
-//				for(var i = 0; i < value.length; i++)
-//					dataEl.appendChild(this.__toXMLRPC(value[i]));
-//				arrayEl.appendChild(dataEl);
-//				valueEl.appendChild(arrayEl);
-//			}
-//			else if(value instanceof Date){
-//				var dateEl = document.createElement('datetime.ISO8601');
-//				dateEl.appendChild(document.createTextNode(rpc.dateToISO8601(value)));
-//				valueEl.appendChild(dateEl);
-//			}
-//			else if(value instanceof Number || value instanceof String || value instanceof Boolean)
-//				return rpc.dateToISO8601(value.valueOf());
-//			else {
-//				var structEl = document.createElement('struct');
-//				var useHasOwn = {}.hasOwnProperty ? true : false; //From Ext's JSON.js
-//				for(var key in value){
-//					if(!useHasOwn || value.hasOwnProperty(key)){
-//						var memberEl = document.createElement('member');
-//						var nameEl = document.createElement('name')
-//						nameEl.appendChild(document.createTextNode(key));
-//						memberEl.appendChild(nameEl);
-//						memberEl.appendChild(this.__toXMLRPC(value[key]));
-//						structEl.appendChild(memberEl);
-//					}
-//				}
-//				valueEl.appendChild(structEl);
-//			}
-//			return valueEl;
-//		//case 'undefined':
-//		//case 'function':
-//		//case 'unknown':
-//		//default:
-//	}
-//	throw new TypeError('Unable to convert the value of type "' + typeof(value) + '" to XML-RPC.'); //(' + String(value) + ')
-//};
 
 rpc.ServiceProxy.prototype.__parseXMLRPC = function(valueEl){
 	if(valueEl.childNodes.length == 1 &&
