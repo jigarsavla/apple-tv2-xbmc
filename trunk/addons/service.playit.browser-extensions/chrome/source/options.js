@@ -12,7 +12,9 @@ function restoreValues(event) {
 	} else {
 		localStorage.frameViewEnabled = "true";
 		$('#frameView').prop('checked', localStorage.frameViewEnabled);
-		chrome.browserAction.setPopup({popup: "popup.html"});
+		chrome.browserAction.setPopup({
+			popup : "popup.html"
+		});
 	}
 }
 
@@ -20,6 +22,8 @@ function defaultValues() {
 	$('#serviceAddress').val("apple-tv.local");
 	$('#servicePort').val("8181");
 	$('#frameView').prop('checked', true);
+	myAlert("Options set to default!",
+		"Please press Save button to save default values.");
 }
 
 function saveValues() {
@@ -27,9 +31,13 @@ function saveValues() {
 	localStorage.servicePort = $('#servicePort').val();
 	localStorage.frameViewEnabled = $('#frameView').prop('checked');
 	if (localStorage.frameViewEnabled === "true") {
-		chrome.browserAction.setPopup({popup: "popup.html"});
-	}else{
-		chrome.browserAction.setPopup({popup: ""});
+		chrome.browserAction.setPopup({
+			popup : "popup.html"
+		});
+	} else {
+		chrome.browserAction.setPopup({
+			popup : ""
+		});
 	}
 	myAlert("Options saved!",
 			"PlayIt extension will use saved values for further requests.");
@@ -81,6 +89,9 @@ $(document).ready(function() {
 			// form.submit();
 			saveValues();
 		}
+	});
+	$('#save').click(function() {
+		$("#optionsForm").submit();
 	});
 	$('#reset').click(defaultValues);
 });
