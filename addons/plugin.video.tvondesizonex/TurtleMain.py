@@ -4,7 +4,11 @@ Created on Dec 27, 2011
 @author: ajju
 '''
 
-import TurtlePlugin
+try:
+    import TurtlePlugin
+except:
+    import xbmcgui  # @UnresolvedImport
+    dialog = xbmcgui.Dialog()
+    dialog.ok('[B][COLOR red]ALERT: [/COLOR][/B] RESTART XBMC', 'A new update has recently installed or add-on reconfigured.', 'Please restart XBMC to reflect the changes.', 'You will not be able to access until restart.')
 
-if __name__ == '__main__':
-    TurtlePlugin.start('plugin.video.tvondesizonex', '1.6.3')
+TurtlePlugin.start('plugin.video.tvondesizonex', '1.6.3')
