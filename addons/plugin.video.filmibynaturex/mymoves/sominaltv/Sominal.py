@@ -198,8 +198,6 @@ def retieveMovieStreams(request_obj, response_obj):
     if playNowItem is not None:
         request_obj.set_data({'videoPlayListItems': playNowItem.get_request_data()['videoPlayListItems']})
     
-    XBMCInterfaceUtils.displayDialogMessage('Do you know?', 'The content of this add-on is from www.sominaltvfilms.com.','Please help SomnialTV by visiting his website regularly.','AJ has no relation with www.sominaltvfilms.com. OK to proceed!',msgType='[B]INFO & REQUEST: [/B]')
-    
     
 def __addVideoInfo__(video_items, videoInfo):
     for video_item in video_items:
