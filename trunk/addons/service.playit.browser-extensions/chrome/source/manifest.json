@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "PlayIt on XBMC",
-  "version": "2.6.5",
+  "version": "2.6.6",
   "background": {
     "scripts": [
       "playit.js",
@@ -20,6 +20,11 @@
     "notifications",
     "tabs",
     "contextMenus"
+  ],"content_scripts": [
+    {
+      "matches": ["https://*.soundcloud.com/*"],
+      "js": ["js/jquery-2.0.0.min.js", "sc-inject.js"]
+    }
   ],
   "icons": {
     "16": "small-icon.png",

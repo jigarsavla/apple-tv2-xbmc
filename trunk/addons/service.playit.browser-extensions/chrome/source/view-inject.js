@@ -1,6 +1,7 @@
 var handlePlayItAction = function(event) {
 	var playItReq = {
-		"url" : event.data
+		type : "video",
+		video_link : event.data
 	};
 	chrome.runtime.connect().postMessage(playItReq);
 }

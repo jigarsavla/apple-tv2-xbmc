@@ -1,5 +1,5 @@
 //PlayIt core function to send data to XBMC PlayIt port
-function playIt(active_url) {
+function playIt(streamReq) {
 	serviceAddress = localStorage.serviceAddress
 	servicePort = localStorage.servicePort
 	if (!serviceAddress || !servicePort)
@@ -18,42 +18,85 @@ function playIt(active_url) {
 		asynchronous : true,
 		protocol : "JSON-RPC",
 		sanitize : false,
-		methods : [ 'ping', 'playHostedVideo', 'playVideo' ]
+		methods : [ 'playHostedVideo', 'playAudio' ]
 	}, false);
 
 	myAlert('Processing request',
 			'Sending PlayIt request to XBMC, please wait...')
 
 	try {
-		playItService
-				.playHostedVideo({
-					params : {
-						'videoLink' : active_url
-					},
-					onSuccess : function(responseObj) {
-						title = responseObj.status
-						if (responseObj.status === 'success')
-							title = 'Playback started'
-						else if (responseObj.status === 'error')
-							title = 'Playback failed'
-						else if (responseObj.status === 'exception')
-							title = 'Unexpected error'
-						myAlert(title, responseObj.message)
-					},
-					onException : function(err) {
-						if (err != undefined && err.code != undefined
-								&& err.code === 101)
-							myAlert('Network error',
-									'Unable to connect or request time-out. Check PlayIt extension setting.')
-						else
-							myAlert('Unknown error',
-									'Chrome extension is unable to process request due to error.')
-						return true
-					},
-					onComplete : function(responseObj) {
-						// nothing
-					}
-				})
+
+		if (streamReq.type === 'video') {
+			playItService
+					.playHostedVideo({
+						params : {
+							'videoLink' : streamReq.video_link
+						},
+						onSuccess : function(responseObj) {
+							title = responseObj.status
+							if (responseObj.title != undefined) {
+								title = responseObj.title
+							} else if (responseObj.status === 'success') {
+								title = 'Playback started'
+							} else if (responseObj.status === 'error') {
+								title = 'Playback failed'
+							} else if (responseObj.status === 'exception') {
+								title = 'Unexpected error'
+							}
+							myAlert(title, responseObj.message)
+						},
+						onException : function(err) {
+							if (err != undefined && err.code != undefined
+									&& err.code === 101)
+								myAlert('Network error',
+										'Unable to connect or request time-out. Check PlayIt extension setting.')
+							else
+								myAlert('Unknown error',
+										'Chrome extension is unable to process request due to error.')
+							return true
+						},
+						onComplete : function(responseObj) {
+							// nothing
+						}
+					});
+		} else if (streamReq.type === 'audio') {
+			playItService
+					.playAudio({
+						params : streamReq,
+						onSuccess : function(responseObj) {
+							title = responseObj.status
+							if (responseObj.title != undefined) {
+								title = responseObj.title
+							} else if (responseObj.status === 'success') {
+								title = 'Playback started'
+							} else if (responseObj.status === 'error') {
+								title = 'Playback failed'
+							} else if (responseObj.status === 'exception') {
+								title = 'Unexpected error'
+							}
+							myAlert(title, responseObj.message)
+						},
+						onException : function(err) {
+							if (err != undefined && err.code != undefined
+									&& err.code === 101) {
+								myAlert('Network error',
+										'Unable to connect or request time-out. Check PlayIt extension setting.');
+							} else if (err != undefined
+									&& err.message != undefined
+									&& err.message == "Method playAudio not supported.") {
+								myAlert('OLD version of PlayIt Service',
+										'Please check for updates of PlayIt Service add-on on XBMC.');
+							} else {
+								myAlert('Unknown error',
+										'Chrome extension is unable to process request due to error.');
+							}
+							return true
+						},
+						onComplete : function(responseObj) {
+							// nothing
+						}
+					});
+		}
 
 	} catch (err) {
 		if (err != undefined && err.code != undefined && err.code === 101)
@@ -90,7 +133,10 @@ function cmClickHandler(info) {
 			if (info.selectionText !== undefined) {
 				myAlert("Video selected", info.selectionText);
 			}
-			playIt(info.linkUrl);
+			playIt({
+				type : "video",
+				video_link : info.linkUrl
+			});
 		}
 	} else if (info.menuItemId == "playItFrameView") {
 		playItFrameViewEnabler();
@@ -100,16 +146,20 @@ function cmClickHandler(info) {
 // Handles playIt button click event
 function playItRequestHandler() {
 	chrome.tabs.getSelected(null, function(tab) {
-		playIt(tab.url);
+		playIt({
+			type : "video",
+			video_link : tab.url
+		});
 	});
 }
 
 // Handles playIt button click event
 function playItActionRequestHandler(tab) {
-	if (localStorage.frameViewEnabled === "true") {
-
-	} else {
-		playIt(tab.url);
+	if (localStorage.frameViewEnabled !== "true") {
+		playIt({
+			type : "video",
+			video_link : tab.url
+		});
 	}
 }
 
@@ -127,11 +177,11 @@ function playItFrameViewEnabler() {
 }
 
 // Handles playIt request from frame or embed videos
-function playItRequestFromFrameHandler(port) {
+function playItRequestFromContentScript(port) {
 	// This will get called by the view-inject script when frame is clicked for
 	// play.
-	port.onMessage.addListener(function(req) {
-		playIt(req.url);
+	port.onMessage.addListener(function(streamReq) {
+		playIt(streamReq);
 	});
 }
 
@@ -155,7 +205,7 @@ var playItFrameViewContextMenuItem = {
 
 chrome.contextMenus.create(playItOnXBMCContextMenuItem);
 chrome.contextMenus.create(playItFrameViewContextMenuItem);
-chrome.runtime.onConnect.addListener(playItRequestFromFrameHandler);
+chrome.runtime.onConnect.addListener(playItRequestFromContentScript);
 chrome.browserAction.onClicked.addListener(playItActionRequestHandler);
 
 if (localStorage.frameViewEnabled === undefined
