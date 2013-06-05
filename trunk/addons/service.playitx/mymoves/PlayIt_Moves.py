@@ -9,7 +9,7 @@ from common.DataObjects import ListItem
 from moves import SnapVideo
 from urllib2 import HTTPError
 import re
-import xbmcgui # @UnresolvedImport
+import xbmcgui  # @UnresolvedImport
 
 def ping(request_obj, response_obj):
     print request_obj.get_data()
@@ -23,9 +23,18 @@ def ping(request_obj, response_obj):
 
 def playHostedVideo(request_obj, response_obj):
     pbType = int(Container().getAddonContext().addon.getSetting('playbacktype'))
-    if pbType == 2 and XBMCInterfaceUtils.isPlayingVideo():
+    
+    if XBMCInterfaceUtils.isPlayingAudio():
         response_obj.addServiceResponseParam("status", "error")
-        response_obj.addServiceResponseParam("message", "XBMC is already playing a video. Your this request is ignored.")
+        response_obj.addServiceResponseParam("title", "Stop active music!")
+        response_obj.addServiceResponseParam("message", "Note: XBMC cannot play video when video playback is in progress.")
+        item = ListItem()
+        item.set_next_action_name('respond')
+        response_obj.addListItem(item)
+    elif pbType == 2 and XBMCInterfaceUtils.isPlaying():
+        response_obj.addServiceResponseParam("status", "error")
+        response_obj.addServiceResponseParam("title", "XBMC is already playing.")
+        response_obj.addServiceResponseParam("message", "Check PlayIt Service add-on settings. Your this request is ignored.")
         item = ListItem()
         item.set_next_action_name('respond')
         response_obj.addListItem(item)
@@ -52,14 +61,16 @@ def playHostedVideo(request_obj, response_obj):
                     response_obj.addListItem(item)
                 else:
                     response_obj.addServiceResponseParam("status", "success")
-                    if not XBMCInterfaceUtils.isPlayingVideo():
+                    if not XBMCInterfaceUtils.isPlaying():
                         response_obj.addServiceResponseParam("message", "Enjoy your video!")
                     else:
-                        response_obj.addServiceResponseParam("message", "Your video has been added to player queue.")
+                        response_obj.addServiceResponseParam("title", "Request Enqueued!")
+                        response_obj.addServiceResponseParam("message", "Your request has been added to player queue.")
                     response_obj.set_redirect_action_name('play_it')
                     request_obj.get_data()['videoTitle'] = 'PlayIt Video'
         except HTTPError:
             response_obj.addServiceResponseParam("status", "error")
+            response_obj.addServiceResponseParam("title", "Invalid URL")
             response_obj.addServiceResponseParam("message", "Video URL is not valid one! Please check and try again.")
             item = ListItem()
             item.set_next_action_name('respond')
@@ -77,6 +88,41 @@ def playRawVideo(request_obj, response_obj):
     response_obj.addListItem(item)
     response_obj.addServiceResponseParam("status", "success")
     response_obj.addServiceResponseParam("message", "Enjoy the video!")
+    
+    
+def playRawAudio(request_obj, response_obj):
+    pbType = int(Container().getAddonContext().addon.getSetting('playbacktype'))
+    
+    if XBMCInterfaceUtils.isPlayingVideo():
+        response_obj.addServiceResponseParam("status", "error")
+        response_obj.addServiceResponseParam("title", "Stop active video!")
+        response_obj.addServiceResponseParam("message", "Note: XBMC cannot play audio when audio playback is in progress.")
+        item = ListItem()
+        item.set_next_action_name('respond')
+        response_obj.addListItem(item)
+    elif pbType == 2 and XBMCInterfaceUtils.isPlaying():
+        response_obj.addServiceResponseParam("status", "error")
+        response_obj.addServiceResponseParam("title", "XBMC is already playing.")
+        response_obj.addServiceResponseParam("message", "Check PlayIt Service add-on settings. Your this request is ignored.")
+        item = ListItem()
+        item.set_next_action_name('respond')
+        response_obj.addListItem(item)
+    else:
+        if pbType == 0:
+            XBMCInterfaceUtils.stopPlayer()
+        if not XBMCInterfaceUtils.isPlaying():
+            response_obj.addServiceResponseParam("message", "Enjoy your music!")
+        else:
+            response_obj.addServiceResponseParam("title", "Request Enqueued!")
+            response_obj.addServiceResponseParam("message", "Your request has been added to player queue.")
+        item = ListItem()
+        item.get_moving_data()['audioStreamUrl'] = request_obj.get_data()['track_link']
+        item.set_next_action_name('Play')
+        xbmcListItem = xbmcgui.ListItem(label=request_obj.get_data()['track_title'], iconImage=request_obj.get_data()['track_artwork_url'], thumbnailImage=request_obj.get_data()['track_artwork_url'])
+        xbmcListItem.setInfo('music', {'title':request_obj.get_data()['track_title']})
+        item.set_xbmc_list_item_obj(xbmcListItem)
+        response_obj.addListItem(item)
+        response_obj.addServiceResponseParam("status", "success")
     
     
 def playZappyVideo(request_obj, response_obj):
