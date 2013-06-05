@@ -3,13 +3,11 @@
 var SC_CLIENT_ID = 'b45b1aa10f1ac2941910a7f0d10f8e28';
 
 var handlePlayItAction = function(event) {
-	console.log("event button clicked = " + event);
 	$.getJSON("https://api.soundcloud.com/i1/tracks/" + event.data.trackId
 			+ "/streams", {
 		client_id : SC_CLIENT_ID,
 		secret_token : event.data.secretToken
 	}, function(data) {
-		console.log('send play it request ' + data);
 		var playItReq = {
 			type : "audio",
 			track_link : data.http_mp3_128_url,
@@ -61,9 +59,10 @@ var addPlayItButton = function(sound) {
 		}, function(track) {
 			playItButton.click({
 				trackId : track.id.toString(),
-				track_title : track.title.toString(),
-				track_artwork_url : track.artwork_url.toString(),
-				track_description : track.description.toString(),
+				track_title : track.title == undefined ? track.id.toString()
+						: track.title.toString(),
+				track_artwork_url : track.artwork_url == undefined ? ""
+						: track.artwork_url.toString(),
 				secret_token : secretToken
 			}, handlePlayItAction);
 		});
