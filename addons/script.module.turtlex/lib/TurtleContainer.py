@@ -154,15 +154,16 @@ class Container(SingletonClass):
     def judgeTurtleNextAction(self, actionObj):
         ProgressDisplayer().displayMessage(80, line1='Preparing items for display or play', line2='Total items: ' + str(len(self.response_obj.get_item_list())))
         if self.response_obj.get_redirect_action_name() is None:
-            isAnyVideoItem = False
+            isAnyPlayableItem = False
             isItemsList = False
+            playlist_type = None
             for item in self.response_obj.get_item_list():
                 nextActionId = actionObj.get_next_action_map()[item.get_next_action_name()]
                 if nextActionId == '__play__':
-                    if not isAnyVideoItem and not XBMCInterfaceUtils.isPlayingVideo():
+                    if not isAnyPlayableItem and not XBMCInterfaceUtils.isPlaying():
                         XBMCInterfaceUtils.clearPlayList()  # Clear playlist item only when at least one video item is found.
-                    XBMCInterfaceUtils.addPlayListItem(item)
-                    isAnyVideoItem = True
+                    playlist_type = XBMCInterfaceUtils.addPlayListItem(item)
+                    isAnyPlayableItem = True
                 elif nextActionId == '__service_response__':
                     # Do Nothing , get response object from container for parameters to be returned
                     pass
@@ -182,10 +183,13 @@ class Container(SingletonClass):
                         XBMCInterfaceUtils.addContextMenuItem(item, 'Download Video', downloadAction)
                     XBMCInterfaceUtils.addFolderItem(item, nextActionId, is_Folder)
                 del item  # deletes item
-            if isAnyVideoItem == True:
+            if isAnyPlayableItem == True:
                 ProgressDisplayer().end()
                 try:
-                    XBMCInterfaceUtils.play()
+                    if playlist_type is not None:
+                        XBMCInterfaceUtils.play(list_type=playlist_type)
+                    else:
+                        XBMCInterfaceUtils.play()
                 except Exception, e:
                     Logger.logFatal(e)
             elif isItemsList:

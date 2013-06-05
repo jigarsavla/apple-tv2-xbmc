@@ -96,6 +96,11 @@ def addPlayListItem(item):
     if item.get_moving_data().has_key('videoStreamUrl'):
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.add(url=item.get_moving_data()['videoStreamUrl'], listitem=item.get_xbmc_list_item_obj())
+        return "video"
+    elif item.get_moving_data().has_key('audioStreamUrl'):
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+        playlist.add(url=item.get_moving_data()['audioStreamUrl'], listitem=item.get_xbmc_list_item_obj())
+        return "audio"
         
 def downloadVideo(item, downloadPath):
     if item.get_moving_data().has_key('videoStreamUrl'):
@@ -107,26 +112,36 @@ def downloadVideo(item, downloadPath):
     else:
         displayDialogMessage("Download failure!", "Unable to resolve video URL.", "Please try again with different source.")
     
-def clearPlayList():
-    playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-    playlist.clear()
+def clearPlayList(list_type="video"):
+    if list_type == "video":
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.clear()
+    elif list_type == "audio":
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+        playlist.clear()
     
-def play(videoSrc=None):
-    if isPlayingVideo():
+def play(videoSrc=None, list_type="video"):
+    if isPlaying():
         return
     if videoSrc == None:
-        videoSrc = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        if list_type == "video":
+            videoSrc = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        elif list_type == "audio":
+            videoSrc = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
     xbmcPlayer = xbmc.Player()
     xbmcPlayer.play(videoSrc)
-    # if not xbmcPlayer.isPlayingVideo():
-    #        d = xbmcgui.Dialog()
-    #        d.ok('Playback Failed!', 'XBMC player failed to play the playlist items', 'Please check again later or look for other options')
     
 def isPlayingVideo():
     return xbmc.Player().isPlayingVideo() 
 
+def isPlayingAudio():
+    return xbmc.Player().isPlayingAudio() 
+
+def isPlaying():
+    return xbmc.Player().isPlaying() 
+
 def stopPlayer():
-    if isPlayingVideo():
+    if isPlaying():
         xbmc.Player().stop()       
 
 class ProgressDisplayer(SingletonClass):

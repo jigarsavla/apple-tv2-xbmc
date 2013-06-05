@@ -6,6 +6,7 @@
 	<service action-id="perform_ping" name="ping" />
 	<service action-id="play_hosted_video" name="playHostedVideo" />
 	<service action-id="play_raw_video" name="playVideo" />
+	<service action-id="play_raw_audio" name="playAudio" />
 	<service action-id="play_zappy_video" name="playZappyVideo" />
 
 	<action id="perform_ping">
@@ -24,17 +25,29 @@
 
 	<action id="play_raw_video">
 		<move module="mymoves.PlayIt_Moves" function="playRawVideo" />
+		<next-action name="respond" id="__service_response__"
+			isfolder="false" />
 		<next-action name="Play" id="__play__" isfolder="false" />
 	</action>
-	
+
+
+	<action id="play_raw_audio">
+		<move module="mymoves.PlayIt_Moves" function="playRawAudio" />
+		<next-action name="respond" id="__service_response__"
+			isfolder="false" />
+		<next-action name="Play" id="__play__" isfolder="false" />
+	</action>
+
 	<action id="play_zappy_video">
 		<move module="mymoves.PlayIt_Moves" function="playZappyVideo" />
+		<next-action name="respond" id="__service_response__"
+			isfolder="false" />
 		<next-action name="Play" id="__play__" isfolder="false" />
 	</action>
 
 	<!-- Common Video Link Player Moves -->
 
-	
+
 	<action id="snap_and_play_video">
 		<move module="moves.PreProcessor" function="prepareVideoItem" />
 		<move module="moves.SnapVideo" function="addPlaylistVideosInfo" />
