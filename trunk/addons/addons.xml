@@ -30,6 +30,7 @@
 		<license>GNU GPL v3</license>
 	</extension>
 </addon>
+
 <addon id="plugin.video.moviesmasti" name="Movies Masti"
 	version="1.0.0" provider-name="Kamal">
 	<requires>
@@ -60,6 +61,7 @@
 		<license>GNU GPL v3</license>
 	</extension>
 </addon>
+
 <addon id="plugin.video.tvondesizonex" name="TV on DESI ZONE"
 	version="1.6.5" provider-name="AJ">
 	<requires>
