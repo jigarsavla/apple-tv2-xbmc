@@ -13,6 +13,7 @@ import xbmcgui  # @UnresolvedImport
 
 def ping(request_obj, response_obj):
     print request_obj.get_data()
+    Container().ga_client.reportAction('ping')
     response_obj.addServiceResponseParam("response", "pong")
     response_obj.addServiceResponseParam("message", "Hi there, I am PlayIt")
 
@@ -27,7 +28,7 @@ def playHostedVideo(request_obj, response_obj):
     if XBMCInterfaceUtils.isPlayingAudio():
         response_obj.addServiceResponseParam("status", "error")
         response_obj.addServiceResponseParam("title", "Stop active music!")
-        response_obj.addServiceResponseParam("message", "Note: XBMC cannot play video when video playback is in progress.")
+        response_obj.addServiceResponseParam("message", "Note: XBMC cannot play video when audio playback is in progress.")
         item = ListItem()
         item.set_next_action_name('respond')
         response_obj.addListItem(item)
@@ -60,8 +61,10 @@ def playHostedVideo(request_obj, response_obj):
                     item.set_next_action_name('respond')
                     response_obj.addListItem(item)
                 else:
+                    Container().ga_client.reportContentUsage('hostedvideo', video_hosting_info.get_video_hosting_name())
                     response_obj.addServiceResponseParam("status", "success")
                     if not XBMCInterfaceUtils.isPlaying():
+                        XBMCInterfaceUtils.clearPlayList(list_type="video")
                         response_obj.addServiceResponseParam("message", "Enjoy your video!")
                     else:
                         response_obj.addServiceResponseParam("title", "Request Enqueued!")
@@ -79,7 +82,7 @@ def playHostedVideo(request_obj, response_obj):
     
 def playRawVideo(request_obj, response_obj):
     video_url = request_obj.get_data()['videoLink']
-    
+    Container().ga_client.reportAction('video')
     item = ListItem()
     item.get_moving_data()['videoStreamUrl'] = video_url
     item.set_next_action_name('Play')
@@ -92,11 +95,11 @@ def playRawVideo(request_obj, response_obj):
     
 def playRawAudio(request_obj, response_obj):
     pbType = int(Container().getAddonContext().addon.getSetting('playbacktype'))
-    
+    Container().ga_client.reportAction('audio')
     if XBMCInterfaceUtils.isPlayingVideo():
         response_obj.addServiceResponseParam("status", "error")
         response_obj.addServiceResponseParam("title", "Stop active video!")
-        response_obj.addServiceResponseParam("message", "Note: XBMC cannot play audio when audio playback is in progress.")
+        response_obj.addServiceResponseParam("message", "Note: XBMC cannot play audio when video playback is in progress.")
         item = ListItem()
         item.set_next_action_name('respond')
         response_obj.addListItem(item)
@@ -111,6 +114,7 @@ def playRawAudio(request_obj, response_obj):
         if pbType == 0:
             XBMCInterfaceUtils.stopPlayer()
         if not XBMCInterfaceUtils.isPlaying():
+            XBMCInterfaceUtils.clearPlayList(list_type="audio")
             response_obj.addServiceResponseParam("message", "Enjoy your music!")
         else:
             response_obj.addServiceResponseParam("title", "Request Enqueued!")
@@ -127,7 +131,7 @@ def playRawAudio(request_obj, response_obj):
     
 def playZappyVideo(request_obj, response_obj):
     Logger.logDebug(request_obj.get_data());
-    
+    Container().ga_client.reportAction('zappyvideo')
     video_id = request_obj.get_data()['videoId']
     port = request_obj.get_data()['port']
     ipaddress = request_obj.get_data()['client_ip']

@@ -18,8 +18,8 @@ class GAClient(SingletonClass):
     
     def __initialize__(self, addon_context):
         self.addon_context = addon_context
-        self.addon_name = addon_context.addon_id.replace('plugin.video.', '')
-        self.addon_version = (addon_context.addon_ver if addon_context.addon_ver is not None else "0.0.0") + "." + addon_context.turtle_ver
+        self.addon_version = (addon_context.addon_ver if addon_context.addon_ver is not None else "0.0.0") + "_" + addon_context.turtle_ver
+        self.addon_name = addon_context.addon_id.replace('plugin.video.', '') + '_' + self.addon_version
         if addon_context.addon.getSetting('ga_visitor') == '':
             from random import randint
             addon_context.addon.setSetting('ga_visitor', str(randint(0, 0x7fffffff)))
@@ -73,6 +73,10 @@ class GAClient(SingletonClass):
                     return
             elif action_id is not "__start__":
                 self.GA("None", action_id)
+                
+    def reportContentUsage(self, addon, contentTitle):
+        if addon is not None and contentTitle is not None:
+            self.GA(addon, contentTitle)
            
     def GA(self, group, name):
             try:

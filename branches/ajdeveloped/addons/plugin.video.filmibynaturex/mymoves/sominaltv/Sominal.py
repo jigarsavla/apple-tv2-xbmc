@@ -3,7 +3,7 @@ Created on Nov 20, 2012
 
 @author: ajju
 '''
-from TurtleContainer import Container
+from TurtleContainer import Container, AddonContext
 from common.DataObjects import ListItem
 import xbmcgui  # @UnresolvedImport
 from common import AddonUtils, Logger, EnkDekoder
@@ -154,6 +154,9 @@ def retieveTrailerStream(request_obj, response_obj):
 
 
 def retieveMovieStreams(request_obj, response_obj):
+    if(request_obj.get_data().has_key('videoInfo')):
+        title = request_obj.get_data()['videoInfo']['title']
+        Container().ga_client.reportContentUsage('movie', title)
     soup = None
     if request_obj.get_data().has_key('movieInfoUrl'):
         html = HttpUtils.HttpClient().getHtmlContent(url=(request_obj.get_data()['movieInfoUrl'] + '?alt=json'))
@@ -167,21 +170,25 @@ def retieveMovieStreams(request_obj, response_obj):
         return
     videoSources = []
     videoSourceLinks = None
-    divTags = []
-    loadLastTags(soup, 'div', divTags)
+    spanTags = []
+    loadLastTags(soup, '(div|span)', spanTags)
+    Logger.logDebug(soup)
+    Logger.logDebug('   -------------------------------------------------------       ')
     
-    for divTag in divTags:
-        if re.search('^(Source|ONLINE)', divTag.getText(), re.IGNORECASE):
+    for spanTag in spanTags:
+        Logger.logDebug(spanTag)
+        if re.search('^(Source|ONLINE)', spanTag.getText(), re.IGNORECASE):
             if videoSourceLinks is not None and len(videoSourceLinks) > 0:
                 videoSources.append(videoSourceLinks)
             videoSourceLinks = []
         else:
-            aTag = divTag.findChild('a', attrs={'href':re.compile('(desionlinetheater.com|wp.me)')}, recursive=True)
+            aTag = spanTag.findChild('a', attrs={'href':re.compile('(desionlinetheater.com|wp.me)')}, recursive=True)
             if aTag is not None:
                 infoLink = str(aTag['href']).replace('http://adf.ly/377117/', '')
                 if videoSourceLinks == None:
                     videoSourceLinks = []
-                videoSourceLinks.append(infoLink)
+                if infoLink not in videoSourceLinks:
+                    videoSourceLinks.append(infoLink)
     if videoSourceLinks is not None and len(videoSourceLinks) > 0:
         videoSources.append(videoSourceLinks)
     new_items = []
@@ -205,9 +212,11 @@ def __addVideoInfo__(video_items, videoInfo):
     
     
 def loadLastTags(soup, findTag, tags):
-    childs = soup.findAll(findTag, recursive=False)
+    childs = soup.findAll(re.compile(findTag), attrs={'class':re.compile(r'\b(Apple-style-span|separator)\b')}, recursive=True)
+    Logger.logDebug(childs)
     if childs is None or len(childs) == 0:
-        tags.append(soup)
+        if soup not in tags:
+            tags.append(soup)
     else:
         for newSoup in childs:
             loadLastTags(newSoup, findTag, tags)
@@ -297,6 +306,9 @@ def __prepareVideoLink__(videoSourceLink):
             Logger.logDebug('Found google short URL = ' + video_url)
             video_url = HttpUtils.getRedirectedUrl(video_url)
             Logger.logDebug('After finding out redirected URL = ' + video_url)
+            if re.search('videos.desionlinetheater.com', video_url):
+                XBMCInterfaceUtils.displayDialogMessage('Unable to parse', 'A new HTML Guardian is used to protect the page', 'Sounds technical!! hmm, it means cannot find video.', 'Fix: Find me JavaScript Interpreter online service')
+                
         video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
         video_source_img = video_hosting_info.get_video_hosting_image()
         

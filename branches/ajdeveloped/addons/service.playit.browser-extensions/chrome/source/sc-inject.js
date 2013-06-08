@@ -2,23 +2,7 @@
 
 var SC_CLIENT_ID = 'b45b1aa10f1ac2941910a7f0d10f8e28';
 
-var handlePlayItAction = function(event) {
-	$.getJSON("https://api.soundcloud.com/i1/tracks/" + event.data.trackId
-			+ "/streams", {
-		client_id : SC_CLIENT_ID,
-		secret_token : event.data.secretToken
-	}, function(data) {
-		var playItReq = {
-			type : "audio",
-			track_link : data.http_mp3_128_url,
-			track_title : event.data.track_title,
-			track_artwork_url : event.data.track_artwork_url
-		};
-		chrome.runtime.connect().postMessage(playItReq);
-	});
-}
-
-var addPlayItButton = function(sound) {
+function addPlayItButton(sound) {
 	if ($(sound).find(".playIt-on-xbmc").length == 0) {
 		var playItButton = $('<button></button>');
 		var anchor = $(sound).find(".soundTitle__title").eq(0);
@@ -31,9 +15,9 @@ var addPlayItButton = function(sound) {
 			buttonClass = 'sc-button sc-button-small sc-button-icon sc-button-responsive playIt-on-xbmc';
 		}
 
-		urlSplitArray = resolveUrl.split("/");
-		lastElement = urlSplitArray.pop();
-		secretToken = '';
+		var urlSplitArray = resolveUrl.split("/");
+		var lastElement = urlSplitArray.pop();
+		var secretToken = '';
 
 		if (lastElement.substr(0, 2) == 's-')// Add secret token if present.
 		{
@@ -64,14 +48,28 @@ var addPlayItButton = function(sound) {
 				track_artwork_url : track.artwork_url == undefined ? ""
 						: track.artwork_url.toString(),
 				secret_token : secretToken
-			}, handlePlayItAction);
+			}, function(event) {
+				$.getJSON("https://api.soundcloud.com/i1/tracks/"
+						+ event.data.trackId + "/streams", {
+					client_id : SC_CLIENT_ID,
+					secret_token : event.data.secretToken
+				}, function(data) {
+					var playItReq = {
+						type : "audio",
+						track_link : data.http_mp3_128_url,
+						track_title : event.data.track_title,
+						track_artwork_url : event.data.track_artwork_url
+					};
+					chrome.runtime.connect().postMessage(playItReq);
+				});
+			});
 		});
 		$(sound).find(".soundActions .sc-button-group:first").eq(0).append(
 				playItButton);
 	}
 }
 
-var scPlayItInjector = function() {
+function scPlayItInjector() {
 	$(".sound").not(".playlist").each(function() {
 		addPlayItButton(this);
 	});
@@ -80,10 +78,12 @@ var scPlayItInjector = function() {
 		$(".trackList .trackList__listItem").each(function() {
 			addPlayItButton(this);
 		});
+		$(".trackList__item").each(function() {
+			addPlayItButton(this);
+		});
 	}
 	$(document).off("mousedown");
 	$(window).off("mousedown", 'a[href*="-media.soundcloud."]');
-
 }
 $(document).ready(function() {
 	scPlayItInjector();

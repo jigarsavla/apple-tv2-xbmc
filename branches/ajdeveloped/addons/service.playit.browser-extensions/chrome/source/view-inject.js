@@ -1,12 +1,4 @@
-var handlePlayItAction = function(event) {
-	var playItReq = {
-		type : "video",
-		video_link : event.data
-	};
-	chrome.runtime.connect().postMessage(playItReq);
-}
-
-var seekForFrameAndEmbed = function() {
+function seekForFrameAndEmbed() {
 	$("iframe,embed")
 			.each(
 					function() {
@@ -36,7 +28,15 @@ var seekForFrameAndEmbed = function() {
 							img.css('margin-top', '5px');
 							img.css('margin-left', '5px');
 
-							div.click(src, handlePlayItAction)
+							div.click(src,
+									function(event) {
+										var playItReq = {
+											type : "video",
+											video_link : event.data
+										};
+										chrome.runtime.connect().postMessage(
+												playItReq);
+									});
 
 							div.width(width);
 							div.height(74);

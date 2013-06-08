@@ -1,12 +1,11 @@
 from TurtleContainer import Container
-from common import AddonUtils, HttpUtils, XBMCInterfaceUtils, ExceptionHandler
-import time
+from common import AddonUtils, HttpUtils, ExceptionHandler
+from mechanize import ParseResponse  # @UnresolvedImport
+import mechanize  # @UnresolvedImport
 import re
-import xbmcgui, xbmc  # @UnresolvedImport
 import sys
-import cookielib
-import mechanize
-from mechanize import ParseResponse
+import xbmcgui  # @UnresolvedImport
+import xbmc  # @UnresolvedImport
 
 
 LOGIN_URL = 'https://accounts.google.com/ServiceLogin?service=youtube&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26feature%3Dsign_in_button%26hl%3Den_US%26next%3D%252F%26nomobiletemp%3D1&hl=en_US&uilel=3&passive=true'
@@ -123,7 +122,7 @@ def __loginYouTube__(url, email, pwd):
             web = response.read()
             response.close()
         return True
-    except Exception,e:
+    except Exception, e:
         print e
         d = xbmcgui.Dialog()
         d.ok('YouTube login failed', 'Please opt for 2-step authentication method of google', 'You should check if you have provided correct username and password')

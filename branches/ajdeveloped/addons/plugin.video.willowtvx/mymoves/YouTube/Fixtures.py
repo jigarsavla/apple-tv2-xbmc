@@ -3,14 +3,15 @@ Created on Mar 16, 2013
 
 @author: ajju
 '''
-from common import HttpUtils, AddonUtils
+from TurtleContainer import Container
+from common import HttpUtils
 from common.DataObjects import ListItem
-import xbmcgui  # @UnresolvedImport
 from datetime import datetime
+import calendar
 import re
 import time
 import urllib
-import calendar
+import xbmcgui  # @UnresolvedImport
 try:
     import json
 except ImportError:
@@ -48,7 +49,7 @@ def displaySeries(request_obj, response_obj):
             items.append(item)
             
         if series.has_key('MatchDetails'):
-            del series['MatchDetails'] #Always retrieve match details
+            del series['MatchDetails']  # Always retrieve match details
         item = ListItem()
         item.add_request_data('series', series)
         item.set_next_action_name('Matches')
@@ -60,6 +61,7 @@ def displaySeries(request_obj, response_obj):
 
 def displayMatches(request_obj, response_obj):
     series = request_obj.get_data()['series']
+    Container().ga_client.reportContentUsage('series', series['Name'])
     if not series.has_key('MatchDetails'):
         tabType = None
         regex = None
