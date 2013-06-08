@@ -95,7 +95,7 @@ def playRawVideo(request_obj, response_obj):
     
 def playRawAudio(request_obj, response_obj):
     pbType = int(Container().getAddonContext().addon.getSetting('playbacktype'))
-    Container().ga_client.reportAction('audio')
+    Container().ga_client.reportContentUsage('audio', request_obj.get_data()['track_title'])
     if XBMCInterfaceUtils.isPlayingVideo():
         response_obj.addServiceResponseParam("status", "error")
         response_obj.addServiceResponseParam("title", "Stop active video!")
