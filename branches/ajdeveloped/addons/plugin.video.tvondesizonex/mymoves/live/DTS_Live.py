@@ -14,6 +14,7 @@ from common import ExceptionHandler
 
 def selectChannelsCategory(request_obj, response_obj):
     d = xbmcgui.Dialog()
+    Container().ga_client.reportAction('live_DTS')
     channelSelect = d.select('Select LIVE TV package:', ['Indian Channels', 'Pakistan Channels', 'Sports Channels'])
     liveUrl = None
     if channelSelect == 0:
