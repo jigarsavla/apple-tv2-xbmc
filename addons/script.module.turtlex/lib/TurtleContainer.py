@@ -23,7 +23,7 @@ class AddonContext(SingletonClass):
     '''
     AddonContext will provide a way for container to access the route
     '''
-    def __initialize__(self, addon_id, addon_ver=None, turtle_id='script.module.turtlex', turtle_ver='1.5.4'):
+    def __initialize__(self, addon_id, addon_ver=None, turtle_id='script.module.turtlex', turtle_ver='1.6.2'):
         
         # Addon information
         self.addon = xbmcaddon.Addon(id=addon_id)
