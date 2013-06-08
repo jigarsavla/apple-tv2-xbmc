@@ -15,6 +15,7 @@ import xbmcgui, xbmcplugin #@UnresolvedImport
 
 
 def login(request_obj, response_obj):
+    Container().ga_client.reportAction('live_WST')
     username = Container().getAddonContext().addon.getSetting('wst_username')
     password = Container().getAddonContext().addon.getSetting('wst_password')
     if username == '' or password == '':

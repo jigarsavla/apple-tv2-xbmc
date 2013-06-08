@@ -1,4 +1,7 @@
 [B]Version v1.6.5[/B]
+- Added Google Analytics parameters.
+
+[B]Version v1.6.5[/B]
 - Error handling.
 
 [B]Version v1.6.4[/B]

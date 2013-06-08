@@ -1,3 +1,6 @@
+[B]Version v0.3.8[/B]
+- Added Google Analytics parameters.
+
 [B]Version v0.3.7[/B]
 - Added support to play Audio Streams.
 

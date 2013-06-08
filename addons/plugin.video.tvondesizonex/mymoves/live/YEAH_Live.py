@@ -12,6 +12,7 @@ import xbmcgui, xbmcplugin #@UnresolvedImport
 CHANNELS_JSON_FILE = 'Yeah-Channels.json'
 
 def addYeahLiveItem(request_obj, response_obj):
+    Container().ga_client.reportAction('live_YEAH')
     yeahfilepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE, makeDirs=False)
     if AddonUtils.doesFileExist(yeahfilepath):
         yeah_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='YEAH.png')

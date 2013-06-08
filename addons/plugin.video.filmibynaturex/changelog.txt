@@ -1,3 +1,7 @@
+[B]Version v2.3.6[/B]
+- Improved parsing of video links.
+- Added Google Analytics parameters.
+
 [B]Version v2.3.5[/B]
 - INFO Message removal.
 
