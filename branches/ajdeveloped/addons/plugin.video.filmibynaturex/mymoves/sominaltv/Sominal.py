@@ -285,6 +285,8 @@ def __prepareVideoLink__(videoSourceLink):
     url = videoSourceLink
     if re.search('wp.me', url, re.I):
         url = HttpUtils.getRedirectedUrl(url)
+    if not url.startswith('http://'):
+        url = 'http://' + url
     Logger.logDebug(url)
 #     contentDiv = BeautifulSoup.SoupStrainer('div', {'class':'left_articles'})
 #     soup = BeautifulSoup.BeautifulSoup(html, contentDiv)
@@ -308,7 +310,6 @@ def __prepareVideoLink__(videoSourceLink):
             Logger.logDebug('After finding out redirected URL = ' + video_url)
             if re.search('videos.desionlinetheater.com', video_url):
                 XBMCInterfaceUtils.displayDialogMessage('Unable to parse', 'A new HTML Guardian is used to protect the page', 'Sounds technical!! hmm, it means cannot find video.', 'Fix: Find me JavaScript Interpreter online service')
-                
         video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
         video_source_img = video_hosting_info.get_video_hosting_image()
         
