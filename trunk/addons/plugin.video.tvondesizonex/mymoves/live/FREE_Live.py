@@ -13,6 +13,7 @@ CHANNELS_JSON_FILE = 'Free-Channels.json'
     
 
 def selectChannelsCategory(request_obj, response_obj):
+    Container().ga_client.reportAction('live_FREE')
     filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonPath, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
     freeChannels = AddonUtils.getJsonFileObj(filepath)
     d = xbmcgui.Dialog()

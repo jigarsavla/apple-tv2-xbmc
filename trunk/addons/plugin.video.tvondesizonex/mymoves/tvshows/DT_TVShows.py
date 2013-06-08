@@ -169,6 +169,7 @@ def __displayTVShows__(tvShowsList, channelType, finished=False):
         
 
 def retrieveTVShowEpisodes(request_obj, response_obj):
+    Container().ga_client.reportContentUsage('dt_tvshow', request_obj.get_data()['tvShowName'])
     contentDiv = BeautifulSoup.SoupStrainer('div', {'id':'content'})
     url = request_obj.get_data()['tvShowUrl']
     channelType = request_obj.get_data()['channelType']

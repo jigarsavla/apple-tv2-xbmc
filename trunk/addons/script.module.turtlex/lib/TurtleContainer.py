@@ -207,7 +207,6 @@ class Container(SingletonClass):
 
     def performAction(self, actionId):
         ProgressDisplayer().start('Processing request...')
-        self.ga_client.reportAction(actionId) 
         while actionId is not None:
             Logger.logInfo('Action to be performed ::' + actionId)
             turtle_route = self.getTurtleRoute(actionId)

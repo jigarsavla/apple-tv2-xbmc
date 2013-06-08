@@ -367,6 +367,7 @@ def __retrieveTVShowEpisodes__(threads, response_obj):
         response_obj.addListItem(item)
 
 def retrieveTVShowEpisodes(request_obj, response_obj):
+    Container().ga_client.reportContentUsage('dr_tvshow', request_obj.get_data()['tvShowName'])
     url = request_obj.get_data()['tvShowUrl']
     if request_obj.get_data().has_key('page'):
         url = url[0:len(url) - 1] + '/index' + request_obj.get_data()['page'] + '.html'
