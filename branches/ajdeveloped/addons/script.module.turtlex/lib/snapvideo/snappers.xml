@@ -218,7 +218,7 @@
 	<snapper module="snapvideo.UrlResolverDelegator" function="retrieveVideoInfo"
 		enabled="true"
 		desc="A delegator to retireve streamUrl using t0mm0 urlresolver module">
-		<video-id regex="(.*)" />
+		<video-id regex="*" />
 	</snapper>
 
 </snappers>

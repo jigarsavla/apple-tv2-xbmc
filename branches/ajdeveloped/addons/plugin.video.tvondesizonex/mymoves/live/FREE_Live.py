@@ -4,9 +4,9 @@ Created on Dec 10, 2011
 @author: ajju
 '''
 from TurtleContainer import Container
-from common import AddonUtils, ExceptionHandler
+from common import AddonUtils
 from common.DataObjects import ListItem
-import xbmcgui, xbmcplugin #@UnresolvedImport
+import xbmcgui, xbmcplugin  # @UnresolvedImport
 
 
 CHANNELS_JSON_FILE = 'Free-Channels.json'
@@ -16,12 +16,11 @@ def selectChannelsCategory(request_obj, response_obj):
     Container().ga_client.reportAction('live_FREE')
     filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonPath, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename=CHANNELS_JSON_FILE)
     freeChannels = AddonUtils.getJsonFileObj(filepath)
-    d = xbmcgui.Dialog()
-    catSelect = d.select('SELECT Category', freeChannels.keys())
-    if catSelect == -1:
-        raise Exception(ExceptionHandler.CATEGORY_NOT_SELECTED, 'Please select the category correctly')
-    category = freeChannels.keys()[catSelect]
-    request_obj.set_data({'channels': freeChannels[category]})
+    
+    filepath = AddonUtils.getCompleteFilePath(baseDirPath=Container().getAddonContext().addonProfile, extraDirPath=AddonUtils.ADDON_SRC_DATA_FOLDER, filename='M.json')
+    if AddonUtils.doesFileExist(filepath):
+        freeChannels.update(AddonUtils.getJsonFileObj(filepath))
+    request_obj.set_data({'channels': freeChannels})
 
 
 def displayChannels(request_obj, response_obj):
@@ -48,3 +47,5 @@ def playChannel(request_obj, response_obj):
     xbmcListItem = xbmcgui.ListItem(label=request_obj.get_data()['channelName'], iconImage=request_obj.get_data()['channelLogo'], thumbnailImage=request_obj.get_data()['channelLogo'])
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
+    
+    

@@ -56,7 +56,8 @@ def playHostedVideo(request_obj, response_obj):
                 video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
                 if video_hosting_info is None:
                     response_obj.addServiceResponseParam("status", "error")
-                    response_obj.addServiceResponseParam("message", "Video URL is currently not supported by PlayIt")
+                    response_obj.addServiceResponseParam("title", "URL not supported")
+                    response_obj.addServiceResponseParam("message", "Video URL is currently not supported by PlayIt. Please check if URL selected is correct.")
                     item = ListItem()
                     item.set_next_action_name('respond')
                     response_obj.addListItem(item)
