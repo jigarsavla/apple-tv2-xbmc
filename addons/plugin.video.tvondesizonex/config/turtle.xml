@@ -8,7 +8,7 @@
 		<move module="mymoves.Home" function="displayMenuItems" />
 		<next-action name="On_Demand" id="display_TV_Shows"
 			isfolder="true" />
-		<next-action name="Live" id="display_Live_TV" isfolder="true" />
+		<next-action name="Live" id="display_Live_FREE_Channels" isfolder="true" />
 	</action>
 
 	<!-- ON DEMAND ITEMS -->

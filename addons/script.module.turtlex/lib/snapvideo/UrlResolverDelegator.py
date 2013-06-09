@@ -4,6 +4,13 @@ Created on Nov 21, 2012
 @author: ajju
 '''
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_SD
+try:
+    import urlresolver  # @UnresolvedImport
+except:
+    import common.urlresolverdummy as urlresolver
+
+def isUrlResolvable(videoUrl):
+    return urlresolver.HostedMediaFile(url=videoUrl).valid_url()
 
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
@@ -16,21 +23,18 @@ def retrieveVideoInfo(videoUrl):
     video_info = VideoInfo()
     video_info.set_video_hosting_info(getVideoHostingInfo())
     video_info.set_video_id(videoUrl)
-    try:
-        sources = []
-        import urlresolver  # @UnresolvedImport
-        hosted_media = urlresolver.HostedMediaFile(url=videoUrl)
-        sources.append(hosted_media)
-        source = urlresolver.choose_source(sources)
-        stream_url = ''
-        if source: 
-            stream_url = source.resolve()
     
-        video_info.set_video_stopped(False)
-        video_info.set_video_image('')
-        video_info.set_video_name(' ')
-        video_info.add_video_link(VIDEO_QUAL_SD, stream_url)
-    except:
-        video_info.set_video_stopped(True)
+    sources = []
+    hosted_media = urlresolver.HostedMediaFile(url=videoUrl)
+    sources.append(hosted_media)
+    source = urlresolver.choose_source(sources)
+    stream_url = ''
+    if source: 
+        stream_url = source.resolve()
+
+    video_info.set_video_stopped(False)
+    video_info.set_video_image('')
+    video_info.set_video_name(' ')
+    video_info.add_video_link(VIDEO_QUAL_SD, stream_url)
     return video_info
 
