@@ -60,10 +60,15 @@ class Snapper(object):
     def getVideoId(self, video_url):
         videoId = None
         for video_id_regex in self.__video_id_regex_list:
-            match = re.compile(video_id_regex).findall(video_url + '&')
-            if len(match) > 0:
-                videoId = match[0]
-                break
+            if video_id_regex == '*':
+                func = getattr(self.__snapper_module, 'isUrlResolvable')
+                if func(video_url):
+                    videoId = video_url
+            else:
+                match = re.compile(video_id_regex).findall(video_url + '&')
+                if len(match) > 0:
+                    videoId = match[0]
+                    break
         return videoId
 
 snappers = None
