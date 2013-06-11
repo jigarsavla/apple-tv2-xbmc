@@ -37,7 +37,7 @@ def updateListItem_With_VideoInfo(video_info, xbmc_list_item):
         xbmc_list_item.setThumbnailImage(video_info.get_video_image())
     
     
-def callBackDialogProgressBar(function_obj, function_args, heading, failure_message, line1='Please wait...', line2='Retrieved $current_index of $total_it items', line3='To go back, press the Cancel button'):
+def callBackDialogProgressBar(function_obj, function_args, heading, failure_message = None, line1='Please wait...', line2='Retrieved $current_index of $total_it items', line3='To go back, press the Cancel button'):
     total_iteration = len(function_args)
     current_index = 0
     ProgressDisplayer().end()
@@ -64,10 +64,10 @@ def callBackDialogProgressBar(function_obj, function_args, heading, failure_mess
                     isCanceled = True
                     break
         except Exception, e:
-            if not SUPPRESS_DIALOG_MSG and pDialog is not None:
+            if not SUPPRESS_DIALOG_MSG and pDialog is not None and failure_message is not None:
                 pDialog.close()
                 dialog = xbmcgui.Dialog()
-                dialog.ok('Process Failed', failure_message, 'You may like to try again later or use other source if available')
+                dialog.ok('[B][COLOR red]FAILED: [/COLOR][/B]Info Retrieval Process', failure_message, 'You may like to try again later or use other source if available')
             Logger.logFatal(e)
             raise Exception(ExceptionHandler.DONOT_DISPLAY_ERROR, '')
         if isCanceled:

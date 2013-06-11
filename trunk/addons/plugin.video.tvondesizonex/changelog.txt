@@ -1,3 +1,6 @@
+[B]Version v1.6.9[/B]
+- Playwire links parsing corrected. 
+
 [B]Version v1.6.8[/B]
 - Straighten live category and removed not working links. 
 
