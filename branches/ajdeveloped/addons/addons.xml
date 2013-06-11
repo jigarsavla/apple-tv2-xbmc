@@ -32,12 +32,12 @@
 </addon>
 
 <addon id="plugin.video.tvondesizonex" name="TV on DESI ZONE"
-	version="1.6.8" provider-name="AJ">
+	version="1.6.9" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex" version="1.6.1" />
+		<import addon="script.module.turtlex" version="1.6.4" />
 		<import addon="script.module.metahandler"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
@@ -142,7 +142,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtlex" name="Turtle X" version="1.6.3"
+<addon id="script.module.turtlex" name="Turtle X" version="1.6.4"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
@@ -179,7 +179,7 @@
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex" version="1.6.2" />
+		<import addon="script.module.turtlex" version="1.6.3" />
 	</requires>
 	<extension point="xbmc.service" library="TurtleMain.py"
 		start="login">
