@@ -109,7 +109,7 @@ def findPlaylistInfo(playlist_url):
 
 def addVideoHostingInfo(request_obj, response_obj):
     items = response_obj.get_item_list()
-    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
+    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), items, 'Retrieving video info', 'Video is either removed or not available. Use other links.')
 
 def addVideoHostingInfoInPlayableItems(request_obj, response_obj):
     items = response_obj.get_item_list()
@@ -118,7 +118,7 @@ def addVideoHostingInfoInPlayableItems(request_obj, response_obj):
         if item.get_next_action_name() == 'Play':
             playable_items.append(item)
     try:
-        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
+        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), playable_items, 'Retrieving video info', failure_message = None)
     except Exception, e:
         Logger.logFatal(e)
 
@@ -128,7 +128,7 @@ def __addVideoHostingInfo_in_item(item):
         
 def addVideoInfo(request_obj, response_obj):
     items = response_obj.get_item_list()
-    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
+    XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), items, 'Retrieving video info', 'Video is either removed or not available. Use other links.')
 
 def addVideoInfoInPlayableItems(request_obj, response_obj):
     items = response_obj.get_item_list()
@@ -137,7 +137,7 @@ def addVideoInfoInPlayableItems(request_obj, response_obj):
         if item.get_next_action_name() == 'Play':
             playable_items.append(item)
     try:
-        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), playable_items, 'Retrieving video info', 'Failed to retrieve video information, please try again later')
+        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), playable_items, 'Retrieving video info', failure_message = None)
     except Exception, e:
         Logger.logFatal(e)
 
@@ -174,7 +174,7 @@ def __processAndAddVideoInfo__(item, data):
     if video_info is None:
         raise Exception(ExceptionHandler.VIDEO_PARSER_NOT_FOUND, 'Video information is not found. Please check other sources.')
     if video_info.is_video_stopped():
-        raise Exception(ExceptionHandler.VIDEO_STOPPED, 'Video is either removed or not found. Please check other links.')
+        raise Exception(ExceptionHandler.VIDEO_STOPPED, 'Video is either Removed by hosting website. Please check other links.')
     XBMCInterfaceUtils.updateListItem_With_VideoInfo(video_info, item.get_xbmc_list_item_obj())
     qual = int(Container().getAddonContext().addon.getSetting('playbackqual'))
     video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_HD_1080)

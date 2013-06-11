@@ -33,7 +33,8 @@ def retrieveVideoInfo(video_id):
         html = html.replace('\r', '')
         html = unicode(html + '&').encode('utf-8')
         if re.search('status=fail', html):
-            XBMCInterfaceUtils.displayDialogMessage('Video info retrieval failed', 'Reason: ' + ((re.compile('reason\=(.+?)\.').findall(html))[0]).replace('+', ' ') + '.')
+            # XBMCInterfaceUtils.displayDialogMessage('Video info retrieval failed', 'Reason: ' + ((re.compile('reason\=(.+?)\.').findall(html))[0]).replace('+', ' ') + '.')
+            Logger.logInfo('YouTube video is removed for Id = ' + video_id + ' reason = ' + html)
             video_info.set_video_stopped(True)
             return video_info
         
