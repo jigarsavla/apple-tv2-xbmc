@@ -213,6 +213,11 @@
 		module="snapvideo.GoogleDocs" desc="video url that is downloaded from google docs server">
 		<video-id regex="docs.google.com/file/(.+?)&amp;" />
 	</snapper>
+	
+	<snapper module="snapvideo.ComedyPortal_net" function="retrieveVideoInfo"
+        enabled="true" desc="www.comedyportal.net video hosting website">
+        <video-id regex="comedyportal.net/(.+?)&amp;" />
+    </snapper>
 
 	<!-- The following snapper should be at the end of all srcappers -->
 	<snapper module="snapvideo.UrlResolverDelegator" function="retrieveVideoInfo"
