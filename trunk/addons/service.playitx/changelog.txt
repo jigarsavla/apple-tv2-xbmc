@@ -1,3 +1,7 @@
+[B]Version v0.4.2[/B]
+- Fixed Dailymotion links.
+- Increased YouTube Playlist limit to 50 video songs (MAX).
+
 [B]Version v0.4.1[/B]
 - Updated to newer version of TurtleX.
 

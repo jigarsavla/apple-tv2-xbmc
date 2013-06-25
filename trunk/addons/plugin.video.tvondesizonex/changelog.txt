@@ -1,3 +1,6 @@
+[B]Version v1.7.1[/B]
+- Fixed Dailymotion links.
+
 [B]Version v1.7.0[/B]
 - New live channels added.
 - Fixed pagination URL. 
