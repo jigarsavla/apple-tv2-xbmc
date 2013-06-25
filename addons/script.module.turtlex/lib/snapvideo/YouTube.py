@@ -38,7 +38,6 @@ def retrieveVideoInfo(video_id):
             video_info.set_video_stopped(True)
             return video_info
         
-        Logger.logDebug(html)
         title = urllib.unquote_plus(re.compile('title=(.+?)&').findall(html)[0]).replace('/\+/g', ' ')
         video_info.set_video_name(title)
         stream_info = None
@@ -77,8 +76,7 @@ def retrieveVideoInfo(video_id):
             return video_info
         
         stream_map = urllib.unquote_plus(stream_map)
-
-        
+        Logger.logDebug(stream_map)
         formatArray = stream_map.split(',')
         for formatContent in formatArray:
             if formatContent == '':
@@ -100,10 +98,18 @@ def retrieveVideoInfo(video_id):
                     Logger.logFatal(e)
             if formatUrl == '':
                 continue
+            Logger.logDebug('************************')
+            Logger.logDebug(formatContent)
             if(formatUrl[0: 4] == "http" or formatUrl[0: 2] == "-r"):
                 formatQual = re.compile("itag=([^&]+)").findall(formatContent)[0]
                 if not re.search("signature=", formatUrl):
-                    formatUrl += "&signature=" + re.compile("sig=([^&]+)").findall(formatContent)[0]
+                    sig = re.compile("sig=([^&]+)").findall(formatContent)
+                    if sig is not None and len(sig) == 1:
+                        formatUrl += "&signature=" + sig[0]
+                    else:
+                        sig = re.compile("s=([^&]+)").findall(formatContent)
+                        if sig is not None and len(sig) == 1:
+                            formatUrl += "&s=" + sig[0]
         
             qual = formatQual
             url = HttpUtils.HttpClient().addHttpCookiesToUrl(formatUrl, extraExtraHeaders={'Referer':'https://www.youtube.com/watch?v=' + video_id})
@@ -164,7 +170,7 @@ def retrieveVideoInfo(video_id):
 
 def retrievePlaylistVideoItems(playlistId):
     Logger.logFatal('YouTube Playlist ID = ' + playlistId)
-    soupXml = HttpUtils.HttpClient().getBeautifulSoup('http://gdata.youtube.com/feeds/api/playlists/' + playlistId)
+    soupXml = HttpUtils.HttpClient().getBeautifulSoup('http://gdata.youtube.com/feeds/api/playlists/' + playlistId + '?max-results=50')
     videoItemsList = []
     for media in soupXml.findChildren('media:player'):
         videoUrl = str(media['url'])

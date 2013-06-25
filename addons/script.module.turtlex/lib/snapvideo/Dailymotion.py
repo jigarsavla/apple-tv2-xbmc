@@ -51,7 +51,7 @@ def retrieveVideoInfo(video_id):
         else:
             
             newseqeunce = urllib.unquote(sequence[0]).decode('utf8').replace('\\/', '/')
-            
+            Logger.logDebug(newseqeunce);
             jObj = json.loads(newseqeunce)
             for sequenceItem in jObj['sequence'][0]['layerList'][0]['sequenceList']:
                 if sequenceItem['name'] == 'main' or sequenceItem['name'] == 'reporting':
@@ -96,7 +96,8 @@ def retrieveVideoInfo(video_id):
                                 video_info.set_video_stopped(False)
                         elif layerItem['name'] == 'relatedBackground' and layerItem['type'] == 'Background':
                             params = layerItem['param']
-                            video_info.set_video_image(params['imageURL'])
+                            if params.has_key('imageURL'):
+                                video_info.set_video_image(params['imageURL'])
     except Exception, e:
         Logger.logError(e)
         video_info.set_video_stopped(True)
