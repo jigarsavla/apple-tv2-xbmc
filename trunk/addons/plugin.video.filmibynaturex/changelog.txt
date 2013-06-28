@@ -1,3 +1,6 @@
+[B]Version v2.3.8[/B]
+- Corrected website link to new one.
+
 [B]Version v2.3.6 - v2.3.7[/B]
 - Improved parsing of video links.
 - Added Google Analytics parameters.
