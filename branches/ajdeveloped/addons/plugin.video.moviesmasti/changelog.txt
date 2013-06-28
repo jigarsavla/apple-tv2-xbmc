@@ -1,3 +1,0 @@
-[B]Version v1.0.0[/B]
-- New Video addon for DESI movies.
-
