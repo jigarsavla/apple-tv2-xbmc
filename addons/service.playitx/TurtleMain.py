@@ -11,4 +11,4 @@ except:
     dialog.ok('[B][COLOR red]ALERT: [/COLOR][/B] RESTART XBMC', 'A new update has recently installed or add-on reconfigured.', 'Please restart XBMC to reflect the changes.', 'You will not be able to access until restart.')
 
 
-TurtleService.start('service.playitx', '0.4.0', 'PlayIt', '/PlayIt', 8181, [8100, 8199])
+TurtleService.start('service.playitx', 'PlayIt', '/PlayIt', 8181, [8100, 8199])

@@ -218,6 +218,18 @@
         enabled="true" desc="www.comedyportal.net video hosting website">
         <video-id regex="comedyportal.net/(.+?)&amp;" />
     </snapper>
+    
+    <snapper module="snapvideo.VevoDelegator" function="retrieveVideoInfo"
+        enabled="true" desc="www.vevo.com music website using BlueCop addon">
+        <video-id regex="vevo.com/watch/(.+?)#" />
+        <video-id regex="vevo.com/watch/(.+?)&amp;" />
+    </snapper>
+    
+    
+    <snapper module="snapvideo.BBCiPlayerDelegator" function="retrieveVideoInfo"
+        enabled="true" desc="www.bbc.co.uk website using BBCiPlayer addon">
+        <video-id regex="bbc.co.uk/iplayer/episode/(.+?)&amp;" />
+    </snapper>
 
 	<!-- The following snapper should be at the end of all srcappers -->
 	<snapper module="snapvideo.UrlResolverDelegator" function="retrieveVideoInfo"

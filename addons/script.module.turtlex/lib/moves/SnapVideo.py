@@ -118,7 +118,7 @@ def addVideoHostingInfoInPlayableItems(request_obj, response_obj):
         if item.get_next_action_name() == 'Play':
             playable_items.append(item)
     try:
-        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), playable_items, 'Retrieving video info', failure_message = None)
+        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoHostingInfo_in_item'), playable_items, 'Retrieving video info', failure_message=None)
     except Exception, e:
         Logger.logFatal(e)
 
@@ -137,7 +137,7 @@ def addVideoInfoInPlayableItems(request_obj, response_obj):
         if item.get_next_action_name() == 'Play':
             playable_items.append(item)
     try:
-        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), playable_items, 'Retrieving video info', failure_message = None)
+        XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addVideoInfo_in_item'), playable_items, 'Retrieving video info', failure_message=None)
     except Exception, e:
         Logger.logFatal(e)
 
@@ -175,16 +175,21 @@ def __processAndAddVideoInfo__(item, data):
         raise Exception(ExceptionHandler.VIDEO_PARSER_NOT_FOUND, 'Video information is not found. Please check other sources.')
     if video_info.is_video_stopped():
         raise Exception(ExceptionHandler.VIDEO_STOPPED, 'Video is either Removed by hosting website. Please check other links.')
-    XBMCInterfaceUtils.updateListItem_With_VideoInfo(video_info, item.get_xbmc_list_item_obj())
-    qual = int(Container().getAddonContext().addon.getSetting('playbackqual'))
-    video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_HD_1080)
-    if video_strm_link is None or qual != 0:
-        video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_HD_720)
-        if video_strm_link is None or qual == 2:
-            video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_SD)
-            if video_strm_link is None:
-                video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_LOW)
-    item.get_moving_data()['videoStreamUrl'] = video_strm_link
+    if video_info.get_video_link(DataObjects.XBMC_EXECUTE_PLUGIN) is not None:
+        item.get_moving_data()['pluginUrl'] = video_info.get_video_link(DataObjects.XBMC_EXECUTE_PLUGIN)
+    else:
+        if Container().getAddonContext().addon.getSetting('ga_video_title') == 'true':
+            Container().ga_client.reportContentUsage(video_info.get_video_hosting_info().get_video_hosting_name(), video_info.get_video_name())
+        XBMCInterfaceUtils.updateListItem_With_VideoInfo(video_info, item.get_xbmc_list_item_obj())
+        qual = int(Container().getAddonContext().addon.getSetting('playbackqual'))
+        video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_HD_1080)
+        if video_strm_link is None or qual != 0:
+            video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_HD_720)
+            if video_strm_link is None or qual == 2:
+                video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_SD)
+                if video_strm_link is None:
+                    video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_LOW)
+        item.get_moving_data()['videoStreamUrl'] = video_strm_link
     
     
 def addPlaylistVideosInfo(request_obj, response_obj):

@@ -7,7 +7,7 @@ from TurtleContainer import Container
 from common import XBMCInterfaceUtils, Logger, HttpUtils
 from common.DataObjects import ListItem
 from moves import SnapVideo
-from urllib2 import HTTPError
+import urllib2
 import re
 import xbmcgui  # @UnresolvedImport
 
@@ -24,6 +24,9 @@ def ping(request_obj, response_obj):
 
 def playHostedVideo(request_obj, response_obj):
     pbType = int(Container().getAddonContext().addon.getSetting('playbacktype'))
+    
+    if Container().getAddonContext().addon.getSetting('ga_video_title') == '':
+        Container().getAddonContext().addon.setSetting('ga_video_title', 'true')
     
     if XBMCInterfaceUtils.isPlayingAudio():
         response_obj.addServiceResponseParam("status", "error")
@@ -49,7 +52,7 @@ def playHostedVideo(request_obj, response_obj):
             video_url = HttpUtils.getRedirectedUrl(video_url)
             Logger.logDebug('After finding out redirected URL = ' + video_url)
             request_obj.get_data()['videoLink'] = video_url
-        try:
+        if __is_valid_url(video_url):
             if __check_media_url(video_url):
                 response_obj.set_redirect_action_name('play_direct')
             else:
@@ -72,7 +75,8 @@ def playHostedVideo(request_obj, response_obj):
                         response_obj.addServiceResponseParam("message", "Your request has been added to player queue.")
                     response_obj.set_redirect_action_name('play_it')
                     request_obj.get_data()['videoTitle'] = 'PlayIt Video'
-        except HTTPError:
+        else:
+            Logger.logError('video_url = ' + str(video_url))
             response_obj.addServiceResponseParam("status", "error")
             response_obj.addServiceResponseParam("title", "Invalid URL")
             response_obj.addServiceResponseParam("message", "Video URL is not valid one! Please check and try again.")
@@ -149,14 +153,24 @@ def playZappyVideo(request_obj, response_obj):
 
 APPLICATION_MEDIA_TYPES = ['application/octet-stream', 'application/x-mpegURL', 'application/ogg']
 def __check_media_url(video_url):
-    import urllib2
-    request = urllib2.Request(video_url)
-    request.get_method = lambda : 'HEAD'
-    response = urllib2.urlopen(request)
-    content_type = response.info().gettype()
     try:
-        return (APPLICATION_MEDIA_TYPES.index(content_type) >= 0)
-    except ValueError:
-        return re.search('[video|audio]/', content_type)
+        request = urllib2.Request(video_url, headers=HttpUtils.HEADERS)
+        request.get_method = lambda : 'HEAD'
+        response = urllib2.urlopen(request)
+        content_type = response.info().gettype()
+        try:
+            return (APPLICATION_MEDIA_TYPES.index(content_type) >= 0)
+        except ValueError:
+            return re.search('[video|audio]/', content_type)
+    except urllib2.HTTPError, he:
+        Logger.logError(he)
+
+def __is_valid_url(video_url):
+    return re.match(
+        r'^(?:http|ftp)s?://'  # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+        r'localhost|'  # localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+        r'(?::\d+)?'  # optional port
+        r'(?:/?|[/?]\S+)$', video_url, re.IGNORECASE)
     
-        
