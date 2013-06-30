@@ -29,7 +29,7 @@ var seekForFrameAndEmbed = function() {
 							var img = $("<img style=\"-webkit-border-radius:0px; border-radius:0px; padding:0px; background-color:white; position: absolute;\"/>");
 							img.attr("src", "http://s23.postimg.org/y9ocav5jr/Icon_64.png");
 
-							var position = $(this).offset();
+							
 
 							img.css('margin-top', '5px');
 							img.css('margin-left', '5px');
@@ -38,8 +38,12 @@ var seekForFrameAndEmbed = function() {
 
 							div.width(width);
 							div.height(74);
+							
+    						var position = {}
+							position.left = this.offsetLeft;
+							position.top = this.offsetTop;
 							div.css(position);
-
+                            
 							$(this).before(div);
 							div.append(img);
 							div
