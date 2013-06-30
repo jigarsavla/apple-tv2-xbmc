@@ -240,6 +240,7 @@ VIDEO_QUAL_LOW = 'LOW'
 VIDEO_QUAL_SD = 'STANDARD'
 VIDEO_QUAL_HD_720 = '720p'
 VIDEO_QUAL_HD_1080 = '1080p'
+XBMC_EXECUTE_PLUGIN = 'execute_plugin'
 
 class VideoInfo(object):
     def __init__(self):

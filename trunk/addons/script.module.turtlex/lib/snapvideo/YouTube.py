@@ -109,7 +109,7 @@ def retrieveVideoInfo(video_id):
                     else:
                         sig = re.compile("s=([^&]+)").findall(formatContent)
                         if sig is not None and len(sig) == 1:
-                            formatUrl += "&s=" + sig[0]
+                            formatUrl += "&signature=" + parseSignature(sig[0])
         
             qual = formatQual
             url = HttpUtils.HttpClient().addHttpCookiesToUrl(formatUrl, extraExtraHeaders={'Referer':'https://www.youtube.com/watch?v=' + video_id})
@@ -167,6 +167,57 @@ def retrieveVideoInfo(video_id):
         video_info.set_video_stopped(True)
     return video_info
 
+
+def swap(a , b):
+    c = a[0]
+    a[0] = a[b % len(a)]
+    a[b] = c
+    return a
+
+def parseSignature(sig):
+    if len(sig) == 88:   
+        sigA = list(sig)
+        sigA = sigA[2:]
+        sigA = swap(sigA, 1)
+        sigA = swap(sigA, 10)
+        sigA = list(reversed(sigA))
+        sigA = sigA[2:]
+        sigA = swap(sigA, 23)
+        sigA = sigA[3:]
+        sigA = swap(sigA, 15)
+        sigA = swap(sigA, 34)
+        sig = ''.join(sigA)
+        return sig
+    elif (len(sig) == 87):
+        sigA = ''.join(list(reversed(list(sig[44: 84]))))
+        sigB = ''.join(list(reversed(list(sig[3: 43]))))
+        sig = sigA[21:22] + sigA[1:21] + sigA[0:1] + sigA[22:31] + sig[0:1] + sigA[32:40] + sig[43:44] + sigB
+        return sig
+    elif (len(sig) == 86):
+        sig = sig[2:17] + sig[0:1] + sig[18:41] + sig[79:80] + sig[42:43] + sig[43:79] + sig[82:83] + sig[80:82] + sig[41:42]
+        return sig
+    elif (len(sig) == 85):
+        sigA = ''.join(list(reversed(list(sig[44:84]))))
+        sigB = ''.join(list(reversed(list(sig[3:43]))))
+        sig = sigA[7:8] + sigA[1:7] + sigA[0:1] + sigA[8:23] + sig[0:1] + sigA[24:33] + sig[1:2] + sigA[34:40] + sig[43:44] + sigB
+        return sig   
+    elif (len(sig) == 84):
+        sigA = ''.join(list(reversed(list(sig[44:84]))))
+        sigB = ''.join(list(reversed(list(sig[3:43]))))
+        sig = sigA + sig[43:44] + sigB[0:6] + sig[2:3] + sigB[7:16] + sigB[39:40] + sigB[17:39] + sigB[16:17]
+        return sig                         
+    elif (len(sig) == 83):
+        sigA = ''.join(list(reversed(list(sig[43:83]))))
+        sigB = ''.join(list(reversed(list(sig[2:42]))))
+        sig = sigA[30:31] + sigA[1:27] + sigB[39:40] + sigA[28:30] + sigA[0:1] + sigA[31:40] + sig[42:43] + sigB[0:5] + sigA[27:28] + sigB[6:39] + sigB[5:6]
+        return sig        
+    elif (len(sig) == 82):
+        sigA = ''.join(list(reversed(list(sig[34:82]))))
+        sigB = ''.join(list(reversed(list(sig[0:33]))))
+        sig = sigA[45:46] + sigA[2:14] + sigA[0:1] + sigA[15:41] + sig[33:34] + sigA[42:43] + sigA[43:44] + sigA[44:45] + sigA[41:42] + sigA[46:47] + sigB[32:33] + sigA[14:15] + sigB[0:32] + sigA[47:48]
+        return sig
+    else:
+        return sig
 
 def retrievePlaylistVideoItems(playlistId):
     Logger.logFatal('YouTube Playlist ID = ' + playlistId)

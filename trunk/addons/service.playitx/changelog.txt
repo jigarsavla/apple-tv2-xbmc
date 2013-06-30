@@ -1,3 +1,7 @@
+[B]Version v0.4.3[/B]
+- Added VEVO add-on delegator.
+- Added BBC iPlayer add-on delegator.
+
 [B]Version v0.4.2[/B]
 - Fixed Dailymotion links.
 - Increased YouTube Playlist limit to 50 video songs (MAX).

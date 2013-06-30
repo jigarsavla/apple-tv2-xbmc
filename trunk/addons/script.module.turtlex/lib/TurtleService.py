@@ -44,25 +44,23 @@ def serviceMethod(name, **params):
     return service_response_obj
 
 
-def start(addon_id, addon_ver, service_name, context_root, default_port, allowed_port_range):
+def start(addon_id, service_name, context_root, default_port, allowed_port_range):
     server = None
     try:
         sys.argv = None  # To handle the situations where some library expects system arguments. Main change made for t0mm0 urlresolver library.
         
         global __addon_id__
-        global __addon_ver__
         global __registered_services__
         global __context_root__
         global __port__
         global __port_range__
         global __service_name__
         __addon_id__ = addon_id
-        __addon_ver__ = addon_ver
         __context_root__ = context_root
         __port__ = default_port
         __port_range__ = allowed_port_range
         __service_name__ = service_name
-        containerObj = Container(addon_id=addon_id, addon_ver=addon_ver)
+        containerObj = Container(addon_id=addon_id)
         iconimage = AddonUtils.getCompleteFilePath(baseDirPath=containerObj.getAddonContext().addonPath, filename='icon.png')
         serviceport = int(containerObj.getAddonContext().addon.getSetting('serviceport'))
         

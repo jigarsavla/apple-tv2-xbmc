@@ -23,18 +23,18 @@ class AddonContext(SingletonClass):
     '''
     AddonContext will provide a way for container to access the route
     '''
-    def __initialize__(self, addon_id, addon_ver=None, turtle_id='script.module.turtlex', turtle_ver='1.6.2'):
+    def __initialize__(self, addon_id, addon_ver=None, turtle_id='script.module.turtlex'):
         
         # Addon information
         self.addon = xbmcaddon.Addon(id=addon_id)
         self.addon_id = addon_id
-        self.addon_ver = addon_ver
+        self.addon_ver = self.addon.getAddonInfo('version')
         self.addonPath = self.addon.getAddonInfo('path')
         self.addonProfile = self.addon.getAddonInfo('profile')
         
-        self.turtle_addon = xbmcaddon.Addon(id='script.module.turtlex')
+        self.turtle_addon = xbmcaddon.Addon(id=turtle_id)
         self.turtle_id = turtle_id
-        self.turtle_ver = turtle_ver
+        self.turtle_ver = self.turtle_addon.getAddonInfo('version')
         self.turtle_addonPath = self.turtle_addon.getAddonInfo('path')
         self.turtle_addonProfile = self.turtle_addon.getAddonInfo('profile')
         
@@ -160,10 +160,13 @@ class Container(SingletonClass):
             for item in self.response_obj.get_item_list():
                 nextActionId = actionObj.get_next_action_map()[item.get_next_action_name()]
                 if nextActionId == '__play__':
-                    if not isAnyPlayableItem and not XBMCInterfaceUtils.isPlaying():
-                        XBMCInterfaceUtils.clearPlayList()  # Clear playlist item only when at least one video item is found.
-                    playlist_type = XBMCInterfaceUtils.addPlayListItem(item)
-                    isAnyPlayableItem = True
+                    if item.get_moving_data().has_key('pluginUrl'):
+                        XBMCInterfaceUtils.executePlugin(item.get_moving_data()['pluginUrl'])
+                    else:
+                        if not isAnyPlayableItem and not XBMCInterfaceUtils.isPlaying():
+                            XBMCInterfaceUtils.clearPlayList()  # Clear playlist item only when at least one video item is found.
+                        playlist_type = XBMCInterfaceUtils.addPlayListItem(item)
+                        isAnyPlayableItem = True
                 elif nextActionId == '__service_response__':
                     # Do Nothing , get response object from container for parameters to be returned
                     pass

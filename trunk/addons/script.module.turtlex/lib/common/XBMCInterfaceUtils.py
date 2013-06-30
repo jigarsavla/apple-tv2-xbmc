@@ -37,7 +37,7 @@ def updateListItem_With_VideoInfo(video_info, xbmc_list_item):
         xbmc_list_item.setThumbnailImage(video_info.get_video_image())
     
     
-def callBackDialogProgressBar(function_obj, function_args, heading, failure_message = None, line1='Please wait...', line2='Retrieved $current_index of $total_it items', line3='To go back, press the Cancel button'):
+def callBackDialogProgressBar(function_obj, function_args, heading, failure_message=None, line1='Please wait...', line2='Retrieved $current_index of $total_it items', line3='To go back, press the Cancel button'):
     total_iteration = len(function_args)
     current_index = 0
     ProgressDisplayer().end()
@@ -91,6 +91,9 @@ def addContextMenuItem(item, label, action_id, data=None):
     data = '?actionId=' + urllib.quote_plus(action_id) + '&data=' + urllib.quote_plus(AddonUtils.encodeData(item.get_request_data()))
     contextMenuItems.append((label, 'XBMC.RunPlugin(%s?%s)' % (sys.argv[0], data)))
     item.get_xbmc_list_item_obj().addContextMenuItems(contextMenuItems, replaceItems=False)
+
+def executePlugin(pluginPath):
+    xbmc.executebuiltin('RunPlugin(%s)' % pluginPath)
 
 def addPlayListItem(item):
     if item.get_moving_data().has_key('videoStreamUrl'):
