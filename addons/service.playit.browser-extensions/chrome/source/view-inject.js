@@ -22,9 +22,6 @@ function seekForFrameAndEmbed() {
 							var img = $("<img style=\"-webkit-border-radius:0px; border-radius:0px; padding:0px; background-color:white; position: absolute;\"/>");
 							img.attr("src", chrome.extension
 									.getURL("Icon-64.png"));
-
-							var position = $(this).offset();
-
 							img.css('margin-top', '5px');
 							img.css('margin-left', '5px');
 
@@ -40,7 +37,11 @@ function seekForFrameAndEmbed() {
 
 							div.width(width);
 							div.height(74);
+							var position = {}
+							position.left = this.offsetLeft;
+							position.top = this.offsetTop;
 							div.css(position);
+
 
 							$(this).before(div);
 							div.append(img);

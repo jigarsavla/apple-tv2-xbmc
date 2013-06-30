@@ -11,10 +11,9 @@ var seekForFrameAndEmbed = function() {
 						var height = $(this).height();
 						var width = $(this).width();
 
-						if (src !== undefined
-								&& src.match("^http")
-								&& !src.match(".swf$")
-								&& height > 300 && width > 300) {
+						if (src !== undefined && src.match("^http")
+								&& !src.match(".swf$") && height > 300
+								&& width > 300) {
 
 							var div = $("<div style=\"position:absolute; background-color:black; opacity:0.4; font-variant: small-caps; font-family:tahoma; font-weight:bold; font-size:16px; color:white\"></div>");
 							div.hover(function() {
@@ -29,7 +28,6 @@ var seekForFrameAndEmbed = function() {
 							img.attr("src", safari.extension.baseURI
 									+ "Icon-64.png");
 
-							var position = $(this).offset();
 							
 							img.css('margin-top', '5px');
 							img.css('margin-left', '5px');
@@ -38,6 +36,9 @@ var seekForFrameAndEmbed = function() {
 
 							div.width(width);
 							div.height(74);
+							var position = {}
+							position.left = this.offsetLeft;
+							position.top = this.offsetTop;
 							div.css(position);
 
 							$(this).before(div);
