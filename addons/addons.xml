@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
 <addon id="plugin.video.filmibynaturex" name="Filmi BY NATURE"
-	version="2.3.8" provider-name="AJ">
+	version="2.3.9" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex"  version="1.6.6" />
+		<import addon="script.module.turtlex"  version="1.6.7" />
 		<import addon="script.module.metahandler" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
@@ -32,12 +32,12 @@
 </addon>
 
 <addon id="plugin.video.tvondesizonex" name="TV on DESI ZONE"
-	version="1.7.1" provider-name="AJ">
+	version="1.7.2" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex" version="1.6.6" />
+		<import addon="script.module.turtlex" version="1.6.7" />
 		<import addon="script.module.metahandler"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
