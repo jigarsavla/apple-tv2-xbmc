@@ -230,6 +230,11 @@
         enabled="true" desc="www.bbc.co.uk website using BBCiPlayer addon">
         <video-id regex="bbc.co.uk/iplayer/episode/(.+?)&amp;" />
     </snapper>
+    
+    <snapper module="snapvideo.SoundCloud" function="retrieveAudioInfo"
+        enabled="true" desc="www.soundcloud.com website">
+        <video-id regex="api.soundcloud.com/(.+?)&amp;soundcloudurl" />
+    </snapper>
 
 	<!-- The following snapper should be at the end of all srcappers -->
 	<snapper module="snapvideo.UrlResolverDelegator" function="retrieveVideoInfo"

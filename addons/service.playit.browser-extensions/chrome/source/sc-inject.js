@@ -47,8 +47,11 @@ function addPlayItButton(sound) {
 						: track.title.toString(),
 				track_artwork_url : track.artwork_url == undefined ? ""
 						: track.artwork_url.toString(),
-				secret_token : secretToken
+				secret_token : secretToken,
+				client_id : SC_CLIENT_ID,
+				type : "audio"
 			}, function(event) {
+				/*
 				$.getJSON("https://api.soundcloud.com/i1/tracks/"
 						+ event.data.trackId + "/streams", {
 					client_id : SC_CLIENT_ID,
@@ -62,6 +65,8 @@ function addPlayItButton(sound) {
 					};
 					chrome.runtime.connect().postMessage(playItReq);
 				});
+				*/
+				chrome.runtime.connect().postMessage(event.data);
 			});
 		});
 		$(sound).find(".soundActions .sc-button-group:first").eq(0).append(

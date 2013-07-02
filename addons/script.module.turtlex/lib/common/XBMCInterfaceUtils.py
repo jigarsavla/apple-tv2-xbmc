@@ -104,6 +104,14 @@ def addPlayListItem(item):
         playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
         playlist.add(url=item.get_moving_data()['audioStreamUrl'], listitem=item.get_xbmc_list_item_obj())
         return "audio"
+
+def setResolvedMediaUrl(item):
+    new_item = None
+    if item.get_moving_data().has_key('videoStreamUrl'):
+        new_item = xbmcgui.ListItem(path=item.get_moving_data()['videoStreamUrl'])
+    elif item.get_moving_data().has_key('audioStreamUrl'):
+        new_item = xbmcgui.ListItem(path=item.get_moving_data()['audioStreamUrl'])
+    xbmcplugin.setResolvedUrl(int(sys.argv[ 1 ]), True, new_item)
         
 def downloadVideo(item, downloadPath):
     if item.get_moving_data().has_key('videoStreamUrl'):

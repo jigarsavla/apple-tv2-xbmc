@@ -22,7 +22,7 @@ from common import HttpUtils
 
 
 PREFERRED_DIRECT_PLAY_ORDER = [GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
-BASE_WSITE_URL = 'http://sominaltv.blogspot.com/'
+BASE_WSITE_URL = 'http://www.sominaltvfilms.com/'
 pageDict = {0:25, 1:50, 2:100}
 TITLES_PER_PAGE = pageDict[int(Container().getAddonContext().addon.getSetting('moviesPerPage'))]
 

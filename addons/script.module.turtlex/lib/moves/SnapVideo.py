@@ -181,7 +181,10 @@ def __processAndAddVideoInfo__(item, data):
         if Container().getAddonContext().addon.getSetting('ga_video_title') == 'true':
             Container().ga_client.reportContentUsage(video_info.get_video_hosting_info().get_video_hosting_name(), video_info.get_video_name())
         XBMCInterfaceUtils.updateListItem_With_VideoInfo(video_info, item.get_xbmc_list_item_obj())
-        qual = int(Container().getAddonContext().addon.getSetting('playbackqual'))
+        qual_set = Container().getAddonContext().addon.getSetting('playbackqual')
+        if qual_set == '':
+            qual_set = '0'
+        qual = int(qual_set)
         video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_HD_1080)
         if video_strm_link is None or qual != 0:
             video_strm_link = video_info.get_video_link(DataObjects.VIDEO_QUAL_HD_720)

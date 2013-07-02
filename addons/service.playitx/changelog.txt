@@ -1,3 +1,7 @@
+[B]Version v0.4.4 - v0.4.5[/B]
+- Added new playit plugin to resolve URL for XBMC player.
+- Added SoundCloud snapper.
+
 [B]Version v0.4.3[/B]
 - Added VEVO add-on delegator.
 - Added BBC iPlayer add-on delegator.

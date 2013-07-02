@@ -18,7 +18,7 @@ function playIt(streamReq) {
 		asynchronous : true,
 		protocol : "JSON-RPC",
 		sanitize : false,
-		methods : [ 'playHostedVideo', 'playAudio' ]
+		methods : [ 'playHostedVideo', 'playHostedAudio' ]
 	}, false);
 
 	myAlert('Processing request',
@@ -61,7 +61,7 @@ function playIt(streamReq) {
 					});
 		} else if (streamReq.type === 'audio') {
 			playItService
-					.playAudio({
+					.playHostedAudio({
 						params : streamReq,
 						onSuccess : function(responseObj) {
 							title = responseObj.status

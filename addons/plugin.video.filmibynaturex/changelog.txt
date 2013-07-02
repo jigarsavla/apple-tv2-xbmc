@@ -1,3 +1,6 @@
+[B]Version v2.4.0[/B]
+- Corrected website link to working one.
+
 [B]Version v2.3.9[/B]
 - Fixed YouTube videos.
 

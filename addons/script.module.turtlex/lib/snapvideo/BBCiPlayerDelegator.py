@@ -17,7 +17,7 @@ def getVideoHostingInfo():
 
 def retrieveVideoInfo(videoUrl):
     try: 
-        xbmcaddon.Addon('plugin.video.vevo')
+        xbmcaddon.Addon('plugin.video.iplayer')
     except: 
         dialog = xbmcgui.Dialog()
         dialog.ok('[B][COLOR red]MISSING: [/COLOR][/B] BBC IPlayer v2 add-on', '', 'Please install BBC IPlayer v2 add-on created by Hitcher!', 'Available at http://code.google.com/p/xbmc-iplayerv2/')
