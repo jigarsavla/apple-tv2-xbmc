@@ -6,7 +6,7 @@
 	
 	<action id="__start__">
 		<move module="moves.PreProcessor" function="prepareVideoItem" />
-		<move module="moves.snapvideo" function="addVideoInfo" />
+		<move module="moves.SnapVideo" function="addVideoInfo" />
 		<next-action name="Play" id="__resolved__" isfolder="false" />
 	</action>
 
