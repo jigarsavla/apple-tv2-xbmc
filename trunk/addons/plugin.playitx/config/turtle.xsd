@@ -48,17 +48,14 @@
 			</xs:element>
 			<xs:element name="include" type="tns:include-type">
 			</xs:element>
+			<xs:element name="service" type="tns:service-type"></xs:element>
 		</xs:choice>
 	</xs:complexType>
 
 	<xs:complexType name="next-action-type">
 		<xs:attribute name="name" type="xs:string" use="required"></xs:attribute>
 		<xs:attribute name="id" type="xs:string" use="required"></xs:attribute>
-		<xs:attribute name="isfolder" type="xs:boolean"
-			use="required">
-		</xs:attribute>
-		<xs:attribute name="downloadable" type="xs:boolean"></xs:attribute>
-		<xs:attribute name="download-action-id" type="xs:string"></xs:attribute>
+		<xs:attribute name="isfolder" type="xs:boolean" use="required"></xs:attribute>
 	</xs:complexType>
 
 
@@ -69,5 +66,10 @@
 	<xs:complexType name="redirect-action-type">
 		<xs:attribute name="name" type="xs:string" use="required"></xs:attribute>
 		<xs:attribute name="id" type="xs:string" use="required"></xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="service-type">
+		<xs:attribute name="name" type="xs:string" use="required"></xs:attribute>
+		<xs:attribute name="action-id" type="xs:string" use="required"></xs:attribute>
 	</xs:complexType>
 </xs:schema>

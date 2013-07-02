@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.module.turtle" name="Turtle" version="1.5.1"
+<addon id="plugin.playitx" name="PlayIt" version="0.0.1"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
-		<import addon="script.module.simplejson" version="2.0.10" />
-		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.urlresolver" />
-		<import addon="script.common.plugin.cache" />
-		<import addon="script.module.simple.downloader" />
+		<import addon="script.module.turtlex" version="1.6.8"/>
 	</requires>
-	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
+		<provides>audio</provides>
+	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary>XBMC add-on framework</summary>
-		<description>XBMC add-on provides a simplest way to configure actions
-			to be performed for each add-on request using XML.</description>
+		<summary>Play the video received from PlayIt service clients like Web Browser extensions</summary>
+		<description>PlayIt is capable of playing almost all type of videos from most of hosted video sources.</description>
 		<disclaimer>This addon makes no warranties, expressed or implied, and
 			hereby disclaims and negates all other warranties, including without
 			limitation, implied warranties or conditions of merchantability,

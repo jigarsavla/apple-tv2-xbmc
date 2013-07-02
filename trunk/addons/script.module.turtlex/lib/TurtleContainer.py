@@ -178,6 +178,8 @@ class Container(SingletonClass):
                         downloadPath = self.addon_context.addon.getSetting('downloadPath')
                     if downloadPath is not None and downloadPath != '':
                         XBMCInterfaceUtils.downloadVideo(item, downloadPath)
+                elif nextActionId == '__resolved__':
+                    XBMCInterfaceUtils.setResolvedMediaUrl(item)
                 else:
                     isItemsList = True
                     is_Folder = self.addon_context.isNextActionFolder(actionObj.get_action_id(), item.get_next_action_name())

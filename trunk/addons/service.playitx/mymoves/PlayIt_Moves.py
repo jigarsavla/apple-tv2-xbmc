@@ -4,11 +4,12 @@ Created on Dec 27, 2011
 @author: ajju
 '''
 from TurtleContainer import Container
-from common import XBMCInterfaceUtils, Logger, HttpUtils
+from common import XBMCInterfaceUtils, Logger, HttpUtils, AddonUtils
 from common.DataObjects import ListItem
 from moves import SnapVideo
-import urllib2
 import re
+import urllib
+import urllib2
 import xbmcgui  # @UnresolvedImport
 
 def ping(request_obj, response_obj):
@@ -96,6 +97,16 @@ def playRawVideo(request_obj, response_obj):
     response_obj.addListItem(item)
     response_obj.addServiceResponseParam("status", "success")
     response_obj.addServiceResponseParam("message", "Enjoy the video!")
+    
+    
+def playHostedAudio(request_obj, response_obj):
+    url = 'https://api.soundcloud.com/i1/tracks/%s/streams?client_id=%s&secret_token=%s&soundcloudurl' % (request_obj.get_data()['trackId'], request_obj.get_data()['client_id'], request_obj.get_data()['secret_token'])
+    data = {}
+    data['videoLink'] = url
+    data['videoTitle'] = request_obj.get_data()['track_title']
+    
+    request_obj.get_data()['track_link'] = 'plugin://plugin.playitx/?data=' + urllib.quote_plus(AddonUtils.encodeData(data))
+    response_obj.set_redirect_action_name('play_direct')
     
     
 def playRawAudio(request_obj, response_obj):

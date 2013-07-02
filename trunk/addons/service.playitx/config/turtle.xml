@@ -7,6 +7,7 @@
 	<service action-id="play_hosted_video" name="playHostedVideo" />
 	<service action-id="play_raw_video" name="playVideo" />
 	<service action-id="play_raw_audio" name="playAudio" />
+	<service action-id="play_hosted_audio" name="playHostedAudio" />
 	<service action-id="play_zappy_video" name="playZappyVideo" />
 
 	<action id="perform_ping">
@@ -21,6 +22,13 @@
 			isfolder="false" />
 		<redirect-action name="play_it" id="snap_and_play_video" />
 		<redirect-action name="play_direct" id="play_raw_video" />
+	</action>
+	
+	<action id="play_hosted_audio">
+		<move module="mymoves.PlayIt_Moves" function="playHostedAudio" />
+		<next-action name="respond" id="__service_response__"
+			isfolder="false" />
+		<redirect-action name="play_direct" id="play_raw_audio" />
 	</action>
 
 	<action id="play_raw_video">
@@ -44,7 +52,7 @@
 			isfolder="false" />
 		<next-action name="Play" id="__play__" isfolder="false" />
 	</action>
-
+	
 	<!-- Common Video Link Player Moves -->
 
 
