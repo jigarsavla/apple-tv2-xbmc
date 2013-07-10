@@ -1,3 +1,6 @@
+[B]Version v2.4.1[/B]
+- Redo website parsing.
+
 [B]Version v2.4.0[/B]
 - Corrected website link to working one.
 

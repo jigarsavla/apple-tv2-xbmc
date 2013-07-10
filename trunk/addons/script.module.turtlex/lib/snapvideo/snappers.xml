@@ -225,6 +225,10 @@
         <video-id regex="vevo.com/watch/(.+?)&amp;" />
     </snapper>
     
+    <snapper module="snapvideo.Entertainment_biz" function="retrieveVideoInfo"
+        enabled="true" desc="www.my-entertainment.biz video hosting website">
+        <video-id regex="my-entertainment.biz/(.+?)&amp;" />
+    </snapper>
     
     <snapper module="snapvideo.BBCiPlayerDelegator" function="retrieveVideoInfo"
         enabled="true" desc="www.bbc.co.uk website using BBCiPlayer addon">
