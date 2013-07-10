@@ -8,13 +8,13 @@
 		<move module="mymoves.Home" function="displayMenuItems" />
 		<next-action name="listMovies" id="display_SOM_Movies"
 			isfolder="true" />
+		<next-action name="HDMovie" id="display_HDMovie_Section"
+			isfolder="true" />
 		<next-action name="Movie" id="display_Movie_Section"
 			isfolder="true" />
 		<next-action name="Trailer" id="display_SOM_Trailers"
 			isfolder="true" />
 		<next-action name="YouTube" id="display_YouTube_Channels"
-			isfolder="true" />
-		<next-action name="AZ" id="display_AZ_Menu_Section"
 			isfolder="true" />
 		<next-action name="ByGenre" id="display_Genre_Section"
 			isfolder="true" />
@@ -70,6 +70,12 @@
 	<action id="display_Movie_Section"
 		pmessage="SominalTvTheatre|Please go to website and press an Advertisement|Keep it running in your hands">
 		<move module="mymoves.movie.Menu" function="displayMainMenu" />
+		<next-action name="listMovies" id="display_SOM_Movies"
+			isfolder="true" />
+	</action>
+	
+	<action id="display_HDMovie_Section">
+		<move module="mymoves.movie.Menu" function="displayHDMainMenu" />
 		<next-action name="listMovies" id="display_SOM_Movies"
 			isfolder="true" />
 	</action>

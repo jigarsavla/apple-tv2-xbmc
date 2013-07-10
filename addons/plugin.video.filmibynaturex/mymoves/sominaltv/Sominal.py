@@ -1,66 +1,41 @@
 '''
-Created on Nov 20, 2012
+Created on Jul 8, 2013
 
 @author: ajju
 '''
-from TurtleContainer import Container, AddonContext
+from TurtleContainer import Container
 from common.DataObjects import ListItem
-import xbmcgui  # @UnresolvedImport
-from common import AddonUtils, Logger, EnkDekoder
-import base64
+import BeautifulSoup
 import re
 import sys
-import BeautifulSoup
+import xbmcgui  # @UnresolvedImport
+from snapvideo import GoogleDocs, Dailymotion, YouTube
+from common import HttpUtils, Logger, EnkDekoder, XBMCInterfaceUtils, AddonUtils
 from moves import SnapVideo
-from snapvideo import Dailymotion, YouTube, GoogleDocs
-from common import XBMCInterfaceUtils
 try:
     import json
 except ImportError:
     import simplejson as json
-from common import HttpUtils
 
 
 PREFERRED_DIRECT_PLAY_ORDER = [GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
 BASE_WSITE_URL = 'http://www.sominaltvfilms.com/'
-pageDict = {0:25, 1:50, 2:100}
-TITLES_PER_PAGE = pageDict[int(Container().getAddonContext().addon.getSetting('moviesPerPage'))]
+# pageDict = {0:25, 1:50, 2:100}
+# TITLES_PER_PAGE = pageDict[int(Container().getAddonContext().addon.getSetting('moviesPerPage'))]
 
 
 
 def listMovies(request_obj, response_obj):
     categoryUrlSuffix = request_obj.get_data()['categoryUrlSuffix']
-    page = None
+    page = 1
     if request_obj.get_data().has_key('page'):
         page = int(request_obj.get_data()['page'])
     
-    titles = Container().getAddonContext().cache.cacheFunction(retrieveMovies, categoryUrlSuffix)
+    titles = retrieveMovies(categoryUrlSuffix, page)
     
-    count = -1
-    start = 0
-    current_page = -1
-    total_pages = -1
-    if len(titles) > TITLES_PER_PAGE:
-        count = 0
-        current_page = 1
-        total_pages = int(len(titles) / TITLES_PER_PAGE)
-        if len(titles) % TITLES_PER_PAGE:
-            total_pages = total_pages + 1
-        if page is not None:
-            current_page = int(page)
-            start = (current_page - 1) * TITLES_PER_PAGE
-    end = start + TITLES_PER_PAGE
     items = []
     for entry in titles:
-        if count > -1:
-            if count < start:
-                count = count + 1
-                continue
-            elif count >= end:
-                break
-            else:
-                count = count + 1
-        titleInfo = entry['info']
+        titleInfo = entry['title']
         
         if re.compile('Hindi Dubbed').findall(titleInfo) is not None:
             titleInfo = titleInfo.replace('(Hindi Dubbed)', '').replace('Hindi Dubbed', '')
@@ -70,7 +45,7 @@ def listMovies(request_obj, response_obj):
             movieInfo = re.compile("(.+?)\((\d+)\)").findall(titleInfo)
         if(len(movieInfo) == 0):
             movieInfo = [[titleInfo]]
-        title = unicode(movieInfo[0][0].rstrip()).encode('utf-8')
+        title = unicode(movieInfo[0][0].rstrip()).encode('utf-8').replace('&#8211;', '-').replace('&amp;', '&')
         year = ''
         if(len(movieInfo[0]) >= 2):
             year = unicode(movieInfo[0][1]).encode('utf-8')
@@ -84,20 +59,25 @@ def listMovies(request_obj, response_obj):
                     quality = '[COLOR orange]DVD[/COLOR]'
                 quality = ' :: ' + quality
                 
-        movieInfoUrl = entry['link']
+        movieInfo = entry['content']
         movieLabel = '[B]' + title + '[/B]' + ('(' + year + ')' + quality if (year != '') else '')
         item = ListItem()
         item.add_moving_data('movieTitle', title)
         item.add_moving_data('movieYear', year)
-        item.add_request_data('movieInfoUrl', movieInfoUrl)
+        item.add_request_data('movieInfo', movieInfo)
+        item.add_request_data('movieTitle', title)
         item.set_next_action_name('Movie_Streams')
         xbmcListItem = xbmcgui.ListItem(label=movieLabel, label2='(' + year + ') :: ' + quality)
         item.set_xbmc_list_item_obj(xbmcListItem)
         items.append(item)
         response_obj.addListItem(item)
     
-    if current_page > 0 and current_page < total_pages:
-        next_page = current_page + 1
+    total_pages = 4
+    count = 0
+    next_page = page
+    if count < total_pages:
+        count = count + 1
+        next_page = next_page + 1
         item = ListItem()
         item.add_request_data('page', next_page)
         item.add_request_data('categoryUrlSuffix', request_obj.get_data()['categoryUrlSuffix'])
@@ -111,45 +91,39 @@ def listMovies(request_obj, response_obj):
 '''
 Cached function to retrieve HD movies
 '''
-def retrieveMovies(categoryUrlSuffix):
-    html = HttpUtils.HttpClient().getHtmlContent(url=(BASE_WSITE_URL + "feeds/posts/summary/-/" + categoryUrlSuffix + "?max-results=99999&alt=json"))
-    jObj = json.loads(html)
+def retrieveMovies(categoryUrlSuffix, page):
+    soup = HttpUtils.HttpClient().getBeautifulSoup(url=(BASE_WSITE_URL + "category/" + categoryUrlSuffix + "/feed?paged=" + str(page)), parseOnlyThese=BeautifulSoup.SoupStrainer('channel'))
     titles = []
-    for entry in jObj["feed"]["entry"]:
-        titleInfo = str(entry["title"]["$t"])
-        movieInfoUrl = ""
-        for link in entry["link"]:
-            if link["rel"] == "self":
-                movieInfoUrl = str(link["href"])
-                break
-        
+    for item in soup.findAll('item'):
+        print item
         title = {}
-        title['info'] = titleInfo
-        title['link'] = movieInfoUrl
+        title['title'] = item.findChild('title').getText()
+        title['content'] = item.findChild('content:encoded').getText()
         titles.append(title)
     return titles
 
 
 def retieveTrailerStream(request_obj, response_obj):
     soup = None
-    title = None
-    if request_obj.get_data().has_key('movieInfoUrl'):
-        html = HttpUtils.HttpClient().getHtmlContent(url=(request_obj.get_data()['movieInfoUrl'] + '?alt=json'))
-        jObj = json.loads(html)
-        html = jObj['entry']['content']['$t']
-        title = jObj['entry']['title']['$t']
-        soup = BeautifulSoup.BeautifulSoup(html)
+    title = request_obj.get_data()['movieTitle']
+    if request_obj.get_data().has_key('movieInfo'):
+        soup = BeautifulSoup.BeautifulSoup(request_obj.get_data()['movieInfo'])
     elif request_obj.get_data().has_key('moviePageUrl'):
         contentDiv = BeautifulSoup.SoupStrainer('div', {'dir':'ltr'})
         soup = HttpUtils.HttpClient().getBeautifulSoup(url=request_obj.get_data()['moviePageUrl'], parseOnlyThese=contentDiv)
-    if soup == None:
+    if soup is None:
         return
-    paramTag = soup.findChild('param', attrs={'name':'movie'}, recursive=True)
     videoLink = None
-    if paramTag is not None:
-        videoLink = paramTag['value']
+    Logger.logDebug(soup.prettify())
+    frameTag = soup.findChild('iframe', recursive=True)
+    if frameTag is not None:
+        videoLink = frameTag['src']
     else:
-        videoLink = soup.findChild('embed', recursive=True)['src']
+        paramTag = soup.findChild('param', attrs={'name':'movie'}, recursive=True)
+        if paramTag is not None:
+            videoLink = paramTag['value']
+        else:
+            videoLink = soup.findChild('embed', recursive=True)['src']
     request_obj.set_data({'videoLink': videoLink, 'videoTitle':title})
 
 
@@ -158,31 +132,30 @@ def retieveMovieStreams(request_obj, response_obj):
         title = request_obj.get_data()['videoInfo']['title']
         Container().ga_client.reportContentUsage('movie', title)
     soup = None
-    if request_obj.get_data().has_key('movieInfoUrl'):
-        html = HttpUtils.HttpClient().getHtmlContent(url=(request_obj.get_data()['movieInfoUrl'] + '?alt=json'))
-        jObj = json.loads(html)
-        html = jObj['entry']['content']['$t']
-        soup = BeautifulSoup.BeautifulSoup(html)
+    if request_obj.get_data().has_key('movieInfo'):
+        soup = BeautifulSoup.BeautifulSoup(request_obj.get_data()['movieInfo'])
     elif request_obj.get_data().has_key('moviePageUrl'):
-        contentDiv = BeautifulSoup.SoupStrainer('div', {'dir':'ltr'})
-        soup = HttpUtils.HttpClient().getBeautifulSoup(url=request_obj.get_data()['moviePageUrl'], parseOnlyThese=contentDiv)
-    if soup == None:
+        soup = HttpUtils.HttpClient().getBeautifulSoup(url=request_obj.get_data()['moviePageUrl'])
+    if soup is None:
         return
     videoSources = []
     videoSourceLinks = None
-    spanTags = []
-    loadLastTags(soup, '(div|span)', spanTags)
-    Logger.logDebug(soup)
+    tags = soup.findAll('p')
+    if len(tags) < 5:
+        tags.extend(soup.findAll('span'))
+    Logger.logDebug(soup.prettify())
     Logger.logDebug('   -------------------------------------------------------       ')
-    
-    for spanTag in spanTags:
-        Logger.logDebug(spanTag)
-        if re.search('^(Source|ONLINE)', spanTag.getText(), re.IGNORECASE):
+    for tag in tags:
+        Logger.logDebug(tag)
+        if re.search('^(Source|ONLINE|Server)', tag.getText(), re.IGNORECASE):
             if videoSourceLinks is not None and len(videoSourceLinks) > 0:
                 videoSources.append(videoSourceLinks)
             videoSourceLinks = []
         else:
-            aTag = spanTag.findChild('a', attrs={'href':re.compile('(desionlinetheater.com|wp.me)')}, recursive=True)
+            aTags = tag.findAll('a', attrs={'href':re.compile('(desionlinetheater.com|wp.me)')}, recursive=True)
+            if aTags is None or len(aTags) != 1:
+                continue
+            aTag = aTags[0]
             if aTag is not None:
                 infoLink = str(aTag['href']).replace('http://adf.ly/377117/', '')
                 if videoSourceLinks == None:
@@ -209,17 +182,6 @@ def retieveMovieStreams(request_obj, response_obj):
 def __addVideoInfo__(video_items, videoInfo):
     for video_item in video_items:
         video_item.add_request_data('videoInfo', videoInfo)
-    
-    
-def loadLastTags(soup, findTag, tags):
-    childs = soup.findAll(re.compile(findTag), attrs={'class':re.compile(r'\b(Apple-style-span|separator)\b')}, recursive=True)
-    Logger.logDebug(childs)
-    if childs is None or len(childs) == 0:
-        if soup not in tags:
-            tags.append(soup)
-    else:
-        for newSoup in childs:
-            loadLastTags(newSoup, findTag, tags)
     
     
 def __findPlayNowStream__(new_items):

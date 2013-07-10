@@ -17,7 +17,7 @@ def displayMainMenu(request_obj, response_obj):
     hindi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Hindi_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
-    item.add_request_data('categoryUrlSuffix', 'Hindi%20Movies')
+    item.add_request_data('categoryUrlSuffix', 'hindi-movies')
     xbmcListItem = xbmcgui.ListItem(label='HINDI', iconImage=hindi_movie_icon_filepath, thumbnailImage=hindi_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
@@ -26,7 +26,7 @@ def displayMainMenu(request_obj, response_obj):
     telugu_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Telugu_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
-    item.add_request_data('categoryUrlSuffix', 'Telugu')
+    item.add_request_data('categoryUrlSuffix', 'telugu')
     xbmcListItem = xbmcgui.ListItem(label='TELUGU', iconImage=telugu_movie_icon_filepath, thumbnailImage=telugu_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
@@ -35,7 +35,7 @@ def displayMainMenu(request_obj, response_obj):
     tamil_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Tamil_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
-    item.add_request_data('categoryUrlSuffix', 'Tamil')
+    item.add_request_data('categoryUrlSuffix', 'tamil')
     xbmcListItem = xbmcgui.ListItem(label='TAMIL', iconImage=tamil_movie_icon_filepath, thumbnailImage=tamil_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
@@ -44,7 +44,7 @@ def displayMainMenu(request_obj, response_obj):
     punjabi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
-    item.add_request_data('categoryUrlSuffix', 'Punjabi')
+    item.add_request_data('categoryUrlSuffix', 'punjabi')
     xbmcListItem = xbmcgui.ListItem(label='PUNJABI', iconImage=punjabi_movie_icon_filepath, thumbnailImage=punjabi_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
@@ -53,20 +53,49 @@ def displayMainMenu(request_obj, response_obj):
     malayalam_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Malayalam_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
-    item.add_request_data('categoryUrlSuffix', 'Malayalam')
+    item.add_request_data('categoryUrlSuffix', 'malayalam')
     xbmcListItem = xbmcgui.ListItem(label='MALAYALAM', iconImage=malayalam_movie_icon_filepath, thumbnailImage=malayalam_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
     
-    # Bengali Movies
-    bengali_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Bengali_Movies_V1.png')
+
+def displayHDMainMenu(request_obj, response_obj):
+    addonContext = Container().getAddonContext()
+    # All Movies
+    hindi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='HD_Movies_V1.png')
     item = ListItem()
     item.set_next_action_name('listMovies')
-    item.add_request_data('categoryUrlSuffix', 'Bengali')
-    xbmcListItem = xbmcgui.ListItem(label='BENGALI', iconImage=bengali_movie_icon_filepath, thumbnailImage=bengali_movie_icon_filepath)
+    item.add_request_data('categoryUrlSuffix', 'bluray')
+    xbmcListItem = xbmcgui.ListItem(label='All HD Movies', iconImage=hindi_movie_icon_filepath, thumbnailImage=hindi_movie_icon_filepath)
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
     
+    # Hindi Movies
+    hindi_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Hindi_Movies_V1.png')
+    item = ListItem()
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'hindi-blurays')
+    xbmcListItem = xbmcgui.ListItem(label='HINDI', iconImage=hindi_movie_icon_filepath, thumbnailImage=hindi_movie_icon_filepath)
+    item.set_xbmc_list_item_obj(xbmcListItem)
+    response_obj.addListItem(item)
+    
+    # Telugu Movies
+    telugu_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Telugu_Movies_V1.png')
+    item = ListItem()
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'telugu-blurays')
+    xbmcListItem = xbmcgui.ListItem(label='TELUGU', iconImage=telugu_movie_icon_filepath, thumbnailImage=telugu_movie_icon_filepath)
+    item.set_xbmc_list_item_obj(xbmcListItem)
+    response_obj.addListItem(item)
+    
+    # Tamil Movies
+    tamil_movie_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='Tamil_Movies_V1.png')
+    item = ListItem()
+    item.set_next_action_name('listMovies')
+    item.add_request_data('categoryUrlSuffix', 'tamil-blurays')
+    xbmcListItem = xbmcgui.ListItem(label='TAMIL', iconImage=tamil_movie_icon_filepath, thumbnailImage=tamil_movie_icon_filepath)
+    item.set_xbmc_list_item_obj(xbmcListItem)
+    response_obj.addListItem(item)
 
 
 def displayUC(request_obj, response_obj):
@@ -119,12 +148,12 @@ def displayAtoZList(request_obj, response_obj):
 
 def displayYearList(request_obj, response_obj):
     d = xbmcgui.Dialog()
-    years = ['2013', '2012', '2011', '2010', '2009', '2008-2005', '2004-2000', 'Pre 2000']
+    years = ['2013', '2012', '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003', '2002', '2001', '2000', 'Pre-2000']
     index = d.select('Select year:', years)
     if index == -1:
         raise Exception(ExceptionHandler.EXCEPTIONS.get(ExceptionHandler.CATEGORY_NOT_SELECTED));
     year = years[index]
-    request_obj.set_data({'categoryUrlSuffix': year})
+    request_obj.set_data({'categoryUrlSuffix': year.lower()})
     
 def displayGenreList(request_obj, response_obj):
     d = xbmcgui.Dialog()
@@ -133,5 +162,5 @@ def displayGenreList(request_obj, response_obj):
     if index == -1:
         raise Exception(ExceptionHandler.EXCEPTIONS.get(ExceptionHandler.CATEGORY_NOT_SELECTED));
     genre = genres[index]
-    request_obj.set_data({'categoryUrlSuffix': genre})
+    request_obj.set_data({'categoryUrlSuffix': genre.lower()})
     
