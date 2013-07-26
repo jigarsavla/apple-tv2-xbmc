@@ -239,6 +239,14 @@
         enabled="true" desc="www.soundcloud.com website">
         <video-id regex="api.soundcloud.com/(.+?)&amp;soundcloudurl" />
     </snapper>
+    
+    <snapper module="snapvideo.Tune_pk" function="retrieveVideoInfo"
+        enabled="true" desc="www.tune.pk video website">
+        <video-id regex="tune.pk/play/(.+?)\?" />
+        <video-id regex="tune.pk/play/(.+?)/" />
+        <video-id regex="tune.pk/play/(.+?)&amp;" />
+        <video-id regex="tune.pk/video/(.+?)/" />
+    </snapper>
 
 	<!-- The following snapper should be at the end of all srcappers -->
 	<snapper module="snapvideo.UrlResolverDelegator" function="retrieveVideoInfo"

@@ -1,4 +1,7 @@
-[B]Version v0.4.3[/B]
+[B]Version v0.4.7[/B]
+- Enabled Queue of Audio URL when Audio player is ON.
+
+[B]Version v0.4.6[/B]
 - Added Entertainment-biz.
 
 [B]Version v0.4.4 - v0.4.5[/B]

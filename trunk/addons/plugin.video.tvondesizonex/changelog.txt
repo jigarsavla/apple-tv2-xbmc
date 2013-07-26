@@ -1,3 +1,6 @@
+[B]Version v1.7.4[/B]
+- DesiRulez website parsing.
+
 [B]Version v1.7.3[/B]
 - Updated turtle version.
 
