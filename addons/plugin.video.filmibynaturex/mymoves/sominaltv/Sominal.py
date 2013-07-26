@@ -64,7 +64,7 @@ def listMovies(request_obj, response_obj):
         item = ListItem()
         item.add_moving_data('movieTitle', title)
         item.add_moving_data('movieYear', year)
-        item.add_request_data('movieInfo', movieInfo)
+        item.add_request_data('movieInfo', unicode(movieInfo).encode('utf-8'))
         item.add_request_data('movieTitle', title)
         item.set_next_action_name('Movie_Streams')
         xbmcListItem = xbmcgui.ListItem(label=movieLabel, label2='(' + year + ') :: ' + quality)
@@ -95,7 +95,6 @@ def retrieveMovies(categoryUrlSuffix, page):
     soup = HttpUtils.HttpClient().getBeautifulSoup(url=(BASE_WSITE_URL + "category/" + categoryUrlSuffix + "/feed?paged=" + str(page)), parseOnlyThese=BeautifulSoup.SoupStrainer('channel'))
     titles = []
     for item in soup.findAll('item'):
-        print item
         title = {}
         title['title'] = item.findChild('title').getText()
         title['content'] = item.findChild('content:encoded').getText()
@@ -254,13 +253,21 @@ def __prepareVideoLink__(videoSourceLink):
 #     soup = BeautifulSoup.BeautifulSoup(html, contentDiv)
     html = HttpUtils.HttpClient().getHtmlContent(url)
     dek = EnkDekoder.dekode(html)
+    Logger.logDebug(dek)
     if dek is not None:
         html = dek
         
-    html = html.replace('\n\r', '').replace('\r', '').replace('\n', '')
-    children = re.compile('<embed(.+?)>').findall(html)
-    if children is None or len(children) == 0:
-        children = re.compile('<iframe(.+?)>').findall(html)
+    html = html.replace('\n\r', '').replace('\r', '').replace('\n', '').replace('\\', '')
+    children = []
+    if re.search('https://video.google.com/get_player', html):
+        docId = re.compile('docid=(.+?)"').findall(html)[0]
+        children.append('src="https://docs.google.com/file/d/' + docId + '/preview"')
+    else:
+        children = re.compile('<embed(.+?)>').findall(html)
+        if children is None or len(children) == 0:
+            children = re.compile('<iframe(.+?)>').findall(html)
+    
+            
     Logger.logDebug(children)
     for child in children:
         video_url = re.compile('src="(.+?)"').findall(child)[0]
@@ -273,6 +280,9 @@ def __prepareVideoLink__(videoSourceLink):
             if re.search('videos.desionlinetheater.com', video_url):
                 XBMCInterfaceUtils.displayDialogMessage('Unable to parse', 'A new HTML Guardian is used to protect the page', 'Sounds technical!! hmm, it means cannot find video.', 'Fix: Find me JavaScript Interpreter online service')
         video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
+        if video_hosting_info is None:
+            Logger.logDebug('Unrecognized video_url = ' + video_url)
+            continue
         video_source_img = video_hosting_info.get_video_hosting_image()
         
         new_item = ListItem()

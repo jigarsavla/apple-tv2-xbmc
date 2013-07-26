@@ -1,5 +1,8 @@
+[B]Version v2.4.2[/B]
+- Again website layout change fix.
+
 [B]Version v2.4.1[/B]
-- Redo website parsing.
+- Redone website parsing.
 
 [B]Version v2.4.0[/B]
 - Corrected website link to working one.

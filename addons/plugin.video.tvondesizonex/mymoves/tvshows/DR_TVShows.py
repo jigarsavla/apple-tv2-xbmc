@@ -417,6 +417,9 @@ def retrieveVideoLinks(request_obj, response_obj):
     
     content = BeautifulSoup.SoupStrainer('blockquote', {'class':re.compile(r'\bpostcontent\b')})
     soup = HttpClient().getBeautifulSoup(url=request_obj.get_data()['episodeUrl'], parseOnlyThese=content)
+    for e in soup.findAll('br'):
+        e.extract()
+    Logger.logDebug(soup)
     if soup.has_key('div'):
         soup = soup.findChild('div', recursive=False)
     prevChild = ''
@@ -497,7 +500,7 @@ def __prepareVideoLink__(video_link):
         new_video_url = 'http://www.dailymotion.com/video/' + video_id + '_'
     elif re.search('(flash.php|fp.php|wire.php)', video_url, flags=re.I):
         new_video_url = 'http://cdn.playwire.com/12376/embed/' + video_id + '.xml'
-    elif re.search('(youtube|u)(\d*).php', video_url, flags=re.I):
+    elif re.search('(youtube|u|yt)(\d*).php', video_url, flags=re.I):
         new_video_url = 'http://www.youtube.com/watch?v=' + video_id + '&'
     elif re.search('megavideo', video_url, flags=re.I):
         new_video_url = 'http://www.megavideo.com/v/' + video_id + '&'
@@ -509,12 +512,14 @@ def __prepareVideoLink__(video_link):
         new_video_url = video_url
     elif re.search('divxstage.php', video_url, flags=re.I):
         new_video_url = 'divxstage.eu/video/' + video_id + '&'
-    elif re.search('hostingbulk.php', video_url, flags=re.I):
+    elif re.search('(hostingbulk|hb).php', video_url, flags=re.I):
         new_video_url = 'hostingbulk.com/' + video_id + '&'
     elif re.search('movshare.php', video_url, flags=re.I):
         new_video_url = 'movshare.net/video/' + video_id + '&'
     elif re.search('nm.php', video_url, flags=re.I):
         new_video_url = 'novamov.com/video/' + video_id + '&'
+    elif re.search('tune.php', video_url, flags=re.I):
+        new_video_url = 'tune.pk/play/' + video_id + '&'
         
     video_hosting_info = SnapVideo.findVideoHostingInfo(new_video_url)
     video_link['videoLink'] = new_video_url

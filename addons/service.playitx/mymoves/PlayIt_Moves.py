@@ -29,14 +29,7 @@ def playHostedVideo(request_obj, response_obj):
     if Container().getAddonContext().addon.getSetting('ga_video_title') == '':
         Container().getAddonContext().addon.setSetting('ga_video_title', 'true')
     
-    if XBMCInterfaceUtils.isPlayingAudio():
-        response_obj.addServiceResponseParam("status", "error")
-        response_obj.addServiceResponseParam("title", "Stop active music!")
-        response_obj.addServiceResponseParam("message", "Note: XBMC cannot play video when audio playback is in progress.")
-        item = ListItem()
-        item.set_next_action_name('respond')
-        response_obj.addListItem(item)
-    elif pbType == 2 and XBMCInterfaceUtils.isPlaying():
+    if pbType == 2 and XBMCInterfaceUtils.isPlaying():
         response_obj.addServiceResponseParam("status", "error")
         response_obj.addServiceResponseParam("title", "XBMC is already playing.")
         response_obj.addServiceResponseParam("message", "Check PlayIt Service add-on settings. Your this request is ignored.")
@@ -54,28 +47,43 @@ def playHostedVideo(request_obj, response_obj):
             Logger.logDebug('After finding out redirected URL = ' + video_url)
             request_obj.get_data()['videoLink'] = video_url
         if __is_valid_url(video_url):
-            if __check_media_url(video_url):
-                response_obj.set_redirect_action_name('play_direct')
+            contentType = __check_media_url(video_url)
+            if contentType is not None:
+                if contentType == 'audio':
+                    response_obj.set_redirect_action_name('play_direct_audio')
+                    request_obj.get_data()['track_title'] = ''
+                    request_obj.get_data()['track_link'] = video_url
+                    request_obj.get_data()['track_artwork_url'] = ''
+                else:
+                    response_obj.set_redirect_action_name('play_direct_video')
             else:
-                video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
-                if video_hosting_info is None:
+                if XBMCInterfaceUtils.isPlayingAudio():
                     response_obj.addServiceResponseParam("status", "error")
-                    response_obj.addServiceResponseParam("title", "URL not supported")
-                    response_obj.addServiceResponseParam("message", "Video URL is currently not supported by PlayIt. Please check if URL selected is correct.")
+                    response_obj.addServiceResponseParam("title", "Stop active music!")
+                    response_obj.addServiceResponseParam("message", "Note: XBMC cannot play video when audio playback is in progress.")
                     item = ListItem()
                     item.set_next_action_name('respond')
                     response_obj.addListItem(item)
                 else:
-                    Container().ga_client.reportContentUsage('hostedvideo', video_hosting_info.get_video_hosting_name())
-                    response_obj.addServiceResponseParam("status", "success")
-                    if not XBMCInterfaceUtils.isPlaying():
-                        XBMCInterfaceUtils.clearPlayList(list_type="video")
-                        response_obj.addServiceResponseParam("message", "Enjoy your video!")
+                    video_hosting_info = SnapVideo.findVideoHostingInfo(video_url)
+                    if video_hosting_info is None:
+                        response_obj.addServiceResponseParam("status", "error")
+                        response_obj.addServiceResponseParam("title", "URL not supported")
+                        response_obj.addServiceResponseParam("message", "Video URL is currently not supported by PlayIt. Please check if URL selected is correct.")
+                        item = ListItem()
+                        item.set_next_action_name('respond')
+                        response_obj.addListItem(item)
                     else:
-                        response_obj.addServiceResponseParam("title", "Request Enqueued!")
-                        response_obj.addServiceResponseParam("message", "Your request has been added to player queue.")
-                    response_obj.set_redirect_action_name('play_it')
-                    request_obj.get_data()['videoTitle'] = 'PlayIt Video'
+                        Container().ga_client.reportContentUsage('hostedvideo', video_hosting_info.get_video_hosting_name())
+                        response_obj.addServiceResponseParam("status", "success")
+                        if not XBMCInterfaceUtils.isPlaying():
+                            XBMCInterfaceUtils.clearPlayList(list_type="video")
+                            response_obj.addServiceResponseParam("message", "Enjoy your video!")
+                        else:
+                            response_obj.addServiceResponseParam("title", "Request Enqueued!")
+                            response_obj.addServiceResponseParam("message", "Your request has been added to player queue.")
+                        response_obj.set_redirect_action_name('play_it')
+                        request_obj.get_data()['videoTitle'] = 'PlayIt Video'
         else:
             Logger.logError('video_url = ' + str(video_url))
             response_obj.addServiceResponseParam("status", "error")
@@ -170,9 +178,13 @@ def __check_media_url(video_url):
         response = urllib2.urlopen(request)
         content_type = response.info().gettype()
         try:
-            return (APPLICATION_MEDIA_TYPES.index(content_type) >= 0)
+            if(APPLICATION_MEDIA_TYPES.index(content_type) >= 0):
+                return 'application'
         except ValueError:
-            return re.search('[video|audio]/', content_type)
+            if re.search('audio/', content_type):
+                return 'audio'
+            elif re.search('video/', content_type):
+                return 'video'
     except urllib2.HTTPError, he:
         Logger.logError(he)
 

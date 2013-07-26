@@ -3,8 +3,8 @@ Created on Dec 24, 2011
 
 @author: ajju
 '''
+from common import HttpUtils, AddonUtils, Logger
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_SD
-from common import HttpUtils, AddonUtils
 import re
 
 def getVideoHostingInfo():
@@ -35,6 +35,7 @@ def retrieveVideoInfo(video_id):
         video_info.set_video_stopped(False)
         video_info.add_video_link(VIDEO_QUAL_SD, video_link)
         
-    except: 
+    except Exception, e:
+        Logger.logError(e)
         video_info.set_video_stopped(True)
     return video_info
