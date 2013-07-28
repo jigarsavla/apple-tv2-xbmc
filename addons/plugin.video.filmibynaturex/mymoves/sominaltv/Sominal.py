@@ -3,15 +3,17 @@ Created on Jul 8, 2013
 
 @author: ajju
 '''
+from BeautifulSoup import BeautifulStoneSoup
 from TurtleContainer import Container
+from common import HttpUtils, Logger, EnkDekoder, XBMCInterfaceUtils, AddonUtils
 from common.DataObjects import ListItem
+from moves import SnapVideo
+from snapvideo import GoogleDocs, Dailymotion, YouTube
 import BeautifulSoup
 import re
+import requests
 import sys
 import xbmcgui  # @UnresolvedImport
-from snapvideo import GoogleDocs, Dailymotion, YouTube
-from common import HttpUtils, Logger, EnkDekoder, XBMCInterfaceUtils, AddonUtils
-from moves import SnapVideo
 try:
     import json
 except ImportError:
@@ -82,7 +84,7 @@ def listMovies(request_obj, response_obj):
         item.add_request_data('page', next_page)
         item.add_request_data('categoryUrlSuffix', request_obj.get_data()['categoryUrlSuffix'])
         item.set_next_action_name('Next_Page')
-        xbmcListItem = xbmcgui.ListItem(label='  ---- next page ----  #' + str(next_page) + ' ->')
+        xbmcListItem = xbmcgui.ListItem(label='  ---- NEXT PAGE #' + str(next_page) + ' --->')
         item.set_xbmc_list_item_obj(xbmcListItem)
         response_obj.addListItem(item)
     
@@ -92,7 +94,12 @@ def listMovies(request_obj, response_obj):
 Cached function to retrieve HD movies
 '''
 def retrieveMovies(categoryUrlSuffix, page):
-    soup = HttpUtils.HttpClient().getBeautifulSoup(url=(BASE_WSITE_URL + "category/" + categoryUrlSuffix + "/feed?paged=" + str(page)), parseOnlyThese=BeautifulSoup.SoupStrainer('channel'))
+    url = BASE_WSITE_URL + "category/" + categoryUrlSuffix + "/feed"
+    if page > 1:
+        url = url + "?paged=" + str(page)
+    r = requests.get(url)
+    html = r.text
+    soup = BeautifulStoneSoup(html, convertEntities=BeautifulStoneSoup.XML_ENTITIES, fromEncoding='utf-8')
     titles = []
     for item in soup.findAll('item'):
         title = {}
