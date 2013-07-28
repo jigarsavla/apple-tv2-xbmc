@@ -1,3 +1,6 @@
+[B]Version v2.4.3[/B]
+- :) Again website change fix. Trying to keep things going.
+
 [B]Version v2.4.2[/B]
 - Again website layout change fix.
 
