@@ -423,9 +423,10 @@ def retrieveVideoLinks(request_obj, response_obj):
     if soup.has_key('div'):
         soup = soup.findChild('div', recursive=False)
     prevChild = ''
+    prevAFont = None
     for child in soup.findChildren():
-        if (child.name == 'img' or child.name == 'b' or (prevChild != 'a' and child.name == 'font' and not child.findChild('a'))):
-            if child.name == 'b' and prevChild == 'a':
+        if (child.name == 'img' or child.name == 'b' or (child.name == 'font' and not child.findChild('a'))):
+            if (child.name == 'b' and prevChild == 'a') or (child.name == 'font' and child == prevAFont):
                 continue
             else:
                 if len(video_playlist_items) > 0:
@@ -463,6 +464,7 @@ def retrieveVideoLinks(request_obj, response_obj):
                 xbmcListItem = xbmcgui.ListItem(label='Source #' + str(video_source_id) + ' | ' + 'Part #' + str(video_part_index) , iconImage=video_source_img, thumbnailImage=video_source_img)
                 item.set_xbmc_list_item_obj(xbmcListItem)
                 response_obj.addListItem(item)
+                prevAFont = child.findChild('font')
             except:
                 Logger.logWarning('Unable to recognize a source = ' + str(video_link['videoLink']))
                 video_source_img = None
@@ -470,6 +472,7 @@ def retrieveVideoLinks(request_obj, response_obj):
                 video_part_index = 0
                 video_playlist_items = []
                 ignoreAllLinks = True
+                prevAFont = None
         prevChild = child.name
     if len(video_playlist_items) > 0:
         response_obj.addListItem(__preparePlayListItem__(video_source_id, video_source_img, video_source_name, video_playlist_items))
