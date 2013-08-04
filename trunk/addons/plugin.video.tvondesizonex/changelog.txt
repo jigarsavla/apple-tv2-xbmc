@@ -1,3 +1,6 @@
+[B]Version v1.7.5[/B]
+- Categorization of video links fixed.
+
 [B]Version v1.7.4[/B]
 - DesiRulez website parsing.
 
