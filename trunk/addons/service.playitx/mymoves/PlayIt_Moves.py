@@ -13,7 +13,6 @@ import urllib2
 import xbmcgui  # @UnresolvedImport
 
 def ping(request_obj, response_obj):
-    print request_obj.get_data()
     Container().ga_client.reportAction('ping')
     response_obj.addServiceResponseParam("response", "pong")
     response_obj.addServiceResponseParam("message", "Hi there, I am PlayIt")
@@ -26,8 +25,7 @@ def ping(request_obj, response_obj):
 def playHostedVideo(request_obj, response_obj):
     pbType = int(Container().getAddonContext().addon.getSetting('playbacktype'))
     
-    if Container().getAddonContext().addon.getSetting('ga_video_title') == '':
-        Container().getAddonContext().addon.setSetting('ga_video_title', 'true')
+    Container().getAddonContext().addon.setSetting('ga_video_title', 'false')
     
     if pbType == 2 and XBMCInterfaceUtils.isPlaying():
         response_obj.addServiceResponseParam("status", "error")
@@ -119,7 +117,7 @@ def playHostedAudio(request_obj, response_obj):
     
 def playRawAudio(request_obj, response_obj):
     pbType = int(Container().getAddonContext().addon.getSetting('playbacktype'))
-    Container().ga_client.reportContentUsage('audio', request_obj.get_data()['track_title'])
+    Container().ga_client.reportAction('audio')
     if XBMCInterfaceUtils.isPlayingVideo():
         response_obj.addServiceResponseParam("status", "error")
         response_obj.addServiceResponseParam("title", "Stop active video!")

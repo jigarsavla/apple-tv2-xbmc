@@ -171,7 +171,7 @@
 	</extension>
 </addon>
 
-<addon id="service.playitx" name="PlayIt" version="0.4.7"
+<addon id="service.playitx" name="PlayIt" version="0.4.8"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
