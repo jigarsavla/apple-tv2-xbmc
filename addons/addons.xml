@@ -29,12 +29,12 @@
 </addon>
 
 <addon id="plugin.video.filmibynaturex" name="Filmi BY NATURE"
-	version="2.4.3" provider-name="AJ">
+	version="2.4.4" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex"  version="1.7.0" />
+		<import addon="script.module.turtlex"  version="1.7.1" />
 		<import addon="script.module.metahandler" />
 		<import addon="script.module.requests" />
 	</requires>
@@ -61,12 +61,12 @@
 </addon>
 
 <addon id="plugin.video.tvondesizonex" name="TV on DESI ZONE"
-	version="1.7.5" provider-name="AJ">
+	version="1.7.6" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex" version="1.7.0" />
+		<import addon="script.module.turtlex" version="1.7.1" />
 		<import addon="script.module.metahandler"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
@@ -140,7 +140,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtlex" name="Turtle X" version="1.7.0"
+<addon id="script.module.turtlex" name="Turtle X" version="1.7.1"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
@@ -171,13 +171,13 @@
 	</extension>
 </addon>
 
-<addon id="service.playitx" name="PlayIt" version="0.4.8"
+<addon id="service.playitx" name="PlayIt" version="0.4.9"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex" version="1.7.0" />
+		<import addon="script.module.turtlex" version="1.7.1" />
 		<import addon="plugin.playitx" version="0.0.1" />
 	</requires>
 	<extension point="xbmc.service" library="TurtleMain.py"

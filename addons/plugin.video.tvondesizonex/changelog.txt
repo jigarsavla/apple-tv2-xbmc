@@ -1,3 +1,6 @@
+[B]Version v1.7.6[/B]
+- Disabled Google Analytics by default. Later it settings might be provided.
+
 [B]Version v1.7.5[/B]
 - Categorization of video links fixed.
 

@@ -1,3 +1,6 @@
+[B]Version v0.4.9[/B]
+- Disabled Google Analytics by default. Later it settings might be provided.
+
 [B]Version v0.4.8[/B]
 - Removed GA for video title.
 
