@@ -11,8 +11,6 @@ import re
 import time
 import xbmc  # @UnresolvedImport
 from common import Logger
-    
-UA_TRACK = 'UA-22779680-3'
 
 class GAClient(SingletonClass):
     
@@ -23,6 +21,7 @@ class GAClient(SingletonClass):
         if addon_context.addon.getSetting('ga_visitor') == '':
             from random import randint
             addon_context.addon.setSetting('ga_visitor', str(randint(0, 0x7fffffff)))
+        self.ua_track = ''
     
     
     def __parseDate(self, dateString):
@@ -33,7 +32,7 @@ class GAClient(SingletonClass):
     
     
     def reportAppLaunch(self):
-    
+        
         secsInHour = 60 * 60
         threshold = 2 * secsInHour
     
@@ -55,10 +54,9 @@ class GAClient(SingletonClass):
         ua = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
         import urllib2
         try:
-            req = urllib2.Request(utm_url, None,
-                                        {'User-Agent':ua}
-                                         )
-            response = urllib2.urlopen(req).read()
+            if self.addon_context.addon.getSetting('ga_enabled') == 'true': #default is disabled
+                req = urllib2.Request(utm_url, None, {'User-Agent':ua})
+                response = urllib2.urlopen(req).read()
         except Exception, e:
             Logger.logError(e)
             Logger.logDebug ("GA fail: %s" % utm_url)         
@@ -91,7 +89,7 @@ class GAClient(SingletonClass):
                                 "&utmt=" + "event" + \
                                 "&utme=" + quote("5(" + self.addon_name + "*" + group + "*" + name + ")") + \
                                 "&utmp=" + quote(self.addon_name) + \
-                                "&utmac=" + UA_TRACK + \
+                                "&utmac=" + self.ua_track + \
                                 "&utmcc=__utma=%s" % ".".join(["1", VISITOR, VISITOR, VISITOR, VISITOR, "2"])
                         try:
                             Logger.logDebug("============================ POSTING TRACK EVENT ============================")
@@ -104,7 +102,7 @@ class GAClient(SingletonClass):
                                 "utmwv=" + self.addon_version + \
                                 "&utmn=" + str(randint(0, 0x7fffffff)) + \
                                 "&utmp=" + quote(self.addon_name) + \
-                                "&utmac=" + UA_TRACK + \
+                                "&utmac=" + self.ua_track + \
                                 "&utmcc=__utma=%s" % ".".join(["1", VISITOR, VISITOR, VISITOR, VISITOR, "2"])
                 else:
                     if group == "None":
@@ -112,14 +110,14 @@ class GAClient(SingletonClass):
                                 "utmwv=" + self.addon_version + \
                                 "&utmn=" + str(randint(0, 0x7fffffff)) + \
                                 "&utmp=" + quote(self.addon_name + "/" + name) + \
-                                "&utmac=" + UA_TRACK + \
+                                "&utmac=" + self.ua_track + \
                                 "&utmcc=__utma=%s" % ".".join(["1", VISITOR, VISITOR, VISITOR, VISITOR, "2"])
                     else:
                         utm_url = utm_gif_location + "?" + \
                                 "utmwv=" + self.addon_version + \
                                 "&utmn=" + str(randint(0, 0x7fffffff)) + \
                                 "&utmp=" + quote(self.addon_name + "/" + group + "/" + name) + \
-                                "&utmac=" + UA_TRACK + \
+                                "&utmac=" + self.ua_track + \
                                 "&utmcc=__utma=%s" % ".".join(["1", VISITOR, VISITOR, VISITOR, VISITOR, "2"])
                                 
                 Logger.logDebug("============================ POSTING ANALYTICS ============================")
@@ -182,7 +180,7 @@ class GAClient(SingletonClass):
                         "&utmt=" + "event" + \
                         "&utme=" + quote("5(APP LAUNCH*" + build + "*" + PLATFORM + ")") + \
                         "&utmp=" + quote(self.addon_name) + \
-                        "&utmac=" + UA_TRACK + \
+                        "&utmac=" + self.ua_track + \
                         "&utmcc=__utma=%s" % ".".join(["1", VISITOR, VISITOR, VISITOR, VISITOR, "2"])
                 try:
                     Logger.logDebug("============================ POSTING APP LAUNCH TRACK EVENT ============================")
