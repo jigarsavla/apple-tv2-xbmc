@@ -28,8 +28,14 @@ def retrieveVideoInfo(video_id):
         video_link = 'http://www.dailymotion.com/video/' + str(video_id)
         html = HttpUtils.HttpClient().getHtmlContent(url=video_link)
         HttpUtils.HttpClient().disableCookies()
-        sequence = re.compile('"sequence":"(.+?)"').findall(html)
-        if(len(sequence) == 0):
+        newseqeunce = None
+        try:
+            flashVarsStr = urllib.unquote(re.compile('param name="flashvars" value="(.+?)"').findall(html)[0]).decode('utf8')
+            flashVars = re.compile('&sequence=(.*)').findall(flashVarsStr)
+            newseqeunce = flashVars[0]
+        except:
+            Logger.logError('Error while parsing sequence!!')
+        if(newseqeunce is None):
             sequence = re.compile('"sequence",  "(.+?)"').findall(html)
             newseqeunce = urllib.unquote(sequence[0]).decode('utf8').replace('\\/', '/')
             imgSrc = re.compile('og:image" content="(.+?)"').findall(html)
@@ -50,7 +56,6 @@ def retrieveVideoInfo(video_id):
                 video_info.add_video_link(VIDEO_QUAL_HD_720, dm_high[0])
         else:
             
-            newseqeunce = urllib.unquote(sequence[0]).decode('utf8').replace('\\/', '/')
             Logger.logDebug(newseqeunce);
             jObj = json.loads(newseqeunce)
             for sequenceItem in jObj['sequence'][0]['layerList'][0]['sequenceList']:
