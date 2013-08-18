@@ -56,11 +56,12 @@ class GAClient(SingletonClass):
         try:
             if self.addon_context.addon.getSetting('ga_enabled') == 'true': #default is disabled
                 req = urllib2.Request(utm_url, None, {'User-Agent':ua})
-                response = urllib2.urlopen(req).read()
+                response = urllib2.urlopen(req)
+                print response.read()
+                response.close()
         except Exception, e:
             Logger.logError(e)
-            Logger.logDebug ("GA fail: %s" % utm_url)         
-        return response
+            Logger.logDebug ("GA fail: %s" % utm_url)
     
     def reportAction(self, action_id):
         if action_id is not None:

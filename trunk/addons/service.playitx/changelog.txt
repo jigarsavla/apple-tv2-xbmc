@@ -1,3 +1,6 @@
+[B]Version v0.5.0[/B]
+- New Turtle version with DM fix.
+
 [B]Version v0.4.9[/B]
 - Disabled Google Analytics by default. Later it settings might be provided.
 
