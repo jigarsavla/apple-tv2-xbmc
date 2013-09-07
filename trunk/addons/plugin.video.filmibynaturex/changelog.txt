@@ -1,3 +1,8 @@
+[B]Version v2.4.6[/B]
+- Handled exceptional crash of metahandler for Eden users.
+- Added support for resolving video item at runtime. Lazy loading of video info.
+- Added Auto Playback settings. Default is enabled.
+
 [B]Version v2.4.5[/B]
 - Added new turtle version with DM fix.
 

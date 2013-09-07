@@ -4,7 +4,7 @@ Created on Jul 8, 2013
 @author: ajju
 '''
 from BeautifulSoup import BeautifulStoneSoup
-from TurtleContainer import Container
+from TurtleContainer import Container, AddonContext
 from common import HttpUtils, Logger, EnkDekoder, XBMCInterfaceUtils, AddonUtils
 from common.DataObjects import ListItem
 from moves import SnapVideo
@@ -191,6 +191,8 @@ def __addVideoInfo__(video_items, videoInfo):
     
     
 def __findPlayNowStream__(new_items):
+    if Container().getAddonContext().addon.getSetting('autoplayback') == 'false':
+        return None
     selectedIndex = None
     selectedSource = None
     for item in new_items:

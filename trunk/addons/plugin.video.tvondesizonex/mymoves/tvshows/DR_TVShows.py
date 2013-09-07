@@ -32,7 +32,7 @@ Creating a JSON object in following format:
 }
 '''
 
-PREFERRED_DIRECT_PLAY_ORDER = [GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, Playwire.VIDEO_HOSTING_NAME, Putlocker.VIDEO_HOSTING_NAME]
+PREFERRED_DIRECT_PLAY_ORDER = [GoogleDocs.VIDEO_HOSTING_NAME, Playwire.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, Putlocker.VIDEO_HOSTING_NAME]
 CHANNELS_JSON_FILE = 'DR_Channels_v4.json'
 OLD_CHANNELS_JSON_FILE = 'DR_Channels_v3.json'
 CHANNEL_TYPE_IND = 'IND'
@@ -530,6 +530,8 @@ def __prepareVideoLink__(video_link):
     video_link['videoSourceName'] = video_hosting_info.get_video_hosting_name()
 
 def __findPlayNowStream__(new_items):
+    if Container().getAddonContext().addon.getSetting('autoplayback') == 'false':
+        return None
     selectedIndex = None
     selectedSource = None
     for item in new_items:
