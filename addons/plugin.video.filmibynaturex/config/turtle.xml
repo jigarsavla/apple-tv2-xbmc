@@ -116,9 +116,7 @@
 		<move module="mymoves.sominaltv.Sominal" function="retieveMovieStreams"
 			pmessage="Retrieving movie stream information" />
 
-		<move module="moves.PreProcessor" function="preparePlayListItems" />
-		<move module="moves.SnapVideo" function="addPlaylistVideosInfoInPlayableItems" />
-		<move module="moves.SnapVideo" function="addVideoInfoInPlayableItems" />
+		<move module="mymoves.PlaylistProcessor" function="preparePlayListItems" />
 		<next-action name="Play" id="__play__" isfolder="false" />
 		<next-action name="Play_Stream" id="snap_and_play_video"
 			isfolder="false" downloadable="true" download-action-id="snap_and_download_video" />
@@ -204,10 +202,15 @@
 	</action>
 
 	<action id="snap_and_continuousplay_playlist">
-		<move module="moves.PreProcessor" function="preparePlayListItems" />
+		<move module="mymoves.PlaylistProcessor" function="preparePlayListItems" />
+		<next-action name="Play" id="__play__" isfolder="false" />
+	</action>
+	
+	<action id="snap_and_resolve_video">
+		<move module="moves.PreProcessor" function="prepareVideoItem" />
 		<move module="moves.SnapVideo" function="addPlaylistVideosInfo" />
 		<move module="moves.SnapVideo" function="addVideoInfo" />
-		<next-action name="Play" id="__play__" isfolder="false" />
+		<next-action name="Play" id="__resolved__" isfolder="false" />
 	</action>
 
 

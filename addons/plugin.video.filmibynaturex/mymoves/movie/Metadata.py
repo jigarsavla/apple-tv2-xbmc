@@ -1,6 +1,6 @@
 
-from common import XBMCInterfaceUtils
-from metahandler import metahandlers # @UnresolvedImport
+from common import XBMCInterfaceUtils, Logger
+from metahandler import metahandlers  # @UnresolvedImport
 import sys
 
 
@@ -9,14 +9,20 @@ def retieveMovieInfoAndAddItem(request_obj, response_obj):
     items = response_obj.get_item_list()
     XBMCInterfaceUtils.callBackDialogProgressBar(getattr(sys.modules[__name__], '__addMovieInfo_in_item'), items, 'Retrieving MOVIE info', 'Failed to retrieve movie information, please try again later')
 
-global metaget
-metaget = metahandlers.MetaData()
+__metaget__ = None
 
 def __addMovieInfo_in_item(item):
     if item.get_next_action_name() == 'Movie_Streams':
         title = unicode(item.get_moving_data()['movieTitle']).encode('utf-8')
         year = unicode(item.get_moving_data()['movieYear']).encode('utf-8')
-        meta = metaget.get_meta('movie', title, year=year)
+        meta = None
+        try:
+            global __metaget__
+            if __metaget__ is None:
+                __metaget__ = metahandlers.MetaData()
+            meta = __metaget__.get_meta('movie', title, year=year)
+        except:
+            Logger.logDebug('Failed to load metahandler module')
         xbmc_item = item.get_xbmc_list_item_obj()
         
         if(meta is not None):
