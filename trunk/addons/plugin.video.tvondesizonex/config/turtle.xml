@@ -9,6 +9,7 @@
 		<next-action name="On_Demand" id="display_TV_Shows"
 			isfolder="true" />
 		<next-action name="Live" id="display_Live_FREE_Channels" isfolder="true" />
+		<next-action name="Fav_TV_Shows" id="display_Fav_TV_Shows" isfolder="true"/>
 	</action>
 
 	<!-- ON DEMAND ITEMS -->
@@ -77,6 +78,7 @@
 		<next-action name="Show_Episodes" id="display_DT_TVShowEpisodes"
 			isfolder="true" />
 	</action>
+	
 
 	<action id="display_DT_TVShowEpisodes">
 		<move module="mymoves.tvshows.DT_TVShows" function="retrieveTVShowEpisodes"
@@ -116,6 +118,20 @@
 			isfolder="false" />
 		<next-action name="SnapAndDirectPlayList" id="snap_and_directplay_playlist"
 			isfolder="false" />
+	</action>
+	
+	<action id="display_Fav_TV_Shows">
+		<move module="mymoves.tvshows.FAV_TVShows" function="displayFavouriteTVShows"/>
+		<next-action name="Show_Episodes" id="display_DR_TVShowEpisodes"
+			isfolder="true" />
+	</action>
+	
+	<action id="add_Fav_TVShow">
+		<move module="mymoves.tvshows.FAV_TVShows" function="addFavouriteTVShow"/>
+	</action>
+	
+	<action id="remove_Fav_TVShow">
+		<move module="mymoves.tvshows.FAV_TVShows" function="removeFavouriteTVShow"/>
 	</action>
 
 	<action id="snap_and_play_DT_video">
