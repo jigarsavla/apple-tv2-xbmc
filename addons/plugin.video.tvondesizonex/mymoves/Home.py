@@ -19,6 +19,13 @@ def displayMenuItems(request_obj, response_obj):
     item.set_xbmc_list_item_obj(xbmcListItem)
     response_obj.addListItem(item)
     
+    # FAV TV Shows
+    item = ListItem()
+    item.set_next_action_name('Fav_TV_Shows')
+    xbmcListItem = xbmcgui.ListItem(label='Favourite TV Shows', iconImage=onDemand_icon_filepath, thumbnailImage=onDemand_icon_filepath)
+    item.set_xbmc_list_item_obj(xbmcListItem)
+    response_obj.addListItem(item)
+    
     # LIVE TV item
     live_icon_filepath = AddonUtils.getCompleteFilePath(baseDirPath=addonContext.addonPath, extraDirPath=AddonUtils.ADDON_ART_FOLDER, filename='live.png')
     item = ListItem()
