@@ -1,3 +1,7 @@
+[B]Version v1.8.0[/B]
+- Fixed Dailymotion URLs with new Turtle.
+- Default set to dailymotion.
+
 [B]Version v1.7.9[/B]
 - Fixed URL for reloading cache.
 - Added favourites item.

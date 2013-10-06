@@ -16,8 +16,8 @@ import re
 import sys
 import time
 import urllib
-import xbmcgui # @UnresolvedImport
-import xbmcplugin # @UnresolvedImport
+import xbmcgui  # @UnresolvedImport
+import xbmcplugin  # @UnresolvedImport
 
 
 '''
@@ -35,7 +35,7 @@ Creating a JSON object in following format:
 }
 '''
 
-PREFERRED_DIRECT_PLAY_ORDER = [GoogleDocs.VIDEO_HOSTING_NAME, Playwire.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, Putlocker.VIDEO_HOSTING_NAME]
+PREFERRED_DIRECT_PLAY_ORDER = [Dailymotion.VIDEO_HOSTING_NAME, Playwire.VIDEO_HOSTING_NAME, Putlocker.VIDEO_HOSTING_NAME]
 CHANNELS_JSON_FILE = 'DR_Channels_v4.json'
 OLD_CHANNELS_JSON_FILE = 'DR_Channels_v3.json'
 CHANNEL_TYPE_IND = 'IND'
