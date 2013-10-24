@@ -35,6 +35,6 @@ def retrieveVideoInfo(videoUrl):
     video_info.set_video_stopped(False)
     video_info.set_video_image('')
     video_info.set_video_name(' ')
-    video_info.add_video_link(VIDEO_QUAL_SD, stream_url)
+    video_info.add_video_link(VIDEO_QUAL_SD, stream_url, False)
     return video_info
 
