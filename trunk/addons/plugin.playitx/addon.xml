@@ -3,7 +3,7 @@
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
-		<import addon="script.module.turtlex" version="1.6.8"/>
+		<import addon="script.module.turtlex" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
 		<provides>audio</provides>

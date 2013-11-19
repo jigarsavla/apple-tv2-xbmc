@@ -4,8 +4,8 @@
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
-		<import addon="script.module.simplejson" version="2.0.10" />
-		<import addon="script.module.beautifulsoup" version="3.2.0" />
+		<import addon="script.module.simplejson" />
+		<import addon="script.module.beautifulsoup" />
 		<import addon="script.module.urlresolver" />
 		<import addon="script.common.plugin.cache" />
 		<import addon="script.module.simple.downloader" />
@@ -35,10 +35,10 @@
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
-		<import addon="script.module.simplejson" version="2.0.10" />
-		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex" version="1.7.2" />
-		<import addon="plugin.playitx" version="0.0.1" />
+		<import addon="script.module.simplejson"  />
+		<import addon="script.module.beautifulsoup" />
+		<import addon="script.module.turtlex"  />
+		<import addon="plugin.playitx" />
 	</requires>
 	<extension point="xbmc.service" library="TurtleMain.py"
 		start="login">
@@ -111,7 +111,7 @@
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
-		<import addon="script.module.turtlex" version="1.6.8"/>
+		<import addon="script.module.turtlex" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="TurtleMain.py">
 		<provides>audio</provides>
