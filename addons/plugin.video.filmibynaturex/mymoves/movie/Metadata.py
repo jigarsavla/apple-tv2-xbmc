@@ -13,8 +13,8 @@ __metaget__ = None
 
 def __addMovieInfo_in_item(item):
     if item.get_next_action_name() == 'Movie_Streams':
-        title = unicode(item.get_moving_data()['movieTitle']).encode('utf-8')
-        year = unicode(item.get_moving_data()['movieYear']).encode('utf-8')
+        year = unicode(item.get_moving_data()['movieYear'], errors='ignore').encode('utf-8')
+        title = unicode(item.get_moving_data()['movieTitle'], errors='ignore').encode('utf-8')
         meta = None
         try:
             global __metaget__
