@@ -91,7 +91,7 @@
 	</extension>
 </addon>
 
-<addon id="repository.googlecode.apple-tv2-xbmc" name="aj addons" version="1.5.3" provider-name="ajay">
+<addon id="repository.googlecode.apple-tv2-xbmc" name="aj addons" version="1.5.4" provider-name="ajay">
 	<extension point="xbmc.addon.repository" name="aj add-on repository">
 		<info compressed="false">http://apple-tv2-xbmc.googlecode.com/svn/trunk/addons/addons.xml</info>
 		<checksum>http://apple-tv2-xbmc.googlecode.com/svn/trunk/addons/addons.xml.md5</checksum>
@@ -105,7 +105,7 @@
 	</extension>
 </addon>
 
-<addon id="repository.xbmc.aj-addons" name="aj addons" version="1.0.0" provider-name="ajdeveloped">
+<addon id="repository.aj-addons" name="aj addons" version="1.0.0" provider-name="ajdeveloped">
 	<extension point="xbmc.addon.repository" name="AJ ADD-ONs (NEW LOOK)">
 		<info compressed="false">https://github.com/ajdeveloped/aj-addons--new-look-/raw/master/addons.xml</info>
 		<checksum>https://github.com/ajdeveloped/aj-addons--new-look-/raw/master/addons.xml.md5</checksum>
