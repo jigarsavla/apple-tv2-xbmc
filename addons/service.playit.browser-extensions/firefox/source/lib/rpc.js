@@ -81,7 +81,7 @@ var rpc = {
 
 
 rpc.ServiceProxy = function(serviceURL, options, checkCrossSite){
-	//if(typeof Prototype == 'undefined')
+    //if(typeof Prototype == 'undefined')
 	//	throw Error("The RPC client currently requires the use of Prototype.");
 	this.__serviceURL = serviceURL;
 	
