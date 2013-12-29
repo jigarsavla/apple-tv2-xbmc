@@ -5,50 +5,36 @@ var prefs = require("sdk/simple-prefs").prefs
 var cm = require("sdk/context-menu");
 var widget = require("sdk/widget");
 var tabs = require("tabs");
+var windows = require("sdk/windows").browserWindows;
+
+var {Cc, Ci} = require('chrome');
+var mediator = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator);
+ 
+
 exports.main = function(){
-    //Adding widget to addon menu    
-    widget.Widget({
-      id: "playit-btn",
-      label: "PlayIt",
-      contentURL: data.url("small-icon.png"), 
-      onClick: function(){
-        active_url = require("sdk/tabs").activeTab.url
-        playIt(prefs.serviceAddress,prefs.servicePort,active_url)
-      },
-      onMouseover: function() {
-        this.contentURL = data.url("Icon-32.png")
-      },
-      onMouseout: function() {
-        this.contentURL = data.url("small-icon.png")
-      }
-    });
-    
-    widget.Widget({
-     id: "playit-frameView-btn",
-     label: "PlayIt Frame View",
-     contentURL: data.url("view-icon.png"), 
-     contentScriptWhen: "start",
-     contentScriptUrl: data.url("view-inject.js"),
-     onClick:function () {
-      worker = tabs.activeTab.attach({
-        contentScriptWhen: "start",
-        contentScriptFile: [data.url("jquery-2.0.0.min.js"),data.url("view-inject.js")]
-      });
-      myAlert("PlayIt Frame View", "Please click on PlayIt bar appears on top of video frame.");
-      worker.port.emit("viewFrame");
-      worker.port.on("playItFrameAction", function (playItReq) {
-        myAlert("Video selected", playItReq.url);
-        playIt(prefs.serviceAddress,prefs.servicePort,playItReq.url);
-      });
-     },
-      onMouseover: function() {
-        this.contentURL = data.url("Icon-32.png")
-      },
-      onMouseout: function() {
-        this.contentURL = data.url("view-icon.png")
-      }
-    });
-    
+    var enumerator = mediator.getEnumerator('navigator:browser');
+    while(enumerator.hasMoreElements()) {
+        var win = enumerator.getNext();
+        addToolbarButton(win.document);
+    }
+    addContextMenuItem();
+}
+
+exports.onUnload = function(reason) {
+    var enumerator = mediator.getEnumerator('navigator:browser');
+    while(enumerator.hasMoreElements()) {
+        var win = enumerator.getNext();
+        removeToolbarButton(win.document);
+    }
+}
+
+windows.on('open', function() {
+    var win = mediator.getMostRecentWindow('navigator:browser');
+    addToolbarButton(win.document);
+});
+
+
+function addContextMenuItem() {
     //Adding context menu item
     cm.Item({
       label: "PlayIt on XBMC",
@@ -61,7 +47,74 @@ exports.main = function(){
           playIt(prefs.serviceAddress,prefs.servicePort,hyperlink[0]);
       }
     });
+}
 
+// add our button
+function addToolbarButton(document) {
+    // this document is an XUL document	
+	var navBar = document.getElementById('nav-bar');
+	if (!navBar) {
+		return;
+	}
+	var btn = document.createElement('toolbarbutton');
+	btn.setAttribute('id', 'playit-btn');
+	btn.setAttribute('type', 'menu-button');
+	// the toolbarbutton-1 class makes it look like a traditional button
+	btn.setAttribute('class', 'toolbarbutton-1');
+	// the data.url is relative to the data folder
+	btn.setAttribute('image', data.url('Icon-toolbar.png'));
+	btn.setAttribute('orient', 'horizontal');
+	// this text will be shown when the toolbar is set to text or text and iconss
+	btn.setAttribute('label', 'PlayIt');
+    btn.setAttribute('tooltiptext', 'PlayIt on XBMC')
+	btn.addEventListener('command', playActiveUrl, false);
+    
+    var menupopup = document.createElement('menupopup');
+    var menuitem1 = document.createElement('menuitem');
+    menuitem1.setAttribute('id', 'playit-item');
+    menuitem1.setAttribute('class', 'menuitem-iconic')
+    menuitem1.setAttribute('label', 'Play current URL');
+    menuitem1.addEventListener('command', playActiveUrl, false);
+    
+    var menuitem2 = document.createElement('menuitem');
+    menuitem2.setAttribute('id', 'frameview-item');
+    menuitem2.setAttribute('class', 'menuitem-iconic')
+    menuitem2.setAttribute('label', 'Enable frame view');
+    menuitem2.addEventListener('command', viewFrame, false);
+    
+    menupopup.appendChild(menuitem1);
+    menupopup.appendChild(menuitem2);
+    btn.appendChild(menupopup);
+	navBar.appendChild(btn);
+}
+
+function playActiveUrl(event) {
+    active_url = require("sdk/tabs").activeTab.url;
+    playIt(prefs.serviceAddress,prefs.servicePort,active_url);
+    event.stopPropagation();
+}
+
+function viewFrame(event) {
+    worker = tabs.activeTab.attach({
+        contentScriptWhen: "start",
+        contentScriptFile: [data.url("jquery-2.0.0.min.js"),data.url("view-inject.js")]
+    });
+    myAlert("PlayIt Frame View", "Please click on PlayIt bar appears on top of video frame.");
+    worker.port.emit("viewFrame");
+    worker.port.on("playItFrameAction", function (playItReq) {
+        myAlert("Video selected", playItReq.url);
+        playIt(prefs.serviceAddress,prefs.servicePort,playItReq.url);
+    });
+    event.stopPropagation();
+}
+ 
+function removeToolbarButton(document) {
+	// this document is an XUL document
+	var navBar = document.getElementById('nav-bar');
+	var btn = document.getElementById('playit-btn');
+	if (navBar && btn) {
+		navBar.removeChild(btn);
+	}
 }
 
 
@@ -127,42 +180,10 @@ function playIt(serviceAddress, servicePort, active_url) {
 }
 function myAlert(title, msg) {
 	title = 'PlayIt: ' + title
-    var myIconURL = data.url("Icon-96.png");
+    var myIconURL = data.url("icon.png");
 	require("sdk/notifications").notify({
         title: title,
         text: msg,
         iconURL: myIconURL
     });
 }
-
-/*
-var ss = require("sdk/simple-storage");
-var playItPanel = require("sdk/panel").Panel({
-  width:350,
-  height:175,
-  contentURL: data.url("playIt-panel.html"),
-  contentScriptFile: data.url("playIt-panel.js"),
-  contentScriptWhen:"ready"
-});
-
-
-widget.port.on("playIt", function(){
-  myAlert("LEFT Click","play the current active url");
-  playIt(ss.storage.serviceAddress, ss.storage.servicePort)
-});
- 
-widget.port.on("open-settings", function(){
-  myAlert("RIGHT Click","open settings panel");
-  playItPanel.show();
-});
-
-
-playItPanel.port.on("save", function(params){
-  myAlert("Save values input by user, value:", params);
-  ss.storage.serviceAddress = params.serviceAddress;
-  ss.storage.servicePort = params.servicePort;
-  myAlert("Save successful!","The user input values hvae been saved.")
-  playItPanel.hide()
-});
-
-*/
