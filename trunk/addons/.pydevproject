@@ -5,12 +5,12 @@
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">Default</pydev_property>
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">python 2.7</pydev_property>
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
-<path>/addons_in_HEAD/plugin.video.filmibynaturex</path>
-<path>/addons_in_HEAD/plugin.video.tvondesizonex</path>
-<path>/addons_in_HEAD/plugin.video.willowtvx</path>
-<path>/addons_in_HEAD/script.module.turtlex/lib</path>
-<path>/addons_in_HEAD/service.playitx</path>
-<path>/addons_in_HEAD/plugin.video.moviesmasti</path>
+<path>/addons/plugin.video.filmibynaturex</path>
+<path>/addons/plugin.video.tvondesizonex</path>
+<path>/addons/plugin.video.willowtvx</path>
+<path>/addons/script.module.turtlex/lib</path>
+<path>/addons/service.playitx</path>
+<path>/addons/plugin.video.moviesmasti</path>
 </pydev_pathproperty>
 <pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
 <path>/Users/ajju/Documents/Workspace/BeautifulSoup-3.2.0</path>
