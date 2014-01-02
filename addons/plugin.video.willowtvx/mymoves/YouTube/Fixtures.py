@@ -29,8 +29,8 @@ def displaySeries(request_obj, response_obj):
     items = []
     for series in seriesDetailJObj:
         name = series['Name']
-        start_date_obj = datetime(*(time.strptime(series['StartDate'].replace(' 0:00', ''), "%d %b %Y")[0:6])).date()
-        end_date_obj = datetime(*(time.strptime(series['EndDate'].replace(' 0:00', ''), "%d %b %Y")[0:6])).date()
+        start_date_obj = datetime.fromtimestamp(time.mktime(time.strptime(str(series['StartDate']), '%d %b %Y %H:%M')))
+        end_date_obj = datetime.fromtimestamp(time.mktime(time.strptime(str(series['EndDate']), '%d %b %Y %H:%M')))
         schedule = start_date_obj.strftime('%b %d %Y') + ' -to- ' + end_date_obj.strftime('%b %d %Y')
         
         if tabType != 'UPCOMING' and series['SeriesShouldRenderInUpcomingTab'] == "1":
