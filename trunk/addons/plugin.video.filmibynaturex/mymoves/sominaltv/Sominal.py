@@ -158,7 +158,7 @@ def retieveMovieStreams(request_obj, response_obj):
                 videoSources.append(videoSourceLinks)
             videoSourceLinks = []
         else:
-            aTags = tag.findAll('a', attrs={'href':re.compile('(desionlinetheater.com|wp.me)')}, recursive=True)
+            aTags = tag.findAll('a', attrs={'href':re.compile('(desiflicks.com|desionlinetheater.com|wp.me)')}, recursive=True)
             if aTags is None or len(aTags) != 1:
                 continue
             aTag = aTags[0]

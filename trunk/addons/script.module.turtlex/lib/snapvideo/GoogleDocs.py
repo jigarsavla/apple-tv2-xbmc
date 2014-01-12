@@ -21,6 +21,7 @@ def retrieveVideoInfo(video_id):
     video_info.set_video_id(video_id)
     try:
         html = HttpUtils.HttpClient().getHtmlContent(url='https://docs.google.com/file/' + str(video_id) + '?pli=1')
+        html = html.decode('utf8')
         title = re.compile("'title': '(.+?)'").findall(html)[0]
         video_info.set_video_name(title)
         stream_map = re.compile('fmt_stream_map":"(.+?)"').findall(html)[0].replace("\/", "/")
@@ -28,7 +29,7 @@ def retrieveVideoInfo(video_id):
         for formatContent in formatArray:
             formatContentInfo = formatContent.split('|')
             qual = formatContentInfo[0]
-            url = formatContentInfo[1]
+            url = (formatContentInfo[1]).decode('unicode-escape')
             if(qual == '13'):  # 176x144
                 video_info.add_video_link(VIDEO_QUAL_LOW, url)
             elif(qual == '17'):  # 176x144
