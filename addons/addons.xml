@@ -29,12 +29,12 @@
 </addon>
 
 <addon id="plugin.video.filmibynaturex" name="Filmi BY NATURE"
-	version="2.4.7" provider-name="AJ">
+	version="2.4.8" provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson" version="2.0.10" />
 		<import addon="script.module.beautifulsoup" version="3.2.0" />
-		<import addon="script.module.turtlex"  version="1.7.2" />
+		<import addon="script.module.turtlex"  version="1.7.4" />
 		<import addon="script.module.metahandler" />
 		<import addon="script.module.requests" />
 	</requires>
@@ -154,7 +154,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtlex" name="Turtle X" version="1.7.3"
+<addon id="script.module.turtlex" name="Turtle X" version="1.7.4"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
