@@ -15,7 +15,6 @@ def preparePlayListItems(request_obj, response_obj):
             data = {}
             data['videoLink'] = videoItem['videoLink']
             data['videoTitle'] = videoItem['videoTitle']
-    
             item = ListItem()
             item.add_moving_data('videoStreamUrl', 'plugin://plugin.video.filmibynaturex/?actionId=snap_and_resolve_video&data=' + urllib.quote_plus(AddonUtils.encodeData(data)))
             item.set_next_action_name('Play')

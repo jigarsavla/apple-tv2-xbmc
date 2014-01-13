@@ -247,6 +247,10 @@
         <video-id regex="tune.pk/play/(.+?)&amp;" />
         <video-id regex="tune.pk/video/(.+?)/" />
     </snapper>
+    
+    <snapper function="retrieveVideoInfo" enabled="true" module="snapvideo.VideoPress">
+    	<video-id regex="videos.videopress.com/(.+?).mp4"/>
+    </snapper>
 
 	<!-- The following snapper should be at the end of all srcappers -->
 	<snapper module="snapvideo.UrlResolverDelegator" function="retrieveVideoInfo"
