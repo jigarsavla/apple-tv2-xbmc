@@ -4,6 +4,12 @@ Created on Dec 27, 2011
 @author: ajju
 '''
 
+
+
+import xbmcgui  # @UnresolvedImport
+dialog = xbmcgui.Dialog()
+dialog.ok('[B][COLOR green]ANNOUNCEMENT: [/COLOR][/B] TV on DESI ZONE v2 with new look available', 'To install, go to http://goo.gl/wri4dS', 'Install aj add-ons (new look) repository.', 'NOTE: Supported on XBMC Frodo or Later.')
+
 try:
     import TurtlePlugin
 except:
