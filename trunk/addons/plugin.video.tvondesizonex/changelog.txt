@@ -1,3 +1,6 @@
+[B]Version v1.8.1[/B]
+- Announcement of release of new add-on.
+
 [B]Version v1.8.0[/B]
 - Fixed Dailymotion URLs with new Turtle.
 - Default set to dailymotion.
