@@ -8,7 +8,7 @@ from TurtleContainer import Container, AddonContext
 from common import HttpUtils, Logger, EnkDekoder, XBMCInterfaceUtils, AddonUtils
 from common.DataObjects import ListItem
 from moves import SnapVideo
-from snapvideo import GoogleDocs, Dailymotion, YouTube, VideoPress
+from snapvideo import GoogleDocs, Dailymotion, YouTube, VideoPress, PlayCineFlix
 import BeautifulSoup
 import re
 import requests
@@ -20,7 +20,7 @@ except ImportError:
     import simplejson as json
 
 
-PREFERRED_DIRECT_PLAY_ORDER = [GoogleDocs.VIDEO_HOSTING_NAME, VideoPress.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
+PREFERRED_DIRECT_PLAY_ORDER = [PlayCineFlix.VIDEO_HOSTING_NAME, VideoPress.VIDEO_HOSTING_NAME, GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
 BASE_WSITE_URL = 'http://www.sominaltvfilms.com/'
 # pageDict = {0:25, 1:50, 2:100}
 # TITLES_PER_PAGE = pageDict[int(Container().getAddonContext().addon.getSetting('moviesPerPage'))]
@@ -268,7 +268,10 @@ def __prepareVideoLink__(videoSourceLink):
         
     html = html.replace('\n\r', '').replace('\r', '').replace('\n', '').replace('\\', '')
     children = []
-    if re.search('https://video.google.com/get_player', html):
+    if re.search('http://playcineflix.com/', html):
+        docId = re.compile('http://playcineflix.com/(.+?).mp4"').findall(html)[0]
+        children.append('src="http://playcineflix.com/' + docId + '.mp4"')
+    elif re.search('https://video.google.com/get_player', html):
         docId = re.compile('docid=(.+?)"').findall(html)[0]
         children.append('src="https://docs.google.com/file/d/' + docId + '/preview"')
     elif re.search('http://videos.videopress.com/', html):
