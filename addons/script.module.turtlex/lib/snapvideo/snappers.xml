@@ -251,6 +251,10 @@
     <snapper function="retrieveVideoInfo" enabled="true" module="snapvideo.VideoPress">
     	<video-id regex="videos.videopress.com/(.+?).mp4"/>
     </snapper>
+    
+    <snapper function="retrieveVideoInfo" enabled="true" module="snapvideo.PlayCineFlix">
+    	<video-id regex="playcineflix.com/(.+?).mp4"/>
+    </snapper>
 
 	<!-- The following snapper should be at the end of all srcappers -->
 	<snapper module="snapvideo.UrlResolverDelegator" function="retrieveVideoInfo"
