@@ -8,7 +8,8 @@ from TurtleContainer import Container, AddonContext
 from common import HttpUtils, Logger, EnkDekoder, XBMCInterfaceUtils, AddonUtils
 from common.DataObjects import ListItem
 from moves import SnapVideo
-from snapvideo import GoogleDocs, Dailymotion, YouTube, VideoPress, PlayCineFlix
+from snapvideo import GoogleDocs, Dailymotion, YouTube, VideoPress, PlayCineFlix, \
+    STVFlicks
 import BeautifulSoup
 import re
 import requests
@@ -20,7 +21,7 @@ except ImportError:
     import simplejson as json
 
 
-PREFERRED_DIRECT_PLAY_ORDER = [PlayCineFlix.VIDEO_HOSTING_NAME, VideoPress.VIDEO_HOSTING_NAME, GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
+PREFERRED_DIRECT_PLAY_ORDER = [PlayCineFlix.VIDEO_HOSTING_NAME, VideoPress.VIDEO_HOSTING_NAME, STVFlicks.VIDEO_HOSTING_NAME, GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
 BASE_WSITE_URL = 'http://www.sominaltvfilms.com/'
 # pageDict = {0:25, 1:50, 2:100}
 # TITLES_PER_PAGE = pageDict[int(Container().getAddonContext().addon.getSetting('moviesPerPage'))]
@@ -158,7 +159,7 @@ def retieveMovieStreams(request_obj, response_obj):
                 videoSources.append(videoSourceLinks)
             videoSourceLinks = []
         else:
-            aTags = tag.findAll('a', attrs={'href':re.compile('(desiflicks.com|desionlinetheater.com|wp.me)')}, recursive=True)
+            aTags = tag.findAll('a', attrs={'href':re.compile('(desiflicks.com|desionlinetheater.com|wp.me|cine.sominaltvfilms.com)')}, recursive=True)
             if aTags is None or len(aTags) != 1:
                 continue
             aTag = aTags[0]
@@ -268,7 +269,10 @@ def __prepareVideoLink__(videoSourceLink):
         
     html = html.replace('\n\r', '').replace('\r', '').replace('\n', '').replace('\\', '')
     children = []
-    if re.search('http://playcineflix.com/', html):
+    if re.search('http://videos.stvflicks.com/', html):
+        docId = re.compile('http://videos.stvflicks.com/(.+?).mp4"').findall(html)[0]
+        children.append('src="http://videos.stvflicks.com/' + docId + '.mp4"')
+    elif re.search('http://playcineflix.com/', html):
         docId = re.compile('http://playcineflix.com/(.+?).mp4"').findall(html)[0]
         children.append('src="http://playcineflix.com/' + docId + '.mp4"')
     elif re.search('https://video.google.com/get_player', html):

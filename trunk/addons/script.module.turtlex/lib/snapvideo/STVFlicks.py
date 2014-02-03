@@ -1,5 +1,5 @@
 '''
-Created on Jan 26, 2014
+Created on Feb 3, 2014
 
 @author: ajdeveloped@gmail.com
 
@@ -20,7 +20,7 @@ along with XOZE.  If not, see <http://www.gnu.org/licenses/>.
 '''
 from common.DataObjects import VideoHostingInfo, VideoInfo, VIDEO_QUAL_SD
 
-VIDEO_HOSTING_NAME = 'PlayCineFlix'
+VIDEO_HOSTING_NAME = 'STVFlicks'
 
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
@@ -34,7 +34,7 @@ def retrieveVideoInfo(video_id):
     video_info.set_video_hosting_info(getVideoHostingInfo())
     video_info.set_video_id(video_id)
     try:
-        video_link = 'http://playcineflix.com/' + str(video_id) + '.mp4'
+        video_link = 'http://videos.stvflicks.com/' + str(video_id) + '.mp4'
         print video_link
         video_info.add_video_link(VIDEO_QUAL_SD, video_link)
         video_info.set_video_stopped(False)
