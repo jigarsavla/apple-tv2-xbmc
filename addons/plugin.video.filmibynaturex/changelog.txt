@@ -1,3 +1,6 @@
+[B]Version v2.5.1[/B]
+- Again change in website & fixed stream resolver.
+
 [B]Version v2.5.0[/B]
 - Added PlayCineFlix stream resolver.
 

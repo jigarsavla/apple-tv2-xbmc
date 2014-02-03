@@ -9,7 +9,7 @@ import re
 
 def getVideoHostingInfo():
     video_hosting_info = VideoHostingInfo()
-    video_hosting_info.set_video_hosting_image('')
+    video_hosting_info.set_video_hosting_image('http://hostingbulk.com/images/logo.png')
     video_hosting_info.set_video_hosting_name('HostingBulk')
     return video_hosting_info
     
@@ -26,10 +26,10 @@ def retrieveVideoInfo(video_id):
         if len(paramSet) > 0:
             video_info_link = AddonUtils.parsePackedValue(paramSet[0][0], int(paramSet[0][1]), int(paramSet[0][2]), paramSet[0][3].split('|')).replace('\\', '').replace('"', '\'')
             
-            img_data = re.compile(r"addVariable\(\'image\',\'(.+?)\'\);").findall(video_info_link)
+            img_data = re.compile(r"image:\'(.+?)\'").findall(video_info_link)
             if len(img_data) == 1:
                 video_info.set_video_image(img_data[0])
-            video_link = re.compile("addVariable\(\'file\',\'(.+?)\'\);").findall(video_info_link)[0]
+            video_link = re.compile(r"file:\'(.+?)\'").findall(video_info_link)[0]
         else:
             video_link = re.compile("'file': '(.+?)'").findall(html)[0]
         video_info.set_video_stopped(False)

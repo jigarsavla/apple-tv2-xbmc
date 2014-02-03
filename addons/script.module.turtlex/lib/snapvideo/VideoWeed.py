@@ -27,8 +27,13 @@ def retrieveVideoInfo(video_id):
 
         domainStr = re.compile('flashvars.domain="(.+?)"').findall(html)[0]
         fileStr = re.compile('flashvars.file="(.+?)"').findall(html)[0]
-        filekeyStr = re.compile('flashvars.filekey="(.+?)"').findall(html)[0]
-        
+        filekey = re.compile('flashvars.filekey="(.+?)"').findall(html)
+        filekeyStr = None
+        if len(filekey) == 0:
+            filekeyStr = re.compile('flashvars.filekey=(.+?);').findall(html)[0]
+            filekeyStr = re.compile('var ' + filekeyStr + '="(.+?)"').findall(html)[0]
+        else:
+            filekeyStr = filekey[0]
         video_info_link = domainStr + '/api/player.api.php?user=undefined&pass=undefined&codes=1&file=' + fileStr + '&key=' + filekeyStr
         html = HttpUtils.HttpClient().getHtmlContent(url=video_info_link)
         video_link = re.compile(r'url=(.+?)&').findall(html)[0]
