@@ -126,11 +126,11 @@
 	</extension>
 </addon>
 
-<addon id="repository.aj-addons" name="aj add-ons (new look)" version="1.0.0" provider-name="ajdeveloped">
+<addon id="repository.aj-addons" name="aj add-ons (new look)" version="1.0.1" provider-name="ajdeveloped">
 	<extension point="xbmc.addon.repository" name="AJ ADD-ONs (NEW LOOK)">
-		<info compressed="false">https://github.com/ajdeveloped/aj-addons--new-look-/raw/master/addons.xml</info>
-		<checksum>https://github.com/ajdeveloped/aj-addons--new-look-/raw/master/addons.xml.md5</checksum>
-		<datadir zip="true">https://github.com/ajdeveloped/aj-addons--new-look-/raw/master/</datadir>
+		<info compressed="false">http://apple-tv2-xbmc.googlecode.com/svn/trunk/AddonsNewLookRepo/addons.xml</info>
+			<checksum>http://apple-tv2-xbmc.googlecode.com/svn/trunk/AddonsNewLookRepo/addons.xml.md5</checksum>
+			<datadir zip="true">http://apple-tv2-xbmc.googlecode.com/svn/trunk/AddonsNewLookRepo/</datadir>
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary>Install AJ ADD-ONs with new look and fastest of all.</summary>
