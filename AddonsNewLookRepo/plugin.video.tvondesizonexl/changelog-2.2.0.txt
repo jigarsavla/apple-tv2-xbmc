@@ -1,0 +1,49 @@
+[B]Version 2.2.0[/B]
+- Tweaks in UI.
+
+[B]Version 2.1.9[/B]
+- Fix for newly added video link desiserials.tv.
+- Fix for desirulez.net TV episodes pagination.
+
+[B]Version 2.1.8[/B]
+- TV Show episodes list animation removed to fix mouse issue.
+
+[B]Version 2.1.7[/B]
+- Tweaked few UI looks to make it better just for fun.
+
+[B]Version 2.1.6[/B]
+- Added finished TV Shows, enabled if set in settings.
+
+[B]Version 2.1.5[/B]
+- Added TV Show label on focused favorite.
+- Added Back button control using add-on settings.
+- New layout for REMOVE FAVORITE button.
+
+[B]Version 2.1.4[/B]
+- Added new XOZE v1.0.1 to provide support for external players.
+
+[B]Version 2.1.3[/B]
+- Added CHANNEL NAME to google images search for tv show.
+- Changed colors to suit the mood while watching TV in dim light.
+
+[B]Version 2.1.2[/B]
+- Realized better to use wraplist for FAVORITES section.
+
+[B]Version 2.1.1[/B]
+- First item is selected in fixed list of FAVORITES section.
+- Changed color to black from white in notifications.
+
+[B]Version 2.1.0[/B]
+- As per feature request received, added FAVORITES section.
+- Improved new icon by increasing font size of DESI ZONE.
+
+[B]Version 2.0.2[/B]
+- Fixed Pakistani tv show video stream link resolver.
+- Added new icon for new look.
+
+[B]Version 2.0.1[/B]
+- Small fixes to load TV Shows under Life OK.
+
+[B]Version 2.0.0[/B]
+- TV on DESI ZONE with NEW LOOK.
+- Optimized for fastest response.
