@@ -82,7 +82,7 @@ def start(addon_id, service_name, context_root, default_port, allowed_port_range
             __registered_services__[service.get_service_name()] = service.get_action_id()
             Logger.logInfo(__service_name__ + ' Service :: service registered = %s @ %s' % (service.get_service_name(), __context_root__))
         server.start()
-        XBMCInterfaceUtils.displayNotification(__service_name__ + ' Service has started', 'Use web browser PlayIt extension to play video.', iconimage=iconimage)
+#         XBMCInterfaceUtils.displayNotification(__service_name__ + ' Service has started', 'Use web browser PlayIt extension to play video.', iconimage=iconimage)
         
         while not xbmc.abortRequested:
             time.sleep(1)
