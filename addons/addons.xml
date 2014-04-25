@@ -154,7 +154,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtlex" name="Turtle X" version="1.7.8"
+<addon id="script.module.turtlex" name="Turtle X" version="1.7.9"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
@@ -185,7 +185,7 @@
 	</extension>
 </addon>
 
-<addon id="service.playitx" name="PlayIt" version="0.6.0"
+<addon id="service.playitx" name="PlayIt" version="0.6.1"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />

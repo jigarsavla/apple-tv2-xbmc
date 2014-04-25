@@ -1,3 +1,6 @@
+[B]Version v0.5.1[/B]
+- Removed starting notification.
+
 [B]Version v0.5.0[/B]
 - New Turtle version with DM fix.
 
