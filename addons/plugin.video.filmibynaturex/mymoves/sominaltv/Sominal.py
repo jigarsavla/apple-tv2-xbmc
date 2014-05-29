@@ -22,7 +22,7 @@ except ImportError:
 
 
 PREFERRED_DIRECT_PLAY_ORDER = [PlayCineFlix.VIDEO_HOSTING_NAME, VideoPress.VIDEO_HOSTING_NAME, STVFlicks.VIDEO_HOSTING_NAME, GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
-BASE_WSITE_URL = 'http://www.sominaltvfilms.com/'
+BASE_WSITE_URL = 'http://www.thesominaltv.com/'
 # pageDict = {0:25, 1:50, 2:100}
 # TITLES_PER_PAGE = pageDict[int(Container().getAddonContext().addon.getSetting('moviesPerPage'))]
 
@@ -159,7 +159,7 @@ def retieveMovieStreams(request_obj, response_obj):
                 videoSources.append(videoSourceLinks)
             videoSourceLinks = []
         else:
-            aTags = tag.findAll('a', attrs={'href':re.compile('(desiflicks.com|desionlinetheater.com|wp.me|cine.sominaltvfilms.com)')}, recursive=True)
+            aTags = tag.findAll('a', attrs={'href':re.compile('(desiflicks.com|desionlinetheater.com|wp.me|cine.sominaltvfilms.com|media.thesominaltv.com)')}, recursive=True)
             if aTags is None or len(aTags) != 1:
                 continue
             aTag = aTags[0]
