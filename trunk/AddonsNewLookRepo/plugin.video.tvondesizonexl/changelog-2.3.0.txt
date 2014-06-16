@@ -1,3 +1,18 @@
+[B]Version 2.3.0[/B]
+- Added new font independent of XBMC skin font.
+
+[B]Version 2.2.9[/B]
+- Stripped "Download" word.
+
+[B]Version 2.2.8[/B]
+- Added new theme "Summer". Can be changed using Settings.
+
+[B]Version 2.2.7[/B]
+- UI changes to enhance the clarity.
+
+[B]Version 2.2.6[/B]
+- Corrected favorites image resolution logic.
+
 [B]Version 2.2.5[/B]
 - Added Bajao from EROSNOW.com.
 
