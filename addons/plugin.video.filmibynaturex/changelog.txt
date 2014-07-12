@@ -1,3 +1,6 @@
+[B]Version v2.5.4[/B]
+- SominalTv website URL updated with new.
+
 [B]Version v2.5.3[/B]
 - SominalTv website URL updated with new.
 

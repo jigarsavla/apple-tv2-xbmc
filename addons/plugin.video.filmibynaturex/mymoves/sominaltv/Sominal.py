@@ -22,7 +22,7 @@ except ImportError:
 
 
 PREFERRED_DIRECT_PLAY_ORDER = [PlayCineFlix.VIDEO_HOSTING_NAME, VideoPress.VIDEO_HOSTING_NAME, STVFlicks.VIDEO_HOSTING_NAME, GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
-BASE_WSITE_URL = 'http://www.thesominaltv.com/'
+BASE_WSITE_URL = 'http://www.playindiafilms.com/'
 # pageDict = {0:25, 1:50, 2:100}
 # TITLES_PER_PAGE = pageDict[int(Container().getAddonContext().addon.getSetting('moviesPerPage'))]
 
