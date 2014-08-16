@@ -9,19 +9,19 @@ from common import HttpUtils, Logger, EnkDekoder, XBMCInterfaceUtils, AddonUtils
 from common.DataObjects import ListItem
 from moves import SnapVideo
 from snapvideo import GoogleDocs, Dailymotion, YouTube, VideoPress, PlayCineFlix, \
-    STVFlicks
+    STVFlicks, MediaPlayBox
 import BeautifulSoup
 import re
 import requests
 import sys
-import xbmcgui  # @UnresolvedImport
+import xbmcgui # @UnresolvedImport
 try:
     import json
 except ImportError:
     import simplejson as json
 
 
-PREFERRED_DIRECT_PLAY_ORDER = [PlayCineFlix.VIDEO_HOSTING_NAME, VideoPress.VIDEO_HOSTING_NAME, STVFlicks.VIDEO_HOSTING_NAME, GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
+PREFERRED_DIRECT_PLAY_ORDER = [MediaPlayBox.VIDEO_HOSTING_NAME, PlayCineFlix.VIDEO_HOSTING_NAME, VideoPress.VIDEO_HOSTING_NAME, STVFlicks.VIDEO_HOSTING_NAME, GoogleDocs.VIDEO_HOSTING_NAME, Dailymotion.VIDEO_HOSTING_NAME, YouTube.VIDEO_HOSTING_NAME]
 BASE_WSITE_URL = 'http://www.playindiafilms.com/'
 # pageDict = {0:25, 1:50, 2:100}
 # TITLES_PER_PAGE = pageDict[int(Container().getAddonContext().addon.getSetting('moviesPerPage'))]
