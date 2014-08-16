@@ -148,7 +148,7 @@ def displayAtoZList(request_obj, response_obj):
 
 def displayYearList(request_obj, response_obj):
     d = xbmcgui.Dialog()
-    years = ['2013', '2012', '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003', '2002', '2001', '2000', 'Pre-2000']
+    years = ['2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003', '2002', '2001', '2000', 'Pre-2000']
     index = d.select('Select year:', years)
     if index == -1:
         raise Exception(ExceptionHandler.EXCEPTIONS.get(ExceptionHandler.CATEGORY_NOT_SELECTED));
