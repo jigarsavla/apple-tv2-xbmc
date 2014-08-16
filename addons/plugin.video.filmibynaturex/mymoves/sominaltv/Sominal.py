@@ -159,7 +159,7 @@ def retieveMovieStreams(request_obj, response_obj):
                 videoSources.append(videoSourceLinks)
             videoSourceLinks = []
         else:
-            aTags = tag.findAll('a', attrs={'href':re.compile('(desiflicks.com|desionlinetheater.com|wp.me|cine.sominaltvfilms.com|media.thesominaltv.com)')}, recursive=True)
+            aTags = tag.findAll('a', attrs={'href':re.compile('(desiflicks.com|desionlinetheater.com|wp.me|cine.sominaltvfilms.com|media.thesominaltv.com|mediaplaybox.com)')}, recursive=True)
             if aTags is None or len(aTags) != 1:
                 continue
             aTag = aTags[0]
@@ -261,6 +261,25 @@ def __prepareVideoLink__(videoSourceLink):
     Logger.logDebug(url)
 #     contentDiv = BeautifulSoup.SoupStrainer('div', {'class':'left_articles'})
 #     soup = BeautifulSoup.BeautifulSoup(html, contentDiv)
+
+    if re.search('', videoSourceLink):
+        video_hosting_info = SnapVideo.findVideoHostingInfo(videoSourceLink)
+        if video_hosting_info is None:
+            Logger.logDebug('Unrecognized video_url = ' + videoSourceLink)
+        else:
+            video_source_img = video_hosting_info.get_video_hosting_image()
+            
+            new_item = ListItem()
+            new_item.add_request_data('videoTitle', 'Part #')
+            new_item.add_request_data('videoLink', videoSourceLink)
+            new_item.add_moving_data('videoSourceImg', video_source_img)
+            new_item.add_moving_data('videoSourceName', video_hosting_info.get_video_hosting_name())
+            new_item.set_next_action_name('Play_Stream')
+            xbmcListItem = xbmcgui.ListItem(label='Part #', iconImage=video_source_img, thumbnailImage=video_source_img)
+            new_item.set_xbmc_list_item_obj(xbmcListItem)
+            new_items.append(new_item)
+            return new_items
+    
     html = HttpUtils.HttpClient().getHtmlContent(url)
     dek = EnkDekoder.dekode(html)
     Logger.logDebug(dek)

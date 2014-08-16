@@ -63,6 +63,7 @@ def getUserAgentForXBMCPlay():
     return 'User-Agent=' + urllib.quote_plus('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_1) AppleWebKit/534.48.3 (KHTML, like Gecko) Version/5.1 Safari/534.48.3' + '&Accept=' + urllib.quote_plus('text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8') + '&Accept_Encoding=' + urllib.quote_plus('gzip, deflate'))
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_1) AppleWebKit/534.48.3 (KHTML, like Gecko) Version/5.1 Safari/534.48.3'}
+IPAD_HEADERS = {'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25'}
 # , 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept_Encoding':'gzip, deflate'
 # HttpClient
 class HttpClient(SingletonClass):
