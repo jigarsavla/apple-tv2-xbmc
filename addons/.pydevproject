@@ -15,5 +15,6 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
 <path>/Users/ajju/Documents/Workspace/BeautifulSoup-3.2.0</path>
 <path>/Users/ajju/Documents/Workspace/script.module.requests/lib</path>
+<path>/Users/ajju/Documents/Workspace/script.module.youtube.dl/lib</path>
 </pydev_pathproperty>
 </pydev_project>

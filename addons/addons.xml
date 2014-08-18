@@ -154,7 +154,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtlex" name="Turtle X" version="1.8.0"
+<addon id="script.module.turtlex" name="Turtle X" version="1.8.1"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
@@ -163,6 +163,7 @@
 		<import addon="script.module.urlresolver" />
 		<import addon="script.common.plugin.cache" />
 		<import addon="script.module.simple.downloader" />
+		<import addon="script.module.youtube.dl" />
 	</requires>
 	<extension point="xbmc.python.module" library="lib" />
 	<extension point="xbmc.addon.metadata">
@@ -185,7 +186,7 @@
 	</extension>
 </addon>
 
-<addon id="service.playitx" name="PlayIt" version="0.6.1"
+<addon id="service.playitx" name="PlayIt" version="0.6.2"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
