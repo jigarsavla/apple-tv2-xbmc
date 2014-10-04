@@ -1,4 +1,4 @@
-[B]Version 2.4.6[/B]
+[B]Version 2.4.6 - 2.4.8[/B]
 - Cloud video source added. 
 
 [B]Version 2.4.5[/B]
