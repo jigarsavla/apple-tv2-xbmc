@@ -300,6 +300,15 @@ def __prepareVideoLink__(videoSourceLink):
     elif re.search('http://videos.videopress.com/', html):
         docId = re.compile('type="video/mp4" href="http://videos.videopress.com/(.+?).mp4"').findall(html)[0]
         children.append('src="http://videos.videopress.com/' + docId + '.mp4"')
+    elif re.search('http://videos.videopress.com/', html):
+        docId = re.compile('type="video/mp4" href="http://videos.videopress.com/(.+?).mp4"').findall(html)[0]
+        children.append('src="http://videos.videopress.com/' + docId + '.mp4"')
+    elif re.search('video_alt_url=http://www.mediaplaybox.com', html):
+        docId = re.compile('video_alt_url=http://www.mediaplaybox.com(.+?).mp4').findall(html)[0]
+        children.append('src="http://www.mediaplaybox.com:81/' + docId + '.mp4"')
+    elif re.search('video_url=http://www.mediaplaybox.com', html):
+        docId = re.compile('video_url=http://www.mediaplaybox.com(.+?).mp4').findall(html)[0]
+        children.append('src="http://www.mediaplaybox.com:81/' + docId + '.mp4"')
     else:
         children = re.compile('<embed(.+?)>').findall(html)
         if children is None or len(children) == 0:
