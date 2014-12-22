@@ -1,4 +1,4 @@
-[B]Version v2.5.5[/B]
+[B]Version v2.5.5-7[/B]
 - MediaPlayBox parsed for video URL. Trailers are not working so far.
 
 [B]Version v2.5.4[/B]
