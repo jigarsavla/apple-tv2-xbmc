@@ -1,5 +1,5 @@
 [B]Version 2.5.3 - 2.5.4[/B]
-- Fixed playwire link for movies. 
+- Fixed playwire link for movies.  
 
 [B]Version 2.5.2[/B]
 - Fixed playwire links and sony PAL, thanks to jchirag0221 for fix. 
