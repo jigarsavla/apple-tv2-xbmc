@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.video.tvondesizonexl" name="TV on DESI ZONE" version="2.5.6"
+<addon id="plugin.video.tvondesizonexl" name="TV on DESI ZONE" version="2.5.7"
 	provider-name="ajdeveloped">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
