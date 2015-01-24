@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.video.tvondesizonexl" name="TV on DESI ZONE" version="2.5.9"
-	provider-name="ajdeveloped">
+<addon id="plugin.video.tvondesizonexl" name="TV on DESI ZONE" version="2.5.10"
+	provider-name="ajdeveloped and jchirag0221">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
 		<import addon="script.module.simplejson" />
 		<import addon="script.module.beautifulsoup" />
 		<import addon="script.module.elementtree" />
+        <import addon="script.module.urlresolver" />
 	</requires>
 	<extension point="xbmc.python.script" library="main.py">
 	<provides>video</provides>
