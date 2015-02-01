@@ -154,7 +154,7 @@
 	</extension>
 </addon>
 
-<addon id="script.module.turtlex" name="Turtle X" version="1.8.2"
+<addon id="script.module.turtlex" name="Turtle X" version="1.8.3"
 	provider-name="AJ">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
