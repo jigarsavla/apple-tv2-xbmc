@@ -1,4 +1,7 @@
-[B]Version 2.5.12[/B]
+[B]Version 2.5.13[/B]
+-  Fixed sources
+
+[B]Version 2.5.11[/B]
 -  Added Epic Channel
 
 [B]Version 2.5.11[/B]
