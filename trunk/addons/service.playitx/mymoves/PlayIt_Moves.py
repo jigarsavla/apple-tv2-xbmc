@@ -96,7 +96,7 @@ def playRawVideo(request_obj, response_obj):
     video_url = request_obj.get_data()['videoLink']
     Container().ga_client.reportAction('video')
     item = ListItem()
-    item.get_moving_data()['videoStreamUrl'] = video_url
+    item.get_moving_data()['videoStreamUrl'] = urllib2.unquote(video_url) + '|User-Agent=Apache-HttpClient'
     item.set_next_action_name('Play')
     xbmcListItem = xbmcgui.ListItem(label='Streaming Video')
     item.set_xbmc_list_item_obj(xbmcListItem)
